@@ -1,0 +1,180 @@
+<link rel="import" href="dashboard-tile.html">
+
+<polymer-element name="dashboard-demo">
+  <template>
+    <style>
+      hot-table {
+        font-size: 12px;
+      }
+    </style>
+
+    <dashboard-tile id="ageTile" skin="green" label="Median Age" value=""></dashboard-tile>
+    <dashboard-tile id="maleTile" skin="blue" label="Male" value=""></dashboard-tile>
+    <dashboard-tile id="femaleTile" skin="pink" label="Female" value=""></dashboard-tile>
+    <dashboard-tile id="englishTile" skin="gray" label="English" value=""></dashboard-tile>
+    <dashboard-tile id="frenchTile" skin="gray" label="French" value=""></dashboard-tile>
+    <dashboard-tile id="spanishTile" skin="gray" label="Spanish" value=""></dashboard-tile>
+    <div style="clear: left"></div>
+
+    <hot-table id="HOT" datarows="people" settings="mySettings" width="400" minsparerows="1">
+      <hot-column id="col1" width="30" readOnly value="id" header="ID"></hot-column>
+      <hot-column width="70" value="name.first" header="First Name"></hot-column>
+      <hot-column width="100" value="name.last" header="Last Name"></hot-column>
+      <hot-column type="dropdown" source="genderList" value="gender"
+                  header="Gender"></hot-column>
+      <hot-column type="numeric" value="age" header="Age"></hot-column>
+      <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
+                  uncheckedTemplate="No"></hot-column>
+      <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
+                  uncheckedTemplate="No"></hot-column>
+      <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
+                  uncheckedTemplate="No"></hot-column>
+      <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
+    </hot-table>
+
+    <p>
+      <button id="button1" title="Prints current data source to Firebug/Chrome Dev Tools">
+        Dump data to console
+      </button>
+
+      <button id="button2">
+        Switch gender
+      </button>
+
+      <button id="button3">
+        Grow older
+      </button>
+    </p>
+
+    <content></content>
+  </template>
+  <script>
+    var people = [
+      {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
+      {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
+      {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
+      {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
+      {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
+      {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
+      {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
+      {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
+      {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
+      {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
+      {id: 11, name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
+    ];
+
+    var mySettings = {
+      isEmptyRow: function (r) {
+        var val;
+        //c === 1 to ignore id column
+        for (var c = 1, clen = this.countCols(); c < clen; c++) {
+          val = this.getDataAtCell(r, c);
+          if (val !== '' && val !== null && typeof val !== 'undefined') {
+            return false;
+          }
+        }
+        return true;
+      }
+    };
+
+    var genderList = ["Male", "Female"];
+
+    function applyIds() {
+      people.filter(function (person) {
+        if (!person.id) {
+          person.id = autoId();
+        }
+      });
+    }
+
+    function autoId() {
+      var highest = 0;
+      people.filter(function (person) {
+        if (person.id && person.id > highest) {
+          highest = person.id;
+        }
+      });
+      return highest + 1;
+    }
+
+    Polymer('dashboard-demo', {
+      domReady: function() {
+        var that = this;
+
+        //Bind Handsontable events
+        this.$.HOT.addHook('afterCreateRow', function () {
+          applyIds();
+        });
+        this.$.HOT.addHook('afterRender', function () {
+          that.refreshDashboard();
+        });
+
+        //Refresh data, rerender Handsontable and dashboard
+        applyIds();
+        this.$.HOT.render();
+        this.refreshDashboard();
+
+        //Bind button events
+        this.$.button1.addEventListener('click', function () {
+          var data = that.$.HOT.getData();
+          console.log('Data of handsontable-table ', data);
+        });
+
+        this.$.button2.addEventListener('click', function () {
+          people.filter(function (person) {
+            person.gender = person.gender === 'Male' ? 'Female' : 'Male';
+          });
+        });
+
+        this.$.button3.addEventListener('click', function () {
+          people.filter(function (person) {
+            if (person.age !== null) {
+              person.age = parseInt(person.age, 10) + 1; //convert string
+            }
+          });
+        });
+      },
+      refreshDashboard: function() {
+        var sum = 0
+          , total = 0
+          , male = 0
+          , female = 0
+          , english = 0
+          , french = 0
+          , spanish = 0;
+
+        people.filter(function (person) {
+          if (person.age) {
+            sum += person.age;
+            total++;
+          }
+          switch (person.gender) {
+            case 'Male':
+              male++;
+              break;
+
+            case 'Female':
+              female++;
+              break;
+          }
+          if (person.languages.english === 'Yes') {
+            english++;
+          }
+          if (person.languages.french === 'Yes') {
+            french++;
+          }
+          if (person.languages.spanish === 'Yes') {
+            spanish++;
+          }
+        });
+
+        this.$.ageTile.value = Math.round(sum / total);
+        this.$.maleTile.value = Math.round(100 * (male / (male + female))) + '%';
+        this.$.femaleTile.value = Math.round(100 * (female / (male + female))) + '%';
+        this.$.englishTile.value = Math.round(100 * (english / people.length)) + '%';
+        this.$.frenchTile.value = Math.round(100 * (french / people.length)) + '%';
+        this.$.spanishTile.value = Math.round(100 * (spanish / people.length)) + '%';
+      }
+    });
+  </script>
+</polymer-element>

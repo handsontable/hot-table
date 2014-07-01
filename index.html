@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>&lt;hot-table&gt;</title>
+
+  <!-- Importing Web Component's Polyfill and jQuery -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
+  <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+
+  <!-- Importing Custom Elements -->
+  <link rel="import" href="src/hot-table.html">
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    hot-table {
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>&lt;hot-table&gt;</h2>
+
+<p>Polymer Element wrapper for Handsontable data grid editor</p>
+
+<template id="tpl" bind>
+  {{people.0.name.first}}
+  <hot-table datarows="{{people}}">
+    <hot-column id="col1" width="30" readOnly value="id" header="ID"></hot-column>
+    <hot-column width="70" value="name.first" header="First Name"></hot-column>
+    <hot-column width="100" value="name.last" header="Last Name"></hot-column>
+    <hot-column value="gender" header="Gender"></hot-column>
+    <hot-column type="numeric" value="age" header="Age"></hot-column>
+    <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
+                uncheckedTemplate="No"></hot-column>
+    <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
+                uncheckedTemplate="No"></hot-column>
+    <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
+                uncheckedTemplate="No"></hot-column>
+    <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
+  </hot-table>
+</template>
+
+<p>More complex demos:</p>
+
+<ul>
+  <li><a href="examples/dashboard.html">Dashboard</a></li>
+</ul>
+
+<script>
+  var people = [
+    {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
+    {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
+    {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
+    {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
+    {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
+    {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
+    {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
+    {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
+    {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
+    {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
+    {id: 11, name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
+  ];
+
+  window.addEventListener('polymer-ready', function () {
+    var tpl = document.getElementById('tpl');
+    tpl.templateBinding = new PolymerExpressions();
+    tpl.model = {
+      people: people
+    }
+  });
+</script>
+
+</body>
+</html>
