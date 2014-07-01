@@ -26,6 +26,7 @@ Or [download as ZIP](https://github.com/warpech/hot-table/archive/gh-pages.zip).
 
     ```html
     <script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script>
     <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
     ```
 
