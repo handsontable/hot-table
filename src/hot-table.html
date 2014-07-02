@@ -107,6 +107,16 @@ function readOption(HANDSONTABLE, key, value) {
   }
 }
 
+function filterNonNull(obj) {
+  var result = {};
+  for(var i in obj) {
+    if(obj.hasOwnProperty(i) && obj[i] !== null) {
+      result[i] = obj[i];
+    }
+  }
+  return result;
+}
+
 function parseHandsontable(HANDSONTABLE) {
   var columns = parseDatacolumns(HANDSONTABLE);
   var options = webComponentDefaults();
@@ -132,6 +142,8 @@ function parseHandsontable(HANDSONTABLE) {
   if (columns.length) {
     options.columns = columns;
   }
+
+  options = filterNonNull(options); //Polymer reports null default values for all declared custom element properties. We don't want them to override Handsontable defaults
 
   return options;
 }
