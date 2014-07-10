@@ -8,7 +8,7 @@ Polymer Element wrapper for [Handsontable](http://handsontable.com/) data grid e
 
 ## Demo
 
-[Check it live!](http://warpech.github.io/hot-table)
+[Check it live!](http://handsontable.github.io/hot-table)
 
 ## Install
 
@@ -18,7 +18,7 @@ Install the component using [Bower](http://bower.io/):
 $ bower install hot-table --save
 ```
 
-Or [download as ZIP](https://github.com/warpech/hot-table/archive/gh-pages.zip).
+Or [download as ZIP](https://github.com/handsontable/hot-table/archive/gh-pages.zip).
 
 ## Usage
 
