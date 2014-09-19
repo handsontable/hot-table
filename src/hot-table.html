@@ -1,15 +1,15 @@
 <!-- Import Polymer -->
-<!--<link rel="import" href="../../polymer/polymer.html"> we don't want to maintain our own copy in demos at http://warpech.github.io/polymer/polymer.html -->
+<!--<link rel="import" href="../lib/polymer/polymer.html"> we don't want to maintain our own copy in demos at http://warpech.github.io/polymer/polymer.html -->
 
 <!-- Handsontable itself -->
-<script src="../../jquery-handsontable/dist/jquery.handsontable.full.js"></script>
+<script src="../lib/jquery-handsontable/dist/jquery.handsontable.full.js"></script>
 
 <!-- Handsontable various cell type dependencies -->
-<script data-jsfiddle="common" src="../../jquery-handsontable/lib/numeral.de-de.js"></script><!-- numeric cell type -->
+<script data-jsfiddle="common" src="../lib/jquery-handsontable/lib/numeral.de-de.js"></script><!-- numeric cell type -->
 
 <polymer-element name="hot-table">
 <template>
-  <link rel="stylesheet" href="../../jquery-handsontable/dist/jquery.handsontable.full.css">
+  <link rel="stylesheet" href="../lib/jquery-handsontable/dist/jquery.handsontable.full.css">
   <div id="htContainer" style="clear: both"></div>
   <content></content>
 </template>
@@ -131,6 +131,7 @@ function parseHandsontable(HANDSONTABLE) {
   }
 
   if (HANDSONTABLE.settings) {
+    console.log(HANDSONTABLE.settings);
     var settingsAttr = getModelPath(HANDSONTABLE, HANDSONTABLE.settings);
     for (i in settingsAttr) {
       if (settingsAttr.hasOwnProperty(i)) {
@@ -145,6 +146,7 @@ function parseHandsontable(HANDSONTABLE) {
 
   options = filterNonNull(options); //Polymer reports null default values for all declared custom element properties. We don't want them to override Handsontable defaults
 
+  console.log(options);
   return options;
 }
 
