@@ -131,7 +131,6 @@ function parseHandsontable(HANDSONTABLE) {
   }
 
   if (HANDSONTABLE.settings) {
-    console.log(HANDSONTABLE.settings);
     var settingsAttr = getModelPath(HANDSONTABLE, HANDSONTABLE.settings);
     for (i in settingsAttr) {
       if (settingsAttr.hasOwnProperty(i)) {
@@ -146,7 +145,6 @@ function parseHandsontable(HANDSONTABLE) {
 
   options = filterNonNull(options); //Polymer reports null default values for all declared custom element properties. We don't want them to override Handsontable defaults
 
-  console.log(options);
   return options;
 }
 
