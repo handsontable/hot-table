@@ -22,6 +22,6 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.4.0",
-    "jquery-handsontable": "warpech/jquery-handsontable"
+    "jquery-handsontable": "handsontable/jquery-handsontable"
   }
 }
