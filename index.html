@@ -9,6 +9,9 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script>
   <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 
+  <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
+  <link rel="stylesheet" href="lib/jquery-handsontable/dist/jquery.handsontable.full.css">
+
   <!-- Importing Custom Elements -->
   <link rel="import" href="src/hot-table.html">
 
@@ -32,7 +35,7 @@
 
 <template id="tpl" bind>
   {{people.0.name.first}}
-  <hot-table datarows="{{people}}">
+  <hot-table datarows="{{people}}" contextMenu="true">
     <hot-column id="col1" width="30" readOnly value="id" header="ID"></hot-column>
     <hot-column width="70" value="name.first" header="First Name"></hot-column>
     <hot-column width="100" value="name.last" header="Last Name"></hot-column>
