@@ -33,8 +33,8 @@
 <p><a href="https://github.com/warpech/hot-table">Source on GitHub</a></p>
 
 <template id="tpl" bind>
-  {{people.0.name.first}}
-  <hot-table datarows="{{people}}" contextMenu="true">
+  Name of first person: <strong>{{people[0].name.first}}</strong> | Highlighted row: <strong>{{highlightedRow}}</strong>
+  <hot-table datarows="{{people}}" contextMenu="true" highlightedRow="{{highlightedRow}}">
     <hot-column id="col1" width="30" readOnly value="id" header="ID"></hot-column>
     <hot-column width="70" value="name.first" header="First Name"></hot-column>
     <hot-column width="100" value="name.last" header="Last Name"></hot-column>
@@ -75,6 +75,7 @@
     var tpl = document.getElementById('tpl');
     tpl.templateBinding = new PolymerExpressions();
     tpl.model = {
+      highlightedRow: -1,
       people: people
     }
   });

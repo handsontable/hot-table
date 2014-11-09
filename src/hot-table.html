@@ -150,7 +150,7 @@ function parseHandsontable(HANDSONTABLE) {
   return options;
 }
 
-var publicMethods = ['updateSettings', 'loadData', 'render', 'setDataAtCell', 'setDataAtRowProp', 'getDataAtCell', 'getDataAtRowProp', 'countRows', 'countCols', 'rowOffset', 'colOffset', 'countVisibleRows', 'countVisibleCols', 'clear', 'clearUndo', 'getData', 'alter', 'getCell', 'getCellMeta', 'selectCell', 'deselectCell', 'getSelected', 'destroyEditor', 'getRowHeader', 'getColHeader', 'destroy', 'isUndoAvailable', 'isRedoAvailable', 'undo', 'redo', 'countEmptyRows', 'countEmptyCols', /*'isEmptyRow', 'isEmptyCol', -- those are also publicProperties*/ 'parseSettingsFromDOM', 'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings'];
+var publicMethods = ['updateSettings', 'loadData', 'render', 'setDataAtCell', 'setDataAtRowProp', 'getDataAtCell', 'getDataAtRowProp', 'countRows', 'countCols', 'rowOffset', 'colOffset', 'countVisibleRows', 'countVisibleCols', 'clear', 'clearUndo', 'getData', 'alter', 'getCell', 'getCellMeta', 'selectCell', 'deselectCell', 'getSelected', 'getSelectedRange', 'destroyEditor', 'getRowHeader', 'getColHeader', 'destroy', 'isUndoAvailable', 'isRedoAvailable', 'undo', 'redo', 'countEmptyRows', 'countEmptyCols', /*'isEmptyRow', 'isEmptyCol', -- those are also publicProperties*/ 'parseSettingsFromDOM', 'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings'];
 var publicHooks = Object.keys(Handsontable.PluginHooks.hooks);
 var publicProperties = Object.keys(Handsontable.DefaultSettings.prototype);
 publicProperties.push('settings', 'source', 'title', 'checkedTemplate', 'uncheckedTemplate', 'renderer'); //properties not mentioned in DefaultSettings
@@ -226,11 +226,26 @@ function readBool(val) {
   return val;
 }
 
+publish.highlightedRow = -1;
+publish.highlightedColumn = -1;
+
 Polymer('hot-table', {
   instance: null,
   enteredView: function () {
     jQuery(this.$.htContainer).handsontable(parseHandsontable(this));
     this.instance = jQuery(this.$.htContainer).data('handsontable');
+
+    //TODO move below to Handsontable
+    var that = this;
+    this.addHook("afterDeselect", function () {
+      that.highlightedRow = -1;
+      that.highlightedColumn = -1;
+    });
+    this.addHook("afterSelectionEnd", function () {
+      var range = that.getSelectedRange();
+      that.highlightedRow = range.highlight.row;
+      that.highlightedColumn = range.highlight.col;
+    });
   },
   onMutation: function () {
     if (this === window) {
