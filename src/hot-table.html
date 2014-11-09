@@ -246,6 +246,15 @@ Polymer('hot-table', {
       that.highlightedRow = range.highlight.row;
       that.highlightedColumn = range.highlight.col;
     });
+
+	var colHeaders;
+	if(typeof this.datarows === "object" && this.colHeaders !== null) {
+	  if(this.datarows.length) {
+	    if(typeof this.datarows[0] === "object" && !Array.isArray(this.datarows[0])) {
+		  this.colHeaders = Object.keys(this.datarows[0]);
+		}
+	  }
+	}
   },
   onMutation: function () {
     if (this === window) {
