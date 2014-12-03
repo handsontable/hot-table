@@ -200,7 +200,7 @@ publicProperties.forEach(function (hot_prop) {
 
     publish[wc_prop + 'Changed'] = function () {
       if (!this.instance) {
-        return; //attribute changed callback called before enteredView
+        return; //attribute changed callback called before attached
       }
 
       if (wc_prop === 'settings') {
@@ -231,7 +231,7 @@ publish.highlightedColumn = -1;
 
 Polymer('hot-table', {
   instance: null,
-  enteredView: function () {
+  attached: function () {
     this.instance = new Handsontable(this.$.htContainer, parseHandsontable(this));
 
     //TODO move below to Handsontable
@@ -301,7 +301,7 @@ Polymer('hot-table', {
       });
 
       Polymer('hot-column', {
-        enteredView: function () {
+        attached: function () {
           this.parentNode && this.parentNode.onMutation && this.parentNode.onMutation();
         },
         attributeChanged: function () {
