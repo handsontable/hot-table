@@ -1,0 +1,11 @@
+
+<!-- Import Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="hot-renderer.html">
+
+<polymer-element name="colored-renderer" extends="hot-renderer" constructor="ColoredRenderer">
+  <template>
+    <template repeat="{{ v, i in splitedValue }}"><span style="color: {{ i % 2 ? 'red' : 'green' }}">{{ v }}</span></template>
+  </template>
+  <script src="colored-renderer.js"></script>
+</polymer-element>

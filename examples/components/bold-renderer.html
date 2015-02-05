@@ -1,0 +1,16 @@
+
+<!-- Import Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="hot-renderer.html">
+
+<polymer-element name="bold-renderer" extends="hot-renderer" constructor="BoldRenderer">
+  <template>
+    <style>
+      span {
+        font-weight: bold;
+      }
+    </style>
+    <span>{{ value.value }}</span>
+  </template>
+  <script src="bold-renderer.js"></script>
+</polymer-element>

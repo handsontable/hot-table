@@ -5,36 +5,24 @@
   <meta charset="utf-8">
   <title>Jasmine Spec Runner</title>
   <link rel="stylesheet" type="text/css" href="lib/jasmine/jasmine.css">
-
   <link rel="stylesheet" type="text/css" href="css/SpecRunner.css">
-
-
 
   <script src="lib/jasmine/phantom-polyfill.js"></script>
   <script src="lib/jasmine/jasmine.js"></script>
   <script src="lib/jasmine/jasmine-html.js"></script>
 
-
-
   <!-- Importing Web Component's Polyfill -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script>
+  <script src="../bower_components/webcomponentsjs/webcomponents.js"></script>
 
   <!-- Importing Custom Elements -->
   <link rel="import" href="../src/hot-table.html">
 
-
-  <!-- this is used just in spec -->
-  <link rel="import" href="lib/x-html.html">
-
-  <script src="spec/WebComponentsSpec.js"></script>
-  <script src="spec/HandsontableColumnSpec.js"></script>
-
-
+  <!-- Specs -->
+  <script src="spec/table-spec.js"></script>
+  <script src="spec/column-spec.js"></script>
 
   <script src="lib/jasmine/reporter.js"></script>
   <script src="lib/jasmine/jasmine-helper.js"></script>
-
 </head>
 <body>
 </body>

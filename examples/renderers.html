@@ -5,14 +5,15 @@
   <title>&lt;hot-table&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+  <script src="../bower_components/webcomponentsjs/webcomponents.js"></script>
 
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
-  <link rel="stylesheet" href="/bower_components/handsontable/dist/handsontable.full.css">
+  <link rel="stylesheet" href="../bower_components/handsontable/dist/handsontable.full.css">
 
   <!-- Importing Custom Elements -->
-  <!--<link rel="import" href="dist/hot-table.html">-->
-  <link rel="import" href="/src/hot-table.html">
+  <link rel="import" href="../src/hot-table.html">
+  <link rel="import" href="components/bold-renderer.html">
+  <link rel="import" href="components/colored-renderer.html">
 
   <style>
     body {
@@ -25,38 +26,30 @@
 </head>
 <body>
 
-<h2>&lt;hot-table&gt;</h2>
+<h2>&lt;hot-table&gt; renderers demo</h2>
 
-<p>Polymer Element wrapper for Handsontable data grid editor</p>
-
-<p><a href="https://github.com/handsontable/hot-table">Source on GitHub</a></p>
-
-<template id="tpl" bind>
-  Name of first person: <strong>{{ people[0].name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
-  <hot-table datarows="{{ people }}" contextMenu="true" highlightedRow="{{ highlightedRow }}">
+<template is="auto-binding">
+  <hot-table datarows="{{ people }}" contextMenu="true">
     <hot-column width="30" readOnly value="id" header="ID"></hot-column>
     <hot-column width="70" value="name.first" header="First Name">
-      <template data-hot-role="renderer"><span>{{ value }}...</span></template>
+      <colored-renderer data-hot-role="renderer"></colored-renderer>
     </hot-column>
-    <hot-column width="100" value="name.last" header="Last Name"></hot-column>
-    <hot-column value="gender" header="Gender"></hot-column>
+    <hot-column width="100" value="name.last" header="Last Name">
+      <bold-renderer data-hot-role="renderer"></bold-renderer>
+    </hot-column>
+    <hot-column value="gender" header="Gender">
+      <colored-renderer data-hot-role="renderer"></colored-renderer>
+    </hot-column>
     <hot-column type="numeric" value="age" header="Age"></hot-column>
     <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
-                uncheckedTemplate="No"></hot-column>
+        uncheckedTemplate="No"></hot-column>
     <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
-                uncheckedTemplate="No"></hot-column>
+        uncheckedTemplate="No"></hot-column>
     <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
-                uncheckedTemplate="No"></hot-column>
+        uncheckedTemplate="No"></hot-column>
     <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
   </hot-table>
 </template>
-
-<p>More demos:</p>
-
-<ul>
-  <li><a href="examples/dashboard.html">Dashboard</a></li>
-  <li><a href="examples/renderers.html">Custom Renderers</a></li>
-</ul>
 
 <script>
   var people = [
@@ -73,14 +66,7 @@
     {id: 11, name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
   ];
 
-  window.addEventListener('polymer-ready', function () {
-    var tpl = document.getElementById('tpl');
-
-    tpl.model = {
-      highlightedRow: -1,
-      people: people
-    };
-  });
+  document.querySelector('template').people = people;
 </script>
 
 </body>
