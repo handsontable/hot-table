@@ -1,5 +1,0 @@
-(function () {
-
-  Polymer('hot-renderer');
-
-})();

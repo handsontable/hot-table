@@ -32,10 +32,10 @@
   }
 
   function findRenderer(element) {
-    return element.querySelector('[data-hot-role=renderer]');
+    return element.querySelector('template[data-hot-role=renderer]');
   }
   function findEditor(element) {
-    return element.querySelector('[data-hot-role=editor]');
+    return element.querySelector('template[data-hot-role=editor]');
   }
 
   Polymer('hot-column', {
@@ -61,35 +61,39 @@
      * @param {Element} element Can be CustomElement or Template element
      */
     registerRenderer: function(element) {
+      var cache;
+
       if (!element) {
         return;
       }
-      var cache = new WeakMap();
+      cache = new WeakMap();
 
+      // TODO: Check if 'renderer' is called from 4 to 8 times when single cell is rendered
       this.renderer = function(instance, TD, row, col, prop, value, cellProperties) {
-        var node, model;
+        var valueKey = prop,
+          node, model, oldValue;
 
-        if (cache.has(TD) || !TD.parentNode) {
+        if (!TD.parentNode) {
           return;
         }
-        // TODO: move below performance tip into Handsontable
-        cache.set(TD, true);
-        model = {
-          td: TD,
-          row: row,
-          col: col,
-          prop: prop,
-          value: value,
-          meta: cellProperties
-        };
+        oldValue = cache.get(TD);
 
-        if (element.nodeName === 'TEMPLATE') {
-          node = element.createInstance(model);
+        if (oldValue === value) {
+          return;
         }
-        else {
-          node = element.cloneNode(true);
-          node.value = model;
+        cache.set(TD, value);
+
+        model = {
+          row: row,
+          col: col
+        };
+        if (prop.indexOf('.') !== -1) {
+          valueKey = prop.split('.')[0];
+          model[valueKey] = instance.getDataAtRowProp(row, valueKey);
+        } else {
+          model[valueKey] = value;
         }
+        node = element.createInstance(model);
 
         TD.textContent = '';
         TD.appendChild(node);

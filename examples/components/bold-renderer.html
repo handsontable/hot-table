@@ -1,16 +1,18 @@
 
 <!-- Import Polymer -->
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="hot-renderer.html">
+<link rel="import" href="../../../polymer/polymer.html">
 
-<polymer-element name="bold-renderer" extends="hot-renderer" constructor="BoldRenderer">
+<polymer-element name="bold-renderer" constructor="BoldRenderer">
   <template>
     <style>
+      :host {
+       white-space: normal;
+      }
       span {
         font-weight: bold;
       }
     </style>
-    <span>{{ value.value }}</span>
+    <span>{{ value }}</span>
   </template>
   <script src="bold-renderer.js"></script>
 </polymer-element>

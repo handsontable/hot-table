@@ -5,14 +5,14 @@
   <title>&lt;hot-table&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+  <script src="../webcomponentsjs/webcomponents.js"></script>
 
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
-  <link rel="stylesheet" href="/bower_components/handsontable/dist/handsontable.full.css">
+  <link rel="stylesheet" href="../handsontable/dist/handsontable.full.css">
 
   <!-- Importing Custom Elements -->
   <!--<link rel="import" href="dist/hot-table.html">-->
-  <link rel="import" href="/src/hot-table.html">
+  <link rel="import" href="src/hot-table.html">
 
   <style>
     body {
@@ -36,7 +36,7 @@
   <hot-table datarows="{{ people }}" contextMenu="true" highlightedRow="{{ highlightedRow }}">
     <hot-column width="30" readOnly value="id" header="ID"></hot-column>
     <hot-column width="70" value="name.first" header="First Name">
-      <template data-hot-role="renderer"><span>{{ value }}...</span></template>
+      <template data-hot-role="renderer"><span>{{ name.first }}...</span></template>
     </hot-column>
     <hot-column width="100" value="name.last" header="Last Name"></hot-column>
     <hot-column value="gender" header="Gender"></hot-column>

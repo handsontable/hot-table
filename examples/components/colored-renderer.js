@@ -1,9 +1,18 @@
 (function () {
 
   Polymer('colored-renderer', {
-    attached: function () {
-      if (this.value) {
-        this.splitedValue = this.value.value.split('');
+    attributeChanged: function(attrName, oldVal, newVal) {
+      if (attrName === 'value') {
+        this.splitValue(newVal);
+      }
+    },
+
+    /**
+     * Split string into array
+     */
+    splitValue: function(value) {
+      if (value) {
+        this.splitedValue = value.split('');
       }
     }
   });
