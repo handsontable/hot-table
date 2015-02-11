@@ -30,19 +30,25 @@
     var desc = this.holder.querySelector('#message');
 
     this.age = parseInt(age, 10);
+
+    if (isNaN(this.age)) {
+      this.age = '';
+    }
     this.holder.querySelector('#age').textContent = this.age;
 
-    if (this.age < 18) {
-      desc.classList.add('invalid');
-      desc.textContent = 'Too young!';
+    if (this.age) {
+      if (this.age < 18) {
+        desc.classList.add('invalid');
+        desc.textContent = 'Too young!';
 
-    } else if (this.age >= 18 && this.age < 50) {
-      desc.classList.remove('invalid');
-      desc.textContent = 'Perfect age!';
+      } else if (this.age >= 18 && this.age < 50) {
+        desc.classList.remove('invalid');
+        desc.textContent = 'Perfect age!';
 
-    } else {
-      desc.classList.add('invalid');
-      desc.textContent = 'Too old!';
+      } else {
+        desc.classList.add('invalid');
+        desc.textContent = 'Too old!';
+      }
     }
   };
 
