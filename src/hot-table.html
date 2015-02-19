@@ -12,6 +12,11 @@
 <polymer-element name="hot-table">
   <template>
     <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
+    <style>
+      .handsontable td {
+        white-space: normal;
+      }
+    </style>
     <div id="htContainer" style="clear: both"></div>
     <content></content>
   </template>

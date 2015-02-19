@@ -12,6 +12,8 @@
 
   <!-- Importing Custom Elements -->
   <link rel="import" href="../src/hot-table.html">
+  <link rel="import" href="../../google-map/google-map.html">
+  <link rel="import" href="../../google-map/google-map-search.html">
   <link rel="import" href="components/bold-renderer.html">
   <link rel="import" href="components/colored-renderer.html">
   <link rel="import" href="components/age-renderer.html">
@@ -22,6 +24,10 @@
     }
     hot-table {
       font-size: 12px;
+    }
+    hot-table /deep/ google-map {
+      height: 100px;
+      width: 200px;
     }
   </style>
 </head>
@@ -44,6 +50,13 @@
     <hot-column width="120" value="age" header="Age">
       <template data-hot-role="renderer"><age-renderer age="{{ age }}"></age-renderer></template>
     </hot-column>
+    <hot-column width="200" value="address" header="Map">
+      <template data-hot-role="renderer">
+        <google-map-search map="{{ map }}" query="{{ address }}" result="{{ result }}"></google-map-search>
+        <google-map disableDefaultUI zoomable="false" map="{{ map }}"
+                    latitude="{{ result.latitude }}" longitude="{{ result.longitude }}"></google-map>
+      </template>
+    </hot-column>
     <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
         uncheckedTemplate="No"></hot-column>
     <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
@@ -65,17 +78,26 @@
 
 <script>
   var people = [
-    {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 17, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
-    {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
-    {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
-    {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
-    {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 65, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
-    {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
-    {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
-    {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
-    {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 88, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
-    {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
-    {id: 11, name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
+    {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 17, address: "Napoli",
+      languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
+    {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, address: "Oslo",
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
+    {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, address: "Denver",
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
+    {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, address: "Mexico City",
+      languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
+    {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 65, address: "Gdynia",
+      languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
+    {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, address: "Glasgow",
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
+    {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, address: "Dublin",
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
+    {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, address: "Seattle",
+      languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
+    {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 88, address: "Vancouver",
+      languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
+    {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, address: "Épernay",
+      languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090}
   ];
 
   document.querySelector('template').people = people;
