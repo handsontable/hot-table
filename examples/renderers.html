@@ -29,6 +29,11 @@
       height: 100px;
       width: 200px;
     }
+    /* For browser which not supported web component natively yet */
+    hot-table google-map {
+      height: 100px;
+      width: 200px;
+    }
   </style>
 </head>
 <body>
@@ -74,6 +79,7 @@
   <li><b>Last Name</b> column uses polymer &lt;bold-renderer&gt; element</li>
   <li><b>Gender</b> column uses &lt;template&gt; element to render cells (as simple cell decorator)</li>
   <li><b>Age</b> column uses native &lt;age-renderer&gt; (CustomElement with webcomponents polyfills) to render cells</li>
+  <li><b>Map</b> column uses native &lt;google-maps&gt; element</li>
 </ul>
 
 <script>

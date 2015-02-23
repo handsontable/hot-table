@@ -1,14 +1,50 @@
 (function() {
 
-  function parseDatacolumn(HANDSONTABLE, HOTCOLUMN) {
-    var obj = {},
-      attrName,
-      i,
-      ilen,
-      val,
-      innerHANDSONTABLE;
+  var
+    publicMethods = ['updateSettings', 'loadData', 'render', 'setDataAtCell', 'setDataAtRowProp', 'getDataAtCell',
+      'getDataAtRowProp', 'countRows', 'countCols', 'rowOffset', 'colOffset', 'countVisibleRows', 'countVisibleCols',
+      'clear', 'clearUndo', 'getData', 'alter', 'getCell', 'getCellMeta', 'selectCell', 'deselectCell', 'getSelected',
+      'getSelectedRange', 'destroyEditor', 'getRowHeader', 'getColHeader', 'destroy', 'isUndoAvailable',
+      'isRedoAvailable', 'undo', 'redo', 'countEmptyRows',
+      'countEmptyCols', /*'isEmptyRow', 'isEmptyCol', -- those are also publicProperties*/ 'parseSettingsFromDOM',
+      'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings'
+    ],
+    publicHooks = Object.keys(Handsontable.PluginHooks.hooks),
+    publicProperties = Object.keys(Handsontable.DefaultSettings.prototype),
+    wcDefaults = webComponentDefaults(),
+    publish = {}
+  ;
 
-    for (i = 0, ilen = publicProperties.length; i < ilen; i++) {
+  publicProperties = publicProperties.concat(publicHooks);
+
+  function webComponentDefaults() {
+    return {
+      observeChanges: true
+    };
+  }
+
+  function parseDataColumns(handsontable) {
+    var columns = [],
+      i, ilen;
+
+    for (i = 0, ilen = handsontable.childNodes.length; i < ilen; i++) {
+      if (handsontable.childNodes[i].nodeName === 'HOT-COLUMN') {
+        columns.push(parseDataColumn(handsontable, handsontable.childNodes[i]));
+      }
+    }
+
+    return columns;
+  }
+
+  function parseDataColumn(handsontable, hotcolumn) {
+    var obj = {},
+      innerHandsontable,
+      attrName,
+      len,
+      val,
+      i;
+
+    for (i = 0, len = publicProperties.length; i < len; i++) {
       attrName = publicProperties[i];
 
       if (attrName === 'data') {
@@ -18,40 +54,46 @@
         attrName = 'header';
       }
 
-      if (HOTCOLUMN[attrName] === null) {
-        continue; //default value
+      if (hotcolumn[attrName] === null) {
+        continue; // default value
       }
-      else if (HOTCOLUMN[attrName] !== void 0 && HOTCOLUMN[attrName] !== "") {
-        val = HOTCOLUMN[attrName];
+      else if (hotcolumn[attrName] !== void 0 && hotcolumn[attrName] !== "") {
+        val = hotcolumn[attrName];
       }
       else {
-        // Dec 3, 2013 - Polymer returns empty string for node properties such as HOTCOLUMN.width
-        val = HOTCOLUMN.getAttribute(attrName);
+        // Dec 3, 2013 - Polymer returns empty string for node properties such as hotcolumn.width
+        val = hotcolumn.getAttribute(attrName);
       }
 
-      if (val !== void 0 && val !== HANDSONTABLE[attrName]) {
-        obj[publicProperties[i]] = readOption(HOTCOLUMN, attrName, val);
+      if (val !== void 0 && val !== handsontable[attrName]) {
+        obj[publicProperties[i]] = readOption(hotcolumn, attrName, val);
       }
     }
-    innerHANDSONTABLE = HOTCOLUMN.getElementsByTagName('hot-table');
+    innerHandsontable = hotcolumn.getElementsByTagName('hot-table');
 
-    if (innerHANDSONTABLE.length) {
-      obj.handsontable = parseHandsontable(innerHANDSONTABLE[0]);
+    if (innerHandsontable.length) {
+      obj.handsontable = parseHandsontable(innerHandsontable[0]);
     }
 
     return obj;
   }
 
-  function getModel(HANDSONTABLE) {
-    if (HANDSONTABLE.templateInstance) {
-      return HANDSONTABLE.templateInstance.model;
+  /**
+   * Get template modal object
+   *
+   * @param {Element} handsontable
+   * @returns {Object}
+   */
+  function getModel(handsontable) {
+    if (handsontable.templateInstance) {
+      return handsontable.templateInstance.model;
     }
     else {
       return window;
     }
   }
 
-  function getModelPath(HANDSONTABLE, path) {
+  function getModelPath(handsontable, path) {
     var model, expression, obj;
 
     // happens in Polymer when assigning
@@ -59,7 +101,7 @@
     if (typeof path === 'object' || typeof path === 'function') {
       return path;
     }
-    model = getModel(HANDSONTABLE);
+    model = getModel(handsontable);
     expression = 'with(model) { ' + path + ';}';
     /* jshint -W061 */
     obj = eval(expression);
@@ -67,26 +109,38 @@
     return (obj);
   }
 
-  function parseDatacolumns(HANDSONTABLE) {
-    var columns = [],
-      i, ilen;
-
-    for (i = 0, ilen = HANDSONTABLE.childNodes.length; i < ilen; i++) {
-      if (HANDSONTABLE.childNodes[i].nodeName === 'HOT-COLUMN') {
-        columns.push(parseDatacolumn(HANDSONTABLE, HANDSONTABLE.childNodes[i]));
-      }
-    }
-
-    return columns;
-  }
-
-  function readOption(HANDSONTABLE, key, value) {
+  /**
+   * Read hnadsontable option value
+   *
+   * @param {Element} handsontable hot-table Element
+   * @param {String} key
+   * @param {*} value
+   * @returns {*}
+   */
+  function readOption(handsontable, key, value) {
     if (key === 'datarows' || key === 'renderer' || key === 'source' || key === 'afterOnCellMouseOver' ||
         publicHooks.indexOf(key) > -1) {
-      return getModelPath(HANDSONTABLE, value);
+      return getModelPath(handsontable, value);
     }
 
     return readBool(value);
+  }
+
+  /**
+   * Read value as Boolean
+   *
+   * @param {*} val
+   * @returns {Boolean}
+   */
+  function readBool(val) {
+    if (val === void 0 || val === 'false') {
+      return false;
+    }
+    else if (val === '' || val === 'true') {
+      return true;
+    }
+
+    return val;
   }
 
   function filterNonNull(obj) {
@@ -101,10 +155,10 @@
     return result;
   }
 
-  function parseHandsontable(HANDSONTABLE) {
-    var columns = parseDatacolumns(HANDSONTABLE),
+  function parseHandsontable(handsontable) {
+    var columns = parseDataColumns(handsontable),
       options = webComponentDefaults(),
-      attrName, i, ilen;
+      attrName, settingsAttr, i, ilen;
 
     for (i = 0, ilen = publicProperties.length; i < ilen; i++) {
       attrName = publicProperties[i];
@@ -112,11 +166,11 @@
       if (attrName === 'data') {
         attrName = 'datarows';
       }
-      options[publicProperties[i]] = readOption(HANDSONTABLE, attrName, HANDSONTABLE[attrName]);
+      options[publicProperties[i]] = readOption(handsontable, attrName, handsontable[attrName]);
     }
 
-    if (HANDSONTABLE.settings) {
-      var settingsAttr = getModelPath(HANDSONTABLE, HANDSONTABLE.settings);
+    if (handsontable.settings) {
+      settingsAttr = getModelPath(handsontable, handsontable.settings);
 
       for (i in settingsAttr) {
         if (settingsAttr.hasOwnProperty(i)) {
@@ -136,32 +190,7 @@
     return options;
   }
 
-  var publicMethods = ['updateSettings', 'loadData', 'render', 'setDataAtCell', 'setDataAtRowProp', 'getDataAtCell',
-    'getDataAtRowProp', 'countRows', 'countCols', 'rowOffset', 'colOffset', 'countVisibleRows', 'countVisibleCols',
-    'clear', 'clearUndo', 'getData', 'alter', 'getCell', 'getCellMeta', 'selectCell', 'deselectCell', 'getSelected',
-    'getSelectedRange', 'destroyEditor', 'getRowHeader', 'getColHeader', 'destroy', 'isUndoAvailable',
-    'isRedoAvailable', 'undo', 'redo', 'countEmptyRows',
-    'countEmptyCols', /*'isEmptyRow', 'isEmptyCol', -- those are also publicProperties*/ 'parseSettingsFromDOM',
-    'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings'
-  ];
-  var publicHooks = Object.keys(Handsontable.PluginHooks.hooks);
-  var publicProperties = Object.keys(Handsontable.DefaultSettings.prototype);
-
-  publicProperties.push('groups', 'settings', 'source', 'title', 'checkedTemplate',
-    'uncheckedTemplate', 'renderer', 'format');
-
-  publicProperties = publicProperties.concat(publicHooks);
-
-  function webComponentDefaults() {
-    return {
-      observeChanges: true
-    };
-  }
-
-  var wcDefaults = webComponentDefaults();
-
-  var publish = {};
-
+  // Apply public web component method into handsontable
   publicMethods.forEach(function (hotMethod) {
     publish[hotMethod] = function () {
       return this.instance[hotMethod].apply(this.instance, arguments);
@@ -169,60 +198,51 @@
   });
 
   publicProperties.forEach(function (hotProp) {
-    var wcProp;
+    var wcProp, val;
 
-    if (!publish[hotProp]) {
-      wcProp = hotProp;
+    if (publish[hotProp]) {
+      return;
+    }
+    wcProp = hotProp;
 
-      if (hotProp === 'data') {
-        wcProp = 'datarows';
+    if (hotProp === 'data') {
+      wcProp = 'datarows';
+    }
+    else if (hotProp === 'title') {
+      // rename 'title' attribute to 'header' because 'title' was causing
+      // problems (https://groups.google.com/forum/#!topic/polymer-dev/RMMsV-D4HVw)
+      wcProp = 'header';
+    }
+    val = wcDefaults[hotProp] === void 0 ? Handsontable.DefaultSettings.prototype[hotProp] : wcDefaults[hotProp];
+
+    if (val === void 0) {
+      // Polymer does not like undefined
+      publish[wcProp] = null;
+    }
+    else if (hotProp === 'observeChanges') {
+      // on by default
+      publish[wcProp] = true;
+    }
+    else {
+      publish[wcProp] = val;
+    }
+
+    publish[wcProp + 'Changed'] = function() {
+      var settings = {};
+
+      // attribute changed callback called before attached
+      if (!this.instance) {
+        return;
       }
-      else if (hotProp === 'title') {
-        // rename 'title' attribute to 'header' because 'title' was causing
-        // problems (https://groups.google.com/forum/#!topic/polymer-dev/RMMsV-D4HVw)
-        wcProp = 'header';
-      }
-
-      var val = wcDefaults[hotProp] === void 0 ? Handsontable.DefaultSettings.prototype[hotProp] : wcDefaults[hotProp];
-
-      if (val === void 0) {
-        publish[wcProp] = null; //Polymer does not like undefined
-      }
-      else if (hotProp === 'observeChanges') {
-        publish[wcProp] = true; //on by default
+      if (wcProp === 'settings') {
+        settings = getModelPath(this, this[wcProp]);
       }
       else {
-        publish[wcProp] = val;
+        settings[hotProp] = readOption(this, wcProp, this[wcProp]);
       }
-
-      publish[wcProp + 'Changed'] = function () {
-        if (!this.instance) {
-          return; //attribute changed callback called before attached
-        }
-
-        if (wcProp === 'settings') {
-          var settings = getModelPath(this, this[wcProp]);
-          this.updateSettings(settings);
-          return;
-        }
-
-        var update = {};
-        update[hotProp] = readOption(this, wcProp, this[wcProp]);
-        this.updateSettings(update);
-      };
-    }
+      this.updateSettings(settings);
+    };
   });
-
-  function readBool(val) {
-    if (val === void 0 || val === 'false') {
-      return false;
-    }
-    else if (val === '' || val === 'true') {
-      return true;
-    }
-
-    return val;
-  }
 
   publish.highlightedRow = -1;
   publish.highlightedColumn = -1;
@@ -237,18 +257,19 @@
      */
     instance: null,
 
-    attached: function () {
+    attached: function() {
       var _this = this;
 
       this.instance = new Handsontable(this.$.htContainer, parseHandsontable(this));
 
       // TODO: move below to Handsontable
-      this.addHook('afterDeselect', function () {
+      this.addHook('afterDeselect', function() {
         _this.highlightedRow = -1;
         _this.highlightedColumn = -1;
       });
-      this.addHook('afterSelectionEnd', function () {
+      this.addHook('afterSelectionEnd', function() {
         var range = _this.getSelectedRange();
+
         _this.highlightedRow = range.highlight.row;
         _this.highlightedColumn = range.highlight.col;
       });
@@ -259,7 +280,7 @@
         }
       }
     },
-    onMutation: function () {
+    onMutation: function() {
       var columns;
 
       if (this === window) {
@@ -270,7 +291,7 @@
         // happens in Handsontable WC demo page in Chrome 33-dev
         return;
       }
-      columns = parseDatacolumns(this);
+      columns = parseDataColumns(this);
 
       if (columns.length) {
         this.updateSettings({columns: columns});

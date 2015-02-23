@@ -2,9 +2,6 @@
 
   var publicProperties = Object.keys(Handsontable.DefaultSettings.prototype);
 
-  publicProperties.push('groups', 'settings', 'source', 'title', 'checkedTemplate',
-    'uncheckedTemplate', 'renderer', 'format');
-
   function getPublishProperties() {
     var publish = {};
 
@@ -58,7 +55,7 @@
     /**
      * Register cell renderer
      *
-     * @param {Element} element Can be CustomElement or Template element
+     * @param {Element} element Template element
      */
     registerRenderer: function(element) {
       var cache;
@@ -68,16 +65,13 @@
       }
       cache = new WeakMap();
 
-      // TODO: Check if 'renderer' is called from 4 to 8 times when single cell is rendered
       this.renderer = function(instance, TD, row, col, prop, value, cellProperties) {
         var valueKey = prop,
           node, model, oldValue;
 
-        if (!TD.parentNode) {
-          return;
-        }
         oldValue = cache.get(TD);
 
+        // Prevent re-render cells that are not changed
         if (oldValue === value) {
           return;
         }
