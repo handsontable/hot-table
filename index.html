@@ -9,6 +9,10 @@
 
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
   <link rel="stylesheet" href="../handsontable/dist/handsontable.full.css">
+  <link rel="stylesheet" href="../handsontable/demo/js/pikaday/css/pikaday.css">
+
+  <script src="../handsontable/demo/js/pikaday/pikaday.js"></script>
+  <script src="../handsontable/demo/js/moment/moment.js"></script>
 
   <!-- Importing Custom Elements -->
   <!--<link rel="import" href="dist/hot-table.html">-->
@@ -39,6 +43,7 @@
       <template data-hot-role="renderer"><span>{{ name.first }}...</span></template>
     </hot-column>
     <hot-column width="100" value="name.last" header="Last Name"></hot-column>
+    <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
     <hot-column value="gender" header="Gender"></hot-column>
     <hot-column type="numeric" value="age" header="Age"></hot-column>
     <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
@@ -60,17 +65,17 @@
 
 <script>
   var people = [
-    {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
-    {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
-    {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
-    {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
-    {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
-    {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
-    {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
-    {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
-    {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
-    {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
-    {id: 11, name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
+    {id: 1, date: '12/24/1986', name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
+    {id: 2, date: '02/30/1976', name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
+    {id: 3, date: '07/14/1967', name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
+    {id: 4, date: '06/14/1956', name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
+    {id: 5, date: '05/09/1975', name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
+    {id: 6, date: '01/01/1986', name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
+    {id: 7, date: '04/03/1994', name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
+    {id: 8, date: '01/04/1993', name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
+    {id: 9, date: '01/05/1982', name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
+    {id: 10, date: '03/10/1992', name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
+    {id: 11, date: '01/10/1991', name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
   ];
 
   window.addEventListener('polymer-ready', function () {
