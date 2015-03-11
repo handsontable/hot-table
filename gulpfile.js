@@ -12,20 +12,20 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('vulcanize', function () {
-  var DIST = 'dist';
-
-  return gulp.src('./src/hot-table.html')
-    .pipe(vulcanize({
-      dest: DIST,
-      strip: true,
-      inline: true,
-      excludes: {
-        scripts: ['handsontable.*', 'polymer.js'],
-        styles: ['handsontable.*']
-      }
-    }))
-    .pipe(gulp.dest(DIST));
-});
+//gulp.task('vulcanize', function () {
+//  var DIST = 'dist';
+//
+//  return gulp.src('./src/hot-table.html')
+//    .pipe(vulcanize({
+//      dest: DIST,
+//      strip: true,
+//      inline: true,
+//      excludes: {
+//        scripts: ['handsontable.*', 'polymer.js'],
+//        styles: ['handsontable.*']
+//      }
+//    }))
+//    .pipe(gulp.dest(DIST));
+//});
 
 gulp.task('default', ['jshint']);
