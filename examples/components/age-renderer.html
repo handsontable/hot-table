@@ -1,0 +1,19 @@
+
+<template id="template">
+  <style>
+    :host {
+      white-space: normal;
+    }
+    #message {
+      color: green;
+    }
+    #message.invalid {
+      color: red;
+    }
+  </style>
+  <span id="holder">
+    <span id="age"></span> (<span id="message"></span>)
+  </span>
+</template>
+
+<script src="age-renderer.js"></script>
