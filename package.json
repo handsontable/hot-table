@@ -1,5 +1,9 @@
 {
   "private": true,
   "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-jshint": "^1.9.2",
+    "gulp-vulcanize": "^5.0.0",
+    "jshint-stylish": "^1.0.0"
   }
 }
