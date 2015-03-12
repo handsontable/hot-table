@@ -37,14 +37,14 @@
 
 <template id="tpl" bind>
   Name of first person: <strong>{{ people[0].name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
-  <hot-table datarows="{{ people }}" contextMenu="true" highlightedRow="{{ highlightedRow }}">
+  <hot-table datarows="{{ people }}" contextMenu="true" highlightedRow="{{ highlightedRow }}" maxRows="11">
     <hot-column width="30" readOnly value="id" header="ID"></hot-column>
     <hot-column width="70" value="name.first" header="First Name">
       <template data-hot-role="renderer"><span>{{ name.first }}...</span></template>
     </hot-column>
     <hot-column width="100" value="name.last" header="Last Name"></hot-column>
     <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
-    <hot-column value="gender" header="Gender"></hot-column>
+    <hot-column width="80" value="gender" type="dropdown" source="genderList" header="Gender"></hot-column>
     <hot-column type="numeric" value="age" header="Age"></hot-column>
     <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
                 uncheckedTemplate="No"></hot-column>
@@ -61,21 +61,34 @@
 <ul>
   <li><a href="examples/dashboard.html">Dashboard</a></li>
   <li><a href="examples/renderers.html">Custom Renderers</a></li>
+  <li><a href="examples/editors.html">Custom Editors</a></li>
 </ul>
 
 <script>
+  var genderList = ['Male', 'Female'];
   var people = [
-    {id: 1, date: '12/24/1986', name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
-    {id: 2, date: '02/30/1976', name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
-    {id: 3, date: '07/14/1967', name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
-    {id: 4, date: '06/14/1956', name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
-    {id: 5, date: '05/09/1975', name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
-    {id: 6, date: '01/01/1986', name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
-    {id: 7, date: '04/03/1994', name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
-    {id: 8, date: '01/04/1993', name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
-    {id: 9, date: '01/05/1982', name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
-    {id: 10, date: '03/10/1992', name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
-    {id: 11, date: '01/10/1991', name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
+    {id: 1, date: '12/24/1986', name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21,
+      languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
+    {id: 2, date: '02/30/1976', name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25,
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
+    {id: 3, date: '07/14/1967', name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32,
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
+    {id: 4, date: '06/14/1956', name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27,
+      languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
+    {id: 5, date: '05/09/1975', name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46,
+      languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
+    {id: 6, date: '01/01/1986', name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34,
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
+    {id: 7, date: '04/03/1994', name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19,
+      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
+    {id: 8, date: '01/04/1993', name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33,
+      languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
+    {id: 9, date: '01/05/1982', name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27,
+      languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
+    {id: 10, date: '03/10/1992', name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42,
+      languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
+    {id: 11, date: '01/10/1991', name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33,
+      languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
   ];
 
   window.addEventListener('polymer-ready', function () {

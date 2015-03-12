@@ -23,22 +23,35 @@
     };
   }
 
-  function parseDataColumns(handsontable) {
+  /**
+   * Parse all founded hot-column data
+   *
+   * @param {HTMLElement} hotTable
+   * @returns {Array}
+   */
+  function parseDataColumns(hotTable) {
     var columns = [],
-      i, ilen;
+      i, len;
 
-    for (i = 0, ilen = handsontable.childNodes.length; i < ilen; i++) {
-      if (handsontable.childNodes[i].nodeName === 'HOT-COLUMN') {
-        columns.push(parseDataColumn(handsontable, handsontable.childNodes[i]));
+    for (i = 0, len = hotTable.childNodes.length; i < len; i++) {
+      if (hotTable.childNodes[i].nodeName === 'HOT-COLUMN') {
+        columns.push(parseDataColumn(hotTable, hotTable.childNodes[i]));
       }
     }
 
     return columns;
   }
 
-  function parseDataColumn(handsontable, hotcolumn) {
+  /**
+   * Parse single hot-column data
+   *
+   * @param {HTMLElement} hotTable
+   * @param {HTMLElement} hotColumn
+   * @returns {Object}
+   */
+  function parseDataColumn(hotTable, hotColumn) {
     var obj = {},
-      innerHandsontable,
+      innerHotTable,
       attrName,
       len,
       val,
@@ -54,25 +67,25 @@
         attrName = 'header';
       }
 
-      if (hotcolumn[attrName] === null) {
+      if (hotColumn[attrName] === null) {
         continue; // default value
       }
-      else if (hotcolumn[attrName] !== void 0 && hotcolumn[attrName] !== "") {
-        val = hotcolumn[attrName];
+      else if (hotColumn[attrName] !== '') {
+        val = hotColumn[attrName];
       }
       else {
-        // Dec 3, 2013 - Polymer returns empty string for node properties such as hotcolumn.width
-        val = hotcolumn.getAttribute(attrName);
+        // Dec 3, 2013 - Polymer returns empty string for node properties such as hotColumn.width
+        val = hotColumn.getAttribute(attrName);
       }
 
-      if (val !== void 0 && val !== handsontable[attrName]) {
-        obj[publicProperties[i]] = readOption(hotcolumn, attrName, val);
+      if (val !== void 0 && val !== hotTable[attrName]) {
+        obj[publicProperties[i]] = readOption(hotColumn, attrName, val);
       }
     }
-    innerHandsontable = hotcolumn.getElementsByTagName('hot-table');
+    innerHotTable = hotColumn.getElementsByTagName('hot-table');
 
-    if (innerHandsontable.length) {
-      obj.handsontable = parseHandsontable(innerHandsontable[0]);
+    if (innerHotTable.length) {
+      obj.handsontable = parseHandsontable(innerHotTable[0]);
     }
 
     return obj;
@@ -81,19 +94,19 @@
   /**
    * Get template modal object
    *
-   * @param {Element} handsontable
+   * @param {Element} hotTable
    * @returns {Object}
    */
-  function getModel(handsontable) {
-    if (handsontable.templateInstance) {
-      return handsontable.templateInstance.model;
+  function getModel(hotTable) {
+    if (hotTable.templateInstance) {
+      return hotTable.templateInstance.model;
     }
     else {
       return window;
     }
   }
 
-  function getModelPath(handsontable, path) {
+  function getModelPath(hotElement, path) {
     var model, expression, obj;
 
     // happens in Polymer when assigning
@@ -101,26 +114,26 @@
     if (typeof path === 'object' || typeof path === 'function') {
       return path;
     }
-    model = getModel(handsontable);
+    model = getModel(hotElement);
     expression = 'with(model) { ' + path + ';}';
     /* jshint -W061 */
     obj = eval(expression);
 
-    return (obj);
+    return obj;
   }
 
   /**
    * Read hnadsontable option value
    *
-   * @param {Element} handsontable hot-table Element
+   * @param {Element} hotElement hot-table Element
    * @param {String} key
    * @param {*} value
    * @returns {*}
    */
-  function readOption(handsontable, key, value) {
+  function readOption(hotElement, key, value) {
     if (key === 'datarows' || key === 'renderer' || key === 'source' || key === 'afterOnCellMouseOver' ||
         publicHooks.indexOf(key) > -1) {
-      return getModelPath(handsontable, value);
+      return getModelPath(hotElement, value);
     }
 
     return readBool(value);
@@ -155,8 +168,8 @@
     return result;
   }
 
-  function parseHandsontable(handsontable) {
-    var columns = parseDataColumns(handsontable),
+  function parseHandsontable(hotTable) {
+    var columns = parseDataColumns(hotTable),
       options = webComponentDefaults(),
       attrName, settingsAttr, i, ilen;
 
@@ -166,11 +179,11 @@
       if (attrName === 'data') {
         attrName = 'datarows';
       }
-      options[publicProperties[i]] = readOption(handsontable, attrName, handsontable[attrName]);
+      options[publicProperties[i]] = readOption(hotTable, attrName, hotTable[attrName]);
     }
 
-    if (handsontable.settings) {
-      settingsAttr = getModelPath(handsontable, handsontable.settings);
+    if (hotTable.settings) {
+      settingsAttr = getModelPath(hotTable, hotTable.settings);
 
       for (i in settingsAttr) {
         if (settingsAttr.hasOwnProperty(i)) {
@@ -258,9 +271,10 @@
     instance: null,
 
     attached: function() {
-      var _this = this;
+      var _this = this,
+        options = parseHandsontable(this);
 
-      this.instance = new Handsontable(this.$.htContainer, parseHandsontable(this));
+      this.instance = new Handsontable(this.$.htContainer, options);
 
       // TODO: move below to Handsontable
       this.addHook('afterDeselect', function() {

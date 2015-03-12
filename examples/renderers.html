@@ -29,6 +29,9 @@
       height: 100px;
       width: 200px;
     }
+    hot-table /deep/ td.maps {
+      padding: 0;
+    }
     /* For browser which not supported web component natively yet */
     hot-table google-map {
       height: 100px;
@@ -41,7 +44,7 @@
 <h2>&lt;hot-table&gt; renderers demo</h2>
 
 <template is="auto-binding">
-  <hot-table datarows="{{ people }}" contextMenu="true">
+  <hot-table datarows="{{ people }}" contextMenu="true" maxRows="10">
     <hot-column width="30" readOnly value="id" header="ID"></hot-column>
     <hot-column width="70" value="name.first" header="First Name">
       <template data-hot-role="renderer"><colored-renderer value="{{ name.first }}"></colored-renderer></template>
@@ -55,7 +58,7 @@
     <hot-column width="120" value="age" header="Age">
       <template data-hot-role="renderer"><age-renderer age="{{ age }}"></age-renderer></template>
     </hot-column>
-    <hot-column width="200" value="address" header="Map">
+    <hot-column width="200" value="address" header="Map" class="maps">
       <template data-hot-role="renderer">
         <google-map-search map="{{ map }}" query="{{ address }}" result="{{ result }}"></google-map-search>
         <google-map disableDefaultUI zoomable="false" map="{{ map }}"

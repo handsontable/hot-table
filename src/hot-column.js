@@ -40,6 +40,7 @@
 
     ready: function () {
       this.registerRenderer(findRenderer(this));
+      this.registerEditor(findEditor(this));
 
       if (this.parentNode && this.parentNode.onMutation) {
         this.parentNode.onMutation();
@@ -70,6 +71,7 @@
           node, model, oldValue;
 
         oldValue = cache.get(TD);
+        Handsontable.renderers.cellDecorator.apply(this, arguments);
 
         // Prevent re-render cells that are not changed
         if (oldValue === value) {
@@ -81,9 +83,11 @@
           row: row,
           col: col
         };
+
         if (prop.indexOf('.') !== -1) {
           valueKey = prop.split('.')[0];
           model[valueKey] = instance.getDataAtRowProp(row, valueKey);
+
         } else {
           model[valueKey] = value;
         }
@@ -92,6 +96,30 @@
         TD.textContent = '';
         TD.appendChild(node);
       };
+    },
+
+    /**
+     * Register cell editor
+     *
+     * @param {Element} element Template element
+     */
+    registerEditor: function(element) {
+      if (!element) {
+        return;
+      }
+      this.editor = ProxyEditor;
+
+      function ProxyEditor(instance) {
+        HotEditor.call(this, instance);
+        this.template = element;
+      }
+
+      ProxyEditor.prototype = Object.create(HotEditor.prototype, {
+        constructor: {
+          value: HotEditor,
+          configurable: true
+        }
+      });
     }
   });
-})();
+}());
