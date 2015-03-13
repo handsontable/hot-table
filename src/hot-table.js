@@ -15,6 +15,7 @@
     publish = {}
   ;
 
+  publicProperties.push('className');
   publicProperties = publicProperties.concat(publicHooks);
 
   function webComponentDefaults() {
