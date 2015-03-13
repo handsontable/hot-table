@@ -30,6 +30,21 @@ describe('<hot-table>', function() {
     });
   });
 
+  it('should detect that table is running in hot-table environment', function() {
+    var
+      hot = document.createElement('hot-table');
+
+    this.$container.append(hot);
+
+    waitsFor(function() {
+      return ready;
+    }, 1000);
+
+    runs(function() {
+      expect(hot.instance.isHotTableEnv).toBe(true);
+    });
+  });
+
   it('undefined attribute should return default value', function() {
     var
       hot = document.createElement('hot-table');
