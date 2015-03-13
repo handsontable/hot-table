@@ -11,7 +11,6 @@ audio, canvas, video {
   *display: inline;
   *zoom: 1;
 }
-/*audio:not([controls]) { display: none; }*/
 [hidden] {
   display: none;
 }
@@ -62,7 +61,7 @@ a:visited {
 a:hover {
   color: #25BBF7;
 }
-/* a:focus { outline: thin dotted; } */
+
 a:focus {
   outline: none;
 }
@@ -249,7 +248,7 @@ textarea {
   vertical-align: top;
   resize: vertical;
 }
-/* input:valid, textarea:valid {  } */
+
 input:invalid, textarea:invalid {
   background-color: #f0dddd;
 }
@@ -271,10 +270,7 @@ td {
   padding: 0.2em 0;
 }
 
-
-/* =========================================================================
-   Primary Styles
-   ========================================================================== */
+/* Primary Styles */
 
 body {
   color: #333;
@@ -331,18 +327,8 @@ pre {
   margin: 0 auto;
 }
 
-.logo {
-  padding-right: 10px;
-  margin-top: -5px;
-}
-
 .logo-desc {
   margin-top: 0;
-}
-
-.follow-btn {
-  width: 169px;
-  margin: 0 auto;
 }
 
 .warning {
@@ -359,84 +345,8 @@ pre {
   font-weight: bold;
 }
 
-#author {
-  overflow: hidden;
-  margin-bottom: 1.5em;
-}
-
-#author span {
-  display: inline-block;
-  *display: block;
-  zoom: 1;
-  margin-top: 5px;
-}
-
-#resize-graphic {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  opacity: .6;
-}
-
-.footer-ad {
-  width: 100%;
-  text-align: center;
-  margin-top: 3em;
-}
-
-.footer-ad img {
-  width: 100%;
-  max-width: 728px;
-  border: solid 1px #eee;
-}
-
-
-/* =============================================================================
-   Non-Semantic Helper Classes
-   ========================================================================== */
-
-.ir {
-  display: block;
-  border: 0;
-  text-indent: -999em;
-  overflow: hidden;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  text-align: left;
-  direction: ltr;
-  *line-height: 0;
-}
-
-.ir br {
-  display: none;
-}
-
 .hidden {
   display: none !important;
-  visibility: hidden;
-}
-
-.visuallyhidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
-}
-
-.invisible {
   visibility: hidden;
 }
 
@@ -457,6 +367,20 @@ code.hljs {
   background-color: transparent;
 }
 
+.fork-me img {
+  border: 0;
+  height: 149px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 149px;
+}
+
 hot-table {
   font-size: 12px;
+  display: inline-block;
+}
+
+hot-table /deep/ .handsontableInputHolder {
+  text-align: left !important;
 }

@@ -58,21 +58,23 @@
     &#x3C;hot-table datarows=&#x22;{{ itemsArray }}&#x22;&#x3E;&#x3C;/hot-table&#x3E;
   </code></pre>
 
-  <a href="https://github.com/handsontable/hot-table"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+  <a href="https://github.com/handsontable/hot-table" class="fork-me">
+    <img src="http://aral.github.com/fork-me-on-github-retina-ribbons/right-dusk-blue@2x.png" alt="Fork me on GitHub">
+  </a>
 
   <h2>Simple Example</h2>
 
   <div class="example">
     <template id="tpl" bind>
       Name of first person: <strong>{{ people[0].name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
-      <hot-table datarows="{{ people }}" contextMenu="true" stretchH="all" highlightedRow="{{ highlightedRow }}">
+      <hot-table datarows="{{ people }}" contextMenu="true" maxRows="{{ people.length }}" highlightedRow="{{ highlightedRow }}">
         <hot-column width="30" readOnly value="id" header="ID"></hot-column>
-        <hot-column width="70" value="name.first" header="First Name">
+        <hot-column value="name.first" header="First Name">
           <template data-hot-role="renderer"><span>{{ name.first }}...</span></template>
         </hot-column>
         <hot-column width="100" value="name.last" header="Last Name"></hot-column>
         <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
-        <hot-column value="gender" header="Gender"></hot-column>
+        <hot-column value="gender" header="Gender" source="['Male', 'Female']" type="dropdown"></hot-column>
         <hot-column type="numeric" value="age" header="Age"></hot-column>
         <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
                     uncheckedTemplate="No"></hot-column>
