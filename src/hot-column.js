@@ -70,6 +70,7 @@
           node, model, oldValue;
 
         oldValue = cache.get(TD);
+        Handsontable.renderers.cellDecorator.apply(this, arguments);
 
         // Prevent re-render cells that are not changed
         if (oldValue === value) {
