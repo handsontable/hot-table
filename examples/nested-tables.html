@@ -11,6 +11,13 @@
   <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
   <link rel="stylesheet" href="../../handsontable/demo/js/pikaday/css/pikaday.css">
 
+  <!-- Code highlighter -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/main.css"/>
+
   <script src="../../handsontable/demo/js/pikaday/pikaday.js"></script>
   <script src="../../handsontable/demo/js/moment/moment.js"></script>
 
@@ -18,11 +25,8 @@
   <link rel="import" href="../src/hot-table.html">
 
   <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-    }
     hot-table {
-      font-size: 12px;
+      display: inline-block;
     }
     hot-table /deep/ .ht_clone_top {
       z-index: 0;
@@ -55,31 +59,69 @@
 </head>
 <body>
 
-<h2>&lt;hot-table&gt; nested tables demo</h2>
+<div id="wrapper">
+  <header>
+    <h1>&lt;hot-table&gt;</h1>
+    <h2 class="logo-desc">Nested tables demo</h2>
+  </header>
 
-<template is="auto-binding">
-  <hot-table datarows="{{ cars }}" contextMenu="true">
-    <hot-column width="30" readOnly value="id" header="ID"></hot-column>
-    <hot-column width="100" value="brand" header="Brand" class="htCenter htMiddle"></hot-column>
-    <hot-column width="600" value="cars" header="Cars" class="no-padding no-header-shadow">
-      <template data-hot-role="renderer">
-        <hot-table datarows="{{ cars }}" stretchH="all" class="no-header-shadow">
-          <hot-column width="100" value="model" header="Model"></hot-column>
-          <hot-column width="100" type="date" value="date.production" header="Production data"></hot-column>
-          <hot-column width="100" type="date" value="date.sold" header="Sold date"></hot-column>
-          <hot-column width="200" value="clients" header="Clients" class="no-padding">
-            <template data-hot-role="renderer">
-              <hot-table datarows="{{ clients }}" stretchH="all" class="no-header-shadow" minSpareRows="1">
-                <hot-column width="100" value="firstName" header="First name"></hot-column>
-                <hot-column width="100" value="lastName" header="Last name"></hot-column>
-              </hot-table>
-            </template>
-          </hot-column>
-        </hot-table>
-      </template>
-    </hot-column>
-  </hot-table>
-</template>
+  <h2>Simple Example</h2>
+
+  <div class="example">
+    <template is="auto-binding">
+      <hot-table datarows="{{ cars }}" contextMenu="true">
+        <hot-column width="30" readOnly value="id" header="ID"></hot-column>
+        <hot-column width="100" value="brand" header="Brand" class="htCenter htMiddle"></hot-column>
+        <hot-column width="600" value="cars" header="Cars" class="no-padding no-header-shadow">
+          <template data-hot-role="renderer">
+            <hot-table datarows="{{ cars }}" stretchH="all" class="no-header-shadow">
+              <hot-column width="100" value="model" header="Model"></hot-column>
+              <hot-column width="100" type="date" value="date.production" header="Production data"></hot-column>
+              <hot-column width="100" type="date" value="date.sold" header="Sold date"></hot-column>
+              <hot-column width="200" value="clients" header="Clients" class="no-padding">
+                <template data-hot-role="renderer">
+                  <hot-table datarows="{{ clients }}" stretchH="all" class="no-header-shadow" minSpareRows="1">
+                    <hot-column width="100" value="firstName" header="First name"></hot-column>
+                    <hot-column width="100" value="lastName" header="Last name"></hot-column>
+                  </hot-table>
+                </template>
+              </hot-column>
+            </hot-table>
+          </template>
+        </hot-column>
+      </hot-table>
+    </template>
+  </div>
+
+  <h2>Code</h2>
+
+  <pre><code class="html">
+    &#x3C;template is=&#x22;auto-binding&#x22;&#x3E;
+      &#x3C;hot-table datarows=&#x22;{{ cars }}&#x22; contextMenu=&#x22;true&#x22;&#x3E;
+        &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+        &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;brand&#x22; header=&#x22;Brand&#x22; class=&#x22;htCenter htMiddle&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+        &#x3C;hot-column width=&#x22;600&#x22; value=&#x22;cars&#x22; header=&#x22;Cars&#x22; class=&#x22;no-padding no-header-shadow&#x22;&#x3E;
+          &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
+            &#x3C;hot-table datarows=&#x22;{{ cars }}&#x22; stretchH=&#x22;all&#x22; class=&#x22;no-header-shadow&#x22;&#x3E;
+              &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;model&#x22; header=&#x22;Model&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+              &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date.production&#x22; header=&#x22;Production data&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+              &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date.sold&#x22; header=&#x22;Sold date&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+              &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;clients&#x22; header=&#x22;Clients&#x22; class=&#x22;no-padding&#x22;&#x3E;
+                &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
+                  &#x3C;hot-table datarows=&#x22;{{ clients }}&#x22; stretchH=&#x22;all&#x22; class=&#x22;no-header-shadow&#x22; minSpareRows=&#x22;1&#x22;&#x3E;
+                    &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;firstName&#x22; header=&#x22;First name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+                    &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;lastName&#x22; header=&#x22;Last name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+                  &#x3C;/hot-table&#x3E;
+                &#x3C;/template&#x3E;
+              &#x3C;/hot-column&#x3E;
+            &#x3C;/hot-table&#x3E;
+          &#x3C;/template&#x3E;
+        &#x3C;/hot-column&#x3E;
+      &#x3C;/hot-table&#x3E;
+    &#x3C;/template&#x3E;
+  </code></pre>
+  <script>hljs.initHighlightingOnLoad();</script>
+</div>
 
 <script>
   var cars = [

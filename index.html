@@ -7,6 +7,13 @@
   <!-- Importing Web Component's Polyfill -->
   <script src="../webcomponentsjs/webcomponents.js"></script>
 
+  <!-- Code highlighter -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="examples/css/main.css"/>
+
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
   <link rel="stylesheet" href="../handsontable/dist/handsontable.full.css">
   <link rel="stylesheet" href="../handsontable/demo/js/pikaday/css/pikaday.css">
@@ -15,79 +22,129 @@
   <script src="../handsontable/demo/js/moment/moment.js"></script>
 
   <!-- Importing Custom Elements -->
-  <!--<link rel="import" href="dist/hot-table.html">-->
   <link rel="import" href="src/hot-table.html">
-
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    hot-table {
-      font-size: 12px;
-    }
-  </style>
 </head>
 <body>
 
-<h2>&lt;hot-table&gt;</h2>
+<div id="wrapper">
+  <header>
+    <h1>&lt;hot-table&gt;</h1>
+    <h2 class="logo-desc">Polymer Element wrapper for <a href="http://handsontable.com">Handsontable</a> data grid editor</h2>
+  </header>
 
-<p>Polymer Element wrapper for Handsontable data grid editor</p>
+  <p class="warning">Some stuff does not work yet. <b>For now it is not ready for production!</b> <br>
+    But feel free to submit issues on GitHub.</p>
 
-<p><a href="https://github.com/handsontable/hot-table">Source on GitHub</a></p>
+  <h2>Install</h2>
+  <br>
+  Install the component using Bower:
+  <pre><code class="bash">
+    $ bower install hot-table --save
+  </code></pre>
+  Or <a href="https://github.com/handsontable/hot-table/archive/master.zip">download as ZIP</a>.
 
-<template id="tpl" bind>
-  Name of first person: <strong>{{ people[0].name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
-  <hot-table datarows="{{ people }}" contextMenu="true" highlightedRow="{{ highlightedRow }}">
-    <hot-column width="30" readOnly value="id" header="ID"></hot-column>
-    <hot-column width="70" value="name.first" header="First Name">
-      <template data-hot-role="renderer"><span>{{ name.first }}...</span></template>
-    </hot-column>
-    <hot-column width="100" value="name.last" header="Last Name"></hot-column>
-    <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
-    <hot-column value="gender" header="Gender"></hot-column>
-    <hot-column type="numeric" value="age" header="Age"></hot-column>
-    <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
-                uncheckedTemplate="No"></hot-column>
-    <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
-                uncheckedTemplate="No"></hot-column>
-    <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
-                uncheckedTemplate="No"></hot-column>
-    <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
-  </hot-table>
-</template>
+  <h2>Usage</h2>
+  <br>
+  1. Import Web Components' polyfill:
+  <pre><code class="html">
+    &#x3C;script src=&#x22;bower_components/webcomponentsjs/webcomponents.js&#x22;&#x3E;&#x3C;/script&#x3E;
+  </code></pre>
+  2. Import Custom Element:
+  <pre><code class="html">
+    &#x3C;link rel=&#x22;import&#x22; href=&#x22;bower_components/hot-table/src/hot-table.html&#x22;&#x3E;
+  </code></pre>
+  3. Start using it!
+  <pre><code class="html">
+    &#x3C;hot-table datarows=&#x22;{{ itemsArray }}&#x22;&#x3E;&#x3C;/hot-table&#x3E;
+  </code></pre>
 
-<p>More demos:</p>
+  <a href="https://github.com/handsontable/hot-table"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-<ul>
-  <li><a href="examples/dashboard.html">Dashboard</a></li>
-  <li><a href="examples/renderers.html">Custom Renderers</a></li>
-  <li><a href="examples/nested-tables.html">Nested Tables</a></li>
-</ul>
+  <h2>Simple Example</h2>
 
-<script>
-  var people = [
-    {id: 1, date: '12/24/1986', name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
-    {id: 2, date: '02/30/1976', name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
-    {id: 3, date: '07/14/1967', name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
-    {id: 4, date: '06/14/1956', name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
-    {id: 5, date: '05/09/1975', name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
-    {id: 6, date: '01/01/1986', name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
-    {id: 7, date: '04/03/1994', name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
-    {id: 8, date: '01/04/1993', name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
-    {id: 9, date: '01/05/1982', name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
-    {id: 10, date: '03/10/1992', name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
-    {id: 11, date: '01/10/1991', name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
-  ];
+  <div class="example">
+    <template id="tpl" bind>
+      Name of first person: <strong>{{ people[0].name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
+      <hot-table datarows="{{ people }}" contextMenu="true" stretchH="all" highlightedRow="{{ highlightedRow }}">
+        <hot-column width="30" readOnly value="id" header="ID"></hot-column>
+        <hot-column width="70" value="name.first" header="First Name">
+          <template data-hot-role="renderer"><span>{{ name.first }}...</span></template>
+        </hot-column>
+        <hot-column width="100" value="name.last" header="Last Name"></hot-column>
+        <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
+        <hot-column value="gender" header="Gender"></hot-column>
+        <hot-column type="numeric" value="age" header="Age"></hot-column>
+        <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
+                    uncheckedTemplate="No"></hot-column>
+        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
+                    uncheckedTemplate="No"></hot-column>
+        <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
+                    uncheckedTemplate="No"></hot-column>
+        <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
+      </hot-table>
+    </template>
+  </div>
 
-  window.addEventListener('polymer-ready', function () {
-    var tpl = document.getElementById('tpl');
+  <h2>Code</h2>
 
-    tpl.model = {
-      highlightedRow: -1,
-      people: people
-    };
-  });
-</script>
+  <pre><code class="html">
+  &#x3C;template id=&#x22;tpl&#x22; bind&#x3E;
+    Name of first person: &#x3C;strong&#x3E;{{ people[0].name.first }}&#x3C;/strong&#x3E; | Highlighted row: &#x3C;strong&#x3E;{{ highlightedRow }}&#x3C;/strong&#x3E;
+
+    &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; contextMenu=&#x22;true&#x22; stretchH=&#x22;all&#x22; highlightedRow=&#x22;{{ highlightedRow }}&#x22;&#x3E;
+      &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;span&#x3E;{{ name.first }}...&#x3C;/span&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date&#x22; header=&#x22;Birthday&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column value=&#x22;gender&#x22; header=&#x22;Gender&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
+                  uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
+                  uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
+                  uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
+  &#x3C;/template&#x3E;
+  </code></pre>
+
+  <h2>More demos</h2>
+
+  <ul>
+    <li><a href="examples/dashboard.html">Dashboard</a></li>
+    <li><a href="examples/renderers.html">Custom Renderers</a></li>
+    <li><a href="examples/nested-tables.html">Nested Tables</a></li>
+  </ul>
+
+  <script>
+    var people = [
+      {id: 1, date: '12/24/1986', name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 21, languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
+      {id: 2, date: '02/30/1976', name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
+      {id: 3, date: '07/14/1967', name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
+      {id: 4, date: '06/14/1956', name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
+      {id: 5, date: '05/09/1975', name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 46, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
+      {id: 6, date: '01/01/1986', name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
+      {id: 7, date: '04/03/1994', name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
+      {id: 8, date: '01/04/1993', name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
+      {id: 9, date: '01/05/1982', name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 27, languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
+      {id: 10, date: '03/10/1992', name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090},
+      {id: 11, date: '01/10/1991', name: {first: 'Aaron', last: 'Kinley'}, gender: 'Female', age: 33, languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
+    ];
+
+    window.addEventListener('polymer-ready', function () {
+      var tpl = document.getElementById('tpl');
+
+      tpl.model = {
+        highlightedRow: -1,
+        people: people
+      };
+    });
+  </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</div>
 
 </body>
 </html>
