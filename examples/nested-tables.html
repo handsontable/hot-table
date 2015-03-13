@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>&lt;hot-table&gt;</title>
+
+  <!-- Importing Web Component's Polyfill -->
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+
+  <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
+  <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
+  <link rel="stylesheet" href="../../handsontable/demo/js/pikaday/css/pikaday.css">
+
+  <script src="../../handsontable/demo/js/pikaday/pikaday.js"></script>
+  <script src="../../handsontable/demo/js/moment/moment.js"></script>
+
+  <!-- Importing Custom Elements -->
+  <link rel="import" href="../src/hot-table.html">
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    hot-table {
+      font-size: 12px;
+    }
+    hot-table /deep/ .ht_clone_top {
+      z-index: 0;
+    }
+    hot-table /deep/ .no-padding {
+      padding: 0;
+      border-right: none;
+      border-left: none;
+    }
+    hot-table /deep/ .no-header-shadow .htCore {
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+    /* For browser which not supported web component natively yet */
+    hot-table .ht_clone_top {
+      z-index: 0;
+    }
+    hot-table .no-padding {
+      padding: 0;
+      border-right: none;
+      border-left: none;
+    }
+    hot-table .no-header-shadow .htCore {
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<h2>&lt;hot-table&gt; nested tables demo</h2>
+
+<template is="auto-binding">
+  <hot-table datarows="{{ cars }}" contextMenu="true">
+    <hot-column width="30" readOnly value="id" header="ID"></hot-column>
+    <hot-column width="100" value="brand" header="Brand" class="htCenter htMiddle"></hot-column>
+    <hot-column width="600" value="cars" header="Cars" class="no-padding no-header-shadow">
+      <template data-hot-role="renderer">
+        <hot-table datarows="{{ cars }}" stretchH="all" class="no-header-shadow">
+          <hot-column width="100" value="model" header="Model"></hot-column>
+          <hot-column width="100" type="date" value="date.production" header="Production data"></hot-column>
+          <hot-column width="100" type="date" value="date.sold" header="Sold date"></hot-column>
+          <hot-column width="200" value="clients" header="Clients" class="no-padding">
+            <template data-hot-role="renderer">
+              <hot-table datarows="{{ clients }}" stretchH="all" class="no-header-shadow" minSpareRows="1">
+                <hot-column width="100" value="firstName" header="First name"></hot-column>
+                <hot-column width="100" value="lastName" header="Last name"></hot-column>
+              </hot-table>
+            </template>
+          </hot-column>
+        </hot-table>
+      </template>
+    </hot-column>
+  </hot-table>
+</template>
+
+<script>
+  var cars = [
+    {
+      id: 1,
+      brand: 'Ford',
+      cars: [
+        {
+          model: 'Focus',
+          date: {production: '10/10/2001', sold: '12/09/2002'},
+          clients: [
+            {firstName: 'Alan', lastName: 'Fabiano'},
+            {firstName: 'Fred', lastName: 'Fabiano'},
+            {firstName: 'Maria', lastName: 'Moore'},
+            {firstName: 'Don', lastName: 'Kinley'},
+            {firstName: 'John', lastName: 'Kowalsky'}
+          ]
+        },
+        {
+          model: 'Fiesta',
+          date: {production: '01/01/2002', sold: '10/29/2003'},
+          clients: [
+            {firstName: 'Wilma', lastName: 'Silver'},
+            {firstName: 'Barbara', lastName: 'Bush'}
+          ]
+        },
+        {
+          model: 'B-Max',
+          date: {production: '06/12/2003', sold: '12/30/2004'},
+          clients: [
+            {firstName: 'Alan', lastName: 'Goldman'},
+            {firstName: 'Pierre', lastName: 'Gold'}
+          ]
+        },
+        {
+          model: 'C-Max',
+          date: {production: '11/10/2007', sold: '08/14/2010'},
+          clients: [
+            {firstName: 'Chris', lastName: 'Wecler'},
+            {firstName: 'Martin', lastName: 'MacDonald'}
+          ]
+        }
+      ]
+    },
+    {
+      id: 2,
+      brand: 'Opel',
+      cars: [
+        {
+          model: 'Corsa',
+          date: {production: '09/16/2008', sold: '12/04/2008'},
+          clients: [
+            {firstName: 'Eddie', lastName: 'Gruber'}
+          ]
+        },
+        {
+          model: 'Meriva',
+          date: {production: '01/11/2009', sold: '10/22/2010'},
+          clients: [
+            {firstName: 'Troy', lastName: 'Eder'},
+            {firstName: 'Barry', lastName: 'Anderson'}
+          ]
+        },
+        {
+          model: 'Cascada',
+          date: {production: '06/30/2003', sold: '11/01/2004'},
+          clients: [
+            {firstName: 'Jose', lastName: 'Acker'},
+            {firstName: 'Carl', lastName: 'Cole'},
+            {firstName: 'Jerry', lastName: 'Cole'}
+          ]
+        },
+        {
+          model: 'Astra',
+          date: {production: '11/09/2007', sold: '08/16/2009'},
+          clients: [
+            {firstName: 'James', lastName: 'Cox'},
+            {firstName: 'David', lastName: 'Crewe'}
+          ]
+        }
+      ]
+    },
+    {
+      id: 3,
+      brand: 'Fiat',
+      cars: [
+        {
+          model: 'Panda',
+          date: {production: '09/16/2008', sold: '12/14/2008'},
+          clients: [
+            {firstName: 'Pedro', lastName: 'Curtis'},
+            {firstName: 'Glen', lastName: 'Cox'}
+          ]
+        },
+        {
+          model: '500',
+          date: {production: '01/11/2006', sold: '01/10/2010'},
+          clients: [
+            {firstName: 'Ted', lastName: 'Derby'},
+            {firstName: 'Mitchel', lastName: 'Grey'},
+            {firstName: 'Alex', lastName: 'Grey'}
+          ]
+        },
+        {
+          model: '500C',
+          date: {production: '06/30/2004', sold: '12/01/2004'},
+          clients: [
+            {firstName: 'Darren', lastName: 'Cox'},
+            {firstName: 'Neil', lastName: 'Crewe'}
+          ]
+        },
+        {
+          model: '500L',
+          date: {production: '02/09/2007', sold: '08/13/2009'},
+          clients: [
+            {firstName: 'Karl', lastName: 'Hancock'},
+            {firstName: 'Arnold', lastName: 'Hall'},
+            {firstName: 'Jamie', lastName: 'Hamilton'}
+          ]
+        },
+        {
+          model: 'Sedici',
+          date: {production: '10/09/2004', sold: ''},
+          clients: []
+        },
+        {
+          model: 'Punto',
+          date: {production: '10/09/2005', sold: ''},
+          clients: []
+        },
+        {
+          model: 'Freemont',
+          date: {production: '11/09/2009', sold: '08/22/2011'},
+          clients: [
+            {firstName: 'James', lastName: 'Horn'},
+            {firstName: 'David', lastName: 'Crewe'}
+          ]
+        },
+        {
+          model: 'Qubo',
+          date: {production: '11/07/2010', sold: '08/30/2013'},
+          clients: [
+            {firstName: 'James', lastName: 'Nye'},
+            {firstName: 'John', lastName: 'Lee'},
+            {firstName: 'John', lastName: 'Paris'},
+            {firstName: 'Rob', lastName: 'Robins'},
+            {firstName: 'Bob', lastName: 'Rodgers'},
+            {firstName: 'David', lastName: 'Layton'},
+            {firstName: 'David', lastName: 'Hopson'}
+          ]
+        }
+      ]
+    }
+  ];
+
+  document.querySelector('template').cars = cars;
+</script>
+
+</body>
+</html>
