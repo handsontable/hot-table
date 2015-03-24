@@ -52,7 +52,7 @@
 
   <div class="example">
     <template is="auto-binding">
-      <hot-table datarows="{{ people }}" contextMenu="true">
+      <hot-table datarows="{{ people }}" maxRows="{{ people.length }}" contextMenu="true">
         <hot-column width="30" readOnly value="id" header="ID"></hot-column>
         <hot-column width="70" value="name.first" header="First Name">
           <template data-hot-role="renderer"><colored-renderer value="{{ name.first }}"></colored-renderer></template>
@@ -97,37 +97,35 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-    &#x3C;template is=&#x22;auto-binding&#x22;&#x3E;
-      &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; contextMenu=&#x22;true&#x22;&#x3E;
-        &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-        &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
-          &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;colored-renderer value=&#x22;{{ name.first }}&#x22;&#x3E;&#x3C;/colored-renderer&#x3E;&#x3C;/template&#x3E;
-        &#x3C;/hot-column&#x3E;
-        &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
-          &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;bold-renderer value=&#x22;{{ name.last }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;&#x3C;/template&#x3E;
-        &#x3C;/hot-column&#x3E;
-        &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; header=&#x22;Gender&#x22;&#x3E;
-          &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;({{ gender }})&#x3C;/template&#x3E;
-        &#x3C;/hot-column&#x3E;
-        &#x3C;hot-column width=&#x22;120&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;
-          &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;age-renderer age=&#x22;{{ age }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
-        &#x3C;/hot-column&#x3E;
-        &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;address&#x22; header=&#x22;Map&#x22;&#x3E;
-          &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
-            &#x3C;google-map-search map=&#x22;{{ map }}&#x22; query=&#x22;{{ address }}&#x22; result=&#x22;{{ result }}&#x22;&#x3E;&#x3C;/google-map-search&#x3E;
-            &#x3C;google-map disableDefaultUI zoomable=&#x22;false&#x22; map=&#x22;{{ map }}&#x22;
-                        latitude=&#x22;{{ result.latitude }}&#x22; longitude=&#x22;{{ result.longitude }}&#x22;&#x3E;&#x3C;/google-map&#x3E;
-          &#x3C;/template&#x3E;
-        &#x3C;/hot-column&#x3E;
-        &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
-            uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-        &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
-            uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-        &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
-            uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-        &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;/hot-table&#x3E;
-    &#x3C;/template&#x3E;
+    &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; maxRows=&#x22;{{ people.length }}&#x22; contextMenu=&#x22;true&#x22;&#x3E;
+      &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;colored-renderer value=&#x22;{{ name.first }}&#x22;&#x3E;&#x3C;/colored-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;bold-renderer value=&#x22;{{ name.last }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; header=&#x22;Gender&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;({{ gender }})&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;120&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;age-renderer age=&#x22;{{ age }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;address&#x22; header=&#x22;Map&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
+          &#x3C;google-map-search map=&#x22;{{ map }}&#x22; query=&#x22;{{ address }}&#x22; result=&#x22;{{ result }}&#x22;&#x3E;&#x3C;/google-map-search&#x3E;
+          &#x3C;google-map disableDefaultUI zoomable=&#x22;false&#x22; map=&#x22;{{ map }}&#x22;
+                      latitude=&#x22;{{ result.latitude }}&#x22; longitude=&#x22;{{ result.longitude }}&#x22;&#x3E;&#x3C;/google-map&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
+          uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
+          uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
+          uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
   </code></pre>
 
   <script>
