@@ -33,8 +33,10 @@
     }
     hot-table /deep/ .no-padding {
       padding: 0;
-      border-right: none;
-      border-left: none;
+    }
+    hot-table /deep/ .nested2 td {
+      border-left-color: transparent;
+      border-right-color: transparent;
     }
     hot-table /deep/ .nested .htCore {
       -webkit-box-shadow: none;
@@ -54,8 +56,10 @@
     }
     hot-table .no-padding {
       padding: 0 !important;
-      border-right: none !important;
-      border-left: none !important;
+    }
+    hot-table .nested-level-2 td {
+      border-left-color: transparent;
+      border-right-color: transparent;
     }
     hot-table.nested .htCore {
       -webkit-box-shadow: none !important;
@@ -85,21 +89,28 @@
       <hot-table dataRows="{{ cars }}" contextMenu="true">
         <hot-column width="30" readOnly value="id" header="ID" class="htCenter htMiddle"></hot-column>
         <hot-column width="100" value="brand" header="Brand" class="htCenter htMiddle"></hot-column>
-        <hot-column width="600" value="cars" header="Cars" editor="false" class="no-padding no-header-shadow">
+        <hot-column width="700" value="cars" header="Cars" editor="false" class="no-padding no-header-shadow">
           <template data-hot-role="renderer">
-            <hot-table width="600" stretchH="all" dataRows="{{ cars }}" contextMenu="true" class="nested" minSpareRows="1">
+            <hot-table width="700" stretchH="all" dataRows="{{ cars }}" contextMenu="true" class="nested" minSpareRows="1">
               <hot-column width="100" value="model" header="Model" class="htCenter htMiddle"></hot-column>
-              <hot-column width="220" value="clients" header="Clients" editor="false" class="no-padding">
+              <hot-column width="230" value="clients" header="Clients" editor="false" class="no-padding">
                 <template data-hot-role="renderer">
-                  <hot-table width="220" stretchH="all" datarows="{{ clients }}" contextMenu="true"
+                  <hot-table width="230" stretchH="all" datarows="{{ clients }}" contextMenu="true"
                              class="nested" minSpareRows="1">
-                    <hot-column width="110" value="firstName" class="htLeft" header="First name"></hot-column>
-                    <hot-column width="110" value="lastName" class="htLeft" header="Last name"></hot-column>
+                    <hot-column width="115" value="firstName" class="htLeft" header="First name"></hot-column>
+                    <hot-column width="115" value="lastName" class="htLeft" header="Last name"></hot-column>
                   </hot-table>
                 </template>
               </hot-column>
-              <hot-column width="140" type="date" value="date.production" header="Production date" class="htCenter htMiddle"></hot-column>
-              <hot-column width="140" type="date" value="date.sold" header="Sold date" class="htCenter htMiddle"></hot-column>
+              <hot-column width="200" value="exportedTo" header="Exported to" editor="false" class="no-padding">
+                <template data-hot-role="renderer">
+                  <hot-table width="200" stretchH="all" datarows="{{ exportedTo }}" contextMenu="true"
+                             class="nested nested-level-2" minSpareRows="1">
+                    <hot-column value="country" header="Country" class="htLeft"></hot-column>
+                  </hot-table>
+                </template>
+              </hot-column>
+              <hot-column width="170" type="date" value="date.sold" header="Sold date" class="htCenter htMiddle"></hot-column>
             </hot-table>
           </template>
         </hot-column>
@@ -144,37 +155,56 @@
       cars: [
         {
           model: 'Focus',
-          date: {production: '10/10/2001', sold: '31/12/2002'},
+          date: {sold: '31/12/2002'},
           clients: [
             {firstName: 'Alan', lastName: 'Fabiano'},
             {firstName: 'Fred', lastName: 'Fabiano'},
             {firstName: 'Maria', lastName: 'Moore'},
             {firstName: 'Don', lastName: 'Kinley'},
             {firstName: 'John', lastName: 'Kowalsky'}
+          ],
+          exportedTo: [
+            {country: 'Canada'},
+            {country: 'Belgium'},
+            {country: 'Denmark'},
+            {country: 'Norway'},
+            {country: 'Sweden'}
           ]
         },
         {
           model: 'Fiesta',
-          date: {production: '01/01/2002', sold: '29/10/2003'},
+          date: {sold: '29/10/2003'},
           clients: [
             {firstName: 'Wilma', lastName: 'Silver'},
             {firstName: 'Barbara', lastName: 'Bush'}
+          ],
+          exportedTo: [
+            {country: 'Denmark'},
+            {country: 'Canada'}
           ]
         },
         {
           model: 'B-Max',
-          date: {production: '06/12/2003', sold: '22/12/2004'},
+          date: {sold: '22/12/2004'},
           clients: [
             {firstName: 'Alan', lastName: 'Goldman'},
             {firstName: 'Pierre', lastName: 'Gold'}
+          ],
+          exportedTo: [
+            {country: 'Poland'},
+            {country: 'Germany'}
           ]
         },
         {
           model: 'C-Max',
-          date: {production: '11/10/2007', sold: '14/08/2010'},
+          date: {sold: '14/08/2010'},
           clients: [
             {firstName: 'Chris', lastName: 'Wecler'},
             {firstName: 'Martin', lastName: 'MacDonald'}
+          ],
+          exportedTo: [
+            {country: 'United Kingdom'},
+            {country: 'Belgium'}
           ]
         }
       ]
@@ -185,34 +215,50 @@
       cars: [
         {
           model: 'Corsa',
-          date: {production: '16/10/2008', sold: '12/04/2008'},
+          date: {sold: '12/04/2008'},
           clients: [
             {firstName: 'Eddie', lastName: 'Gruber'}
+          ],
+          exportedTo: [
+            {country: 'United Kingdom'}
           ]
         },
         {
           model: 'Meriva',
-          date: {production: '01/11/2009', sold: '22/10/2010'},
+          date: {sold: '22/10/2010'},
           clients: [
             {firstName: 'Troy', lastName: 'Eder'},
             {firstName: 'Barry', lastName: 'Anderson'}
+          ],
+          exportedTo: [
+            {country: 'United Kingdom'},
+            {country: 'Belgium'}
           ]
         },
         {
           model: 'Cascada',
-          date: {production: '30/06/2003', sold: '11/01/2004'},
+          date: {sold: '11/01/2004'},
           clients: [
             {firstName: 'Jose', lastName: 'Acker'},
             {firstName: 'Carl', lastName: 'Cole'},
             {firstName: 'Jerry', lastName: 'Cole'}
+          ],
+          exportedTo: [
+            {country: 'United States'},
+            {country: 'United Kingdom'},
+            {country: 'Poland'}
           ]
         },
         {
           model: 'Astra',
-          date: {production: '11/09/2007', sold: '16/08/2009'},
+          date: {sold: '16/08/2009'},
           clients: [
             {firstName: 'James', lastName: 'Cox'},
             {firstName: 'David', lastName: 'Crewe'}
+          ],
+          exportedTo: [
+            {country: 'France'},
+            {country: 'Spain'}
           ]
         }
       ]

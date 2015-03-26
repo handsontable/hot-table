@@ -126,6 +126,9 @@
         key === 'dataSchema' || publicHooks.indexOf(key) > -1) {
       return getModelPath(handsontable, value);
     }
+    if (key === 'className') {
+      return value;
+    }
 
     return readBool(value);
   }
