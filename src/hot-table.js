@@ -7,7 +7,7 @@
       'getSelectedRange', 'destroyEditor', 'getRowHeader', 'getColHeader', 'destroy', 'isUndoAvailable',
       'isRedoAvailable', 'undo', 'redo', 'countEmptyRows',
       'countEmptyCols', /*'isEmptyRow', 'isEmptyCol', -- those are also publicProperties*/ 'parseSettingsFromDOM',
-      'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings'
+      'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings', 'getSchema'
     ],
     publicHooks = Object.keys(Handsontable.PluginHooks.hooks),
     publicProperties = Object.keys(Handsontable.DefaultSettings.prototype),
