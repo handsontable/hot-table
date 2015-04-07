@@ -10,6 +10,13 @@
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
   <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
 
+  <!-- Code highlighter -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/main.css"/>
+
   <!-- Importing Custom Elements -->
   <link rel="import" href="../src/hot-table.html">
   <link rel="import" href="../../google-map/google-map.html">
@@ -19,11 +26,8 @@
   <link rel="import" href="components/age-renderer.html">
 
   <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-    }
     hot-table {
-      font-size: 12px;
+      display: inline-block;
     }
     hot-table /deep/ google-map {
       height: 100px;
@@ -38,76 +42,120 @@
 </head>
 <body>
 
-<h2>&lt;hot-table&gt; renderers demo</h2>
+<div id="wrapper">
+  <header>
+    <h1>&lt;hot-table&gt;</h1>
+    <h2 class="logo-desc">Custom renderers demo</h2>
+  </header>
 
-<template is="auto-binding">
-  <hot-table datarows="{{ people }}" contextMenu="true">
-    <hot-column width="30" readOnly value="id" header="ID"></hot-column>
-    <hot-column width="70" value="name.first" header="First Name">
-      <template data-hot-role="renderer"><colored-renderer value="{{ name.first }}"></colored-renderer></template>
-    </hot-column>
-    <hot-column width="100" value="name.last" header="Last Name">
-      <template data-hot-role="renderer"><bold-renderer value="{{ name.last }}"></bold-renderer></template>
-    </hot-column>
-    <hot-column width="80" value="gender" header="Gender">
-      <template data-hot-role="renderer">({{ gender }})</template>
-    </hot-column>
-    <hot-column width="120" value="age" header="Age">
-      <template data-hot-role="renderer"><age-renderer age="{{ age }}"></age-renderer></template>
-    </hot-column>
-    <hot-column width="200" value="address" header="Map">
-      <template data-hot-role="renderer">
-        <google-map-search map="{{ map }}" query="{{ address }}" result="{{ result }}"></google-map-search>
-        <google-map disableDefaultUI zoomable="false" map="{{ map }}"
-                    latitude="{{ result.latitude }}" longitude="{{ result.longitude }}"></google-map>
-      </template>
-    </hot-column>
-    <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
-        uncheckedTemplate="No"></hot-column>
-    <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
-        uncheckedTemplate="No"></hot-column>
-    <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
-        uncheckedTemplate="No"></hot-column>
-    <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
-  </hot-table>
-</template>
+  <h2>Simple Example</h2>
 
-<p>Used renderers:</p>
+  <div class="example">
+    <template is="auto-binding">
+      <hot-table datarows="{{ people }}" maxRows="{{ people.length }}" contextMenu="true">
+        <hot-column width="30" readOnly value="id" header="ID"></hot-column>
+        <hot-column width="70" value="name.first" header="First Name">
+          <template data-hot-role="renderer"><colored-renderer value="{{ name.first }}"></colored-renderer></template>
+        </hot-column>
+        <hot-column width="100" value="name.last" header="Last Name">
+          <template data-hot-role="renderer"><bold-renderer value="{{ name.last }}"></bold-renderer></template>
+        </hot-column>
+        <hot-column width="80" value="gender" header="Gender">
+          <template data-hot-role="renderer">({{ gender }})</template>
+        </hot-column>
+        <hot-column width="120" value="age" header="Age">
+          <template data-hot-role="renderer"><age-renderer age="{{ age }}"></age-renderer></template>
+        </hot-column>
+        <hot-column width="200" value="address" header="Map">
+          <template data-hot-role="renderer">
+            <google-map-search map="{{ map }}" query="{{ address }}" result="{{ result }}"></google-map-search>
+            <google-map disableDefaultUI zoomable="false" map="{{ map }}"
+                        latitude="{{ result.latitude }}" longitude="{{ result.longitude }}"></google-map>
+          </template>
+        </hot-column>
+        <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
+            uncheckedTemplate="No"></hot-column>
+        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
+            uncheckedTemplate="No"></hot-column>
+        <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
+            uncheckedTemplate="No"></hot-column>
+        <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
+      </hot-table>
+    </template>
+  </div>
 
-<ul>
-  <li><b>First Name</b> column uses polymer &lt;colored-renderer&gt; element</li>
-  <li><b>Last Name</b> column uses polymer &lt;bold-renderer&gt; element</li>
-  <li><b>Gender</b> column uses &lt;template&gt; element to render cells (as simple cell decorator)</li>
-  <li><b>Age</b> column uses native &lt;age-renderer&gt; (CustomElement with webcomponents polyfills) to render cells</li>
-  <li><b>Map</b> column uses native &lt;google-maps&gt; element</li>
-</ul>
+  <h2>Used renderers</h2>
 
-<script>
-  var people = [
-    {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 17, address: "Napoli",
-      languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
-    {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, address: "Oslo",
-      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
-    {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, address: "Denver",
-      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
-    {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, address: "Mexico City",
-      languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
-    {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 65, address: "Gdynia",
-      languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
-    {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, address: "Glasgow",
-      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
-    {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, address: "Dublin",
-      languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
-    {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, address: "Seattle",
-      languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
-    {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 88, address: "Vancouver",
-      languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
-    {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, address: "Épernay",
-      languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090}
-  ];
+  <ul>
+    <li><b>First Name</b> column uses polymer &lt;colored-renderer&gt; element</li>
+    <li><b>Last Name</b> column uses polymer &lt;bold-renderer&gt; element</li>
+    <li><b>Gender</b> column uses &lt;template&gt; element to render cells (as simple cell decorator)</li>
+    <li><b>Age</b> column uses native &lt;age-renderer&gt; (CustomElement with webcomponents polyfills) to render cells</li>
+    <li><b>Map</b> column uses native &lt;google-maps&gt; element</li>
+  </ul>
 
-  document.querySelector('template').people = people;
-</script>
+  <h2>Code</h2>
+
+  <pre><code class="html">
+    &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; maxRows=&#x22;{{ people.length }}&#x22; contextMenu=&#x22;true&#x22;&#x3E;
+      &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;colored-renderer value=&#x22;{{ name.first }}&#x22;&#x3E;&#x3C;/colored-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;bold-renderer value=&#x22;{{ name.last }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; header=&#x22;Gender&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;({{ gender }})&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;120&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;age-renderer age=&#x22;{{ age }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;address&#x22; header=&#x22;Map&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
+          &#x3C;google-map-search map=&#x22;{{ map }}&#x22; query=&#x22;{{ address }}&#x22; result=&#x22;{{ result }}&#x22;&#x3E;&#x3C;/google-map-search&#x3E;
+          &#x3C;google-map disableDefaultUI zoomable=&#x22;false&#x22; map=&#x22;{{ map }}&#x22;
+                      latitude=&#x22;{{ result.latitude }}&#x22; longitude=&#x22;{{ result.longitude }}&#x22;&#x3E;&#x3C;/google-map&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
+          uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
+          uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
+          uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
+  </code></pre>
+
+  <script>
+    var people = [
+      {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 17, address: "Napoli",
+        languages: {english: 'Yes', spanish: 'Yes', french: 'No'}, salary: 2000},
+      {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, address: "Oslo",
+        languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2500},
+      {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, address: "Denver",
+        languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1700},
+      {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, address: "Mexico City",
+        languages: {english: 'No', spanish: 'Yes', french: 'Yes'}, salary: 3000},
+      {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 65, address: "Gdynia",
+        languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 1450},
+      {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, address: "Glasgow",
+        languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 2300},
+      {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, address: "Dublin",
+        languages: {english: 'Yes', spanish: 'No', french: 'No'}, salary: 1900},
+      {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, address: "Seattle",
+        languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2400},
+      {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 88, address: "Vancouver",
+        languages: {english: 'Yes', spanish: 'No', french: 'Yes'}, salary: 2110},
+      {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, address: "Épernay",
+        languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090}
+    ];
+
+    document.querySelector('template').people = people;
+  </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</div>
 
 </body>
 </html>

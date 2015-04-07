@@ -5,6 +5,13 @@
     <style>
       hot-table {
         font-size: 12px;
+        display: inline-block;
+      }
+      hot-table /deep/ .handsontableInputHolder {
+        text-align: left !important;
+      }
+      dashboard-tile {
+        display: inline-block;
       }
     </style>
 
@@ -14,9 +21,8 @@
     <dashboard-tile id="englishTile" skin="gray" label="English" value=""></dashboard-tile>
     <dashboard-tile id="frenchTile" skin="gray" label="French" value=""></dashboard-tile>
     <dashboard-tile id="spanishTile" skin="gray" label="Spanish" value=""></dashboard-tile>
-    <div style="clear: left"></div>
 
-    <hot-table id="HOT" datarows="people" settings="mySettings" width="400" minsparerows="1" contextMenu="true">
+    <hot-table id="HOT" datarows="people" settings="mySettings" minsparerows="1" contextMenu="true">
       <hot-column id="col1" width="30" readOnly value="id" header="ID"></hot-column>
       <hot-column width="70" value="name.first" header="First Name"></hot-column>
       <hot-column width="100" value="name.last" header="Last Name"></hot-column>
