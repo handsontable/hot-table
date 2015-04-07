@@ -7,7 +7,7 @@
       'getSelectedRange', 'destroyEditor', 'getRowHeader', 'getColHeader', 'destroy', 'isUndoAvailable',
       'isRedoAvailable', 'undo', 'redo', 'countEmptyRows',
       'countEmptyCols', /*'isEmptyRow', 'isEmptyCol', -- those are also publicProperties*/ 'parseSettingsFromDOM',
-      'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings'
+      'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings', 'getSchema'
     ],
     publicHooks = Object.keys(Handsontable.PluginHooks.hooks),
     publicProperties = Object.keys(Handsontable.DefaultSettings.prototype),
@@ -53,6 +53,9 @@
       }
       else if (attrName === 'title') {
         attrName = 'header';
+      }
+      else if (attrName === 'className') {
+        attrName = 'class';
       }
 
       if (hotcolumn[attrName] === null) {
@@ -120,8 +123,11 @@
    */
   function readOption(handsontable, key, value) {
     if (key === 'datarows' || key === 'renderer' || key === 'source' || key === 'afterOnCellMouseOver' ||
-        publicHooks.indexOf(key) > -1) {
+        key === 'dataSchema' || publicHooks.indexOf(key) > -1) {
       return getModelPath(handsontable, value);
+    }
+    if (key === 'className') {
+      return value;
     }
 
     return readBool(value);
@@ -241,7 +247,15 @@
       else {
         settings[hotProp] = readOption(this, wcProp, this[wcProp]);
       }
-      this.updateSettings(settings);
+
+      if (wcProp === 'datarows') {
+        if (settings[hotProp] !== this.instance.getSettings()[hotProp]) {
+          this.updateSettings(settings);
+        }
+      } else {
+        // TODO (performance) On Chrome (natively supported web components) every single attribute fired updateSettings
+        this.updateSettings(settings);
+      }
     };
   });
 
@@ -259,11 +273,39 @@
     instance: null,
 
     attached: function() {
-      var _this = this;
+      this.activeNestedTable = null;
 
       this.instance = new Handsontable(this.$.htContainer, parseHandsontable(this));
 
-      // TODO: move below to Handsontable
+      this.collectNestedTables();
+      this.registerHooks();
+
+      if (Array.isArray(this.datarows) && this.datarows.length && this.colHeaders !== null) {
+        if (typeof this.datarows[0] === 'object' && !Array.isArray(this.datarows[0])) {
+          this.colHeaders = Object.keys(this.datarows[0]);
+        }
+      }
+    },
+
+    detached: function() {
+      this.instance.destroy();
+    },
+
+    /**
+     * Register hooks
+     */
+    registerHooks: function() {
+      var _this = this;
+
+      if (!Handsontable.Dom.isChildOfWebComponentTable(this.parentNode)) {
+        Handsontable.hooks.add('beforeOnCellMouseDown', function() {
+          _this.onBeforeOnCellMouseDown.apply(_this, [this].concat(Array.prototype.slice.call(arguments)));
+        });
+        Handsontable.hooks.add('afterOnCellMouseDown', function() {
+          _this.onAfterOnCellMouseDown.apply(_this, [this].concat(Array.prototype.slice.call(arguments)));
+        });
+      }
+
       this.addHook('afterDeselect', function() {
         _this.highlightedRow = -1;
         _this.highlightedColumn = -1;
@@ -274,13 +316,71 @@
         _this.highlightedRow = range.highlight.row;
         _this.highlightedColumn = range.highlight.col;
       });
+    },
 
-      if (Array.isArray(this.datarows) && this.datarows.length && this.colHeaders !== null) {
-        if (typeof this.datarows[0] === 'object' && !Array.isArray(this.datarows[0])) {
-          this.colHeaders = Object.keys(this.datarows[0]);
-        }
+    /**
+     * Detect and collect all founded nested hot-table's
+     */
+    collectNestedTables: function() {
+      var parentTable = null,
+        isNative = Handsontable.Dom.isWebComponentSupportedNatively();
+
+      if (!Handsontable.Dom.isChildOfWebComponentTable(this.parentNode)) {
+        parentTable = this;
+      }
+      this.nestedTables = new HotTableUtils.NestedTable(this);
+      this.nestedTables.setStrategy(isNative ? 'native' : 'emulation', parentTable);
+      this.nestedTables.update();
+    },
+
+    /**
+     * @param {Handsontable} hotInstance
+     * @param {DOMEvent} event
+     * @param {Object} coords
+     * @param {HTMLElement} TD
+     */
+    onBeforeOnCellMouseDown: function(hotInstance, event, coords, TD) {
+      var cellMeta;
+
+      if (!this.nestedTables.isNested(hotInstance) && hotInstance !== this.instance) {
+        return;
+      }
+
+      if (this.activeNestedTable) {
+        cellMeta = hotInstance.getCellMeta(coords.row, coords.col);
+
+        cellMeta._disableVisualSelection = cellMeta.disableVisualSelection;
+        cellMeta.disableVisualSelection = true;
+
+      } else {
+        this.activeNestedTable = hotInstance;
+      }
+      // on last event set first table as listening
+      if (hotInstance === this.instance) {
+        this.activeNestedTable.listen();
+        this.activeNestedTable = null;
       }
     },
+
+    /**
+     * @param {Handsontable} hotInstance
+     * @param {DOMEvent} event
+     * @param {Object} coords
+     * @param {HTMLElement} TD
+     */
+    onAfterOnCellMouseDown: function(hotInstance, event, coords, TD) {
+      var cellMeta;
+
+      if (!this.nestedTables.isNested(hotInstance) && hotInstance !== this.instance) {
+        return;
+      }
+      cellMeta = hotInstance.getCellMeta(coords.row, coords.col);
+
+      if (cellMeta._disableVisualSelection !== undefined) {
+        cellMeta.disableVisualSelection = cellMeta._disableVisualSelection;
+      }
+    },
+
     onMutation: function() {
       var columns;
 
