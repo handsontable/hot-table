@@ -34,17 +34,8 @@
     hot-table /deep/ .no-padding {
       padding: 0;
     }
-    hot-table /deep/ .nested2 td {
-      border-left-color: transparent;
-      border-right-color: transparent;
-    }
-    hot-table /deep/ .nested .htCore {
-      -webkit-box-shadow: none;
-      -moz-box-shadow: none;
-      box-shadow: none;
-    }
     hot-table /deep/ .nested .ht_clone_top {
-      z-index: 0;
+      display: none !important;
     }
     hot-table /deep/ .htMiddle {
       font-size: 1.3em;
@@ -57,17 +48,12 @@
     hot-table .no-padding {
       padding: 0 !important;
     }
-    hot-table .nested-level-2 td {
-      border-left-color: transparent;
-      border-right-color: transparent;
-    }
-    hot-table.nested .htCore {
-      -webkit-box-shadow: none !important;
-      -moz-box-shadow: none !important;
-      box-shadow: none !important;
-    }
     hot-table.nested .ht_clone_top {
-      z-index: 0;
+      display: none !important;
+    }
+    hot-table.nested .handsontable:not(.ht_master) table {
+      box-shadow: none !important;
+      -webkit-box-shadow: none !important;
     }
     hot-table .htMiddle {
       font-size: 1.3em;
@@ -178,98 +164,98 @@
             {country: 'Sweden'}
           ]
         },
-//        {
-//          model: 'Fiesta',
-//          date: {sold: '29/10/2003'},
-//          clients: [
-//            {firstName: 'Wilma', lastName: 'Silver'},
-//            {firstName: 'Barbara', lastName: 'Bush'}
-//          ],
-//          exportedTo: [
-//            {country: 'Denmark'},
-//            {country: 'Canada'}
-//          ]
-//        },
-//        {
-//          model: 'B-Max',
-//          date: {sold: '22/12/2004'},
-//          clients: [
-//            {firstName: 'Alan', lastName: 'Goldman'},
-//            {firstName: 'Pierre', lastName: 'Gold'}
-//          ],
-//          exportedTo: [
-//            {country: 'Poland'},
-//            {country: 'Germany'}
-//          ]
-//        },
-//        {
-//          model: 'C-Max',
-//          date: {sold: '14/08/2010'},
-//          clients: [
-//            {firstName: 'Chris', lastName: 'Wecler'},
-//            {firstName: 'Martin', lastName: 'MacDonald'}
-//          ],
-//          exportedTo: [
-//            {country: 'United Kingdom'},
-//            {country: 'Belgium'}
-//          ]
-//        }
+        {
+          model: 'Fiesta',
+          date: {sold: '29/10/2003'},
+          clients: [
+            {firstName: 'Wilma', lastName: 'Silver'},
+            {firstName: 'Barbara', lastName: 'Bush'}
+          ],
+          exportedTo: [
+            {country: 'Denmark'},
+            {country: 'Canada'}
+          ]
+        },
+        {
+          model: 'B-Max',
+          date: {sold: '22/12/2004'},
+          clients: [
+            {firstName: 'Alan', lastName: 'Goldman'},
+            {firstName: 'Pierre', lastName: 'Gold'}
+          ],
+          exportedTo: [
+            {country: 'Poland'},
+            {country: 'Germany'}
+          ]
+        },
+        {
+          model: 'C-Max',
+          date: {sold: '14/08/2010'},
+          clients: [
+            {firstName: 'Chris', lastName: 'Wecler'},
+            {firstName: 'Martin', lastName: 'MacDonald'}
+          ],
+          exportedTo: [
+            {country: 'United Kingdom'},
+            {country: 'Belgium'}
+          ]
+        }
       ]
     },
-//    {
-//      id: 2,
-//      brand: 'Opel',
-//      cars: [
-//        {
-//          model: 'Corsa',
-//          date: {sold: '12/04/2008'},
-//          clients: [
-//            {firstName: 'Eddie', lastName: 'Gruber'}
-//          ],
-//          exportedTo: [
-//            {country: 'United Kingdom'}
-//          ]
-//        },
-//        {
-//          model: 'Meriva',
-//          date: {sold: '22/10/2010'},
-//          clients: [
-//            {firstName: 'Troy', lastName: 'Eder'},
-//            {firstName: 'Barry', lastName: 'Anderson'}
-//          ],
-//          exportedTo: [
-//            {country: 'United Kingdom'},
-//            {country: 'Belgium'}
-//          ]
-//        },
-//        {
-//          model: 'Cascada',
-//          date: {sold: '11/01/2004'},
-//          clients: [
-//            {firstName: 'Jose', lastName: 'Acker'},
-//            {firstName: 'Carl', lastName: 'Cole'},
-//            {firstName: 'Jerry', lastName: 'Cole'}
-//          ],
-//          exportedTo: [
-//            {country: 'United States'},
-//            {country: 'United Kingdom'},
-//            {country: 'Poland'}
-//          ]
-//        },
-//        {
-//          model: 'Astra',
-//          date: {sold: '16/08/2009'},
-//          clients: [
-//            {firstName: 'James', lastName: 'Cox'},
-//            {firstName: 'David', lastName: 'Crewe'}
-//          ],
-//          exportedTo: [
-//            {country: 'France'},
-//            {country: 'Spain'}
-//          ]
-//        }
-//      ]
-//    }
+    {
+      id: 2,
+      brand: 'Opel',
+      cars: [
+        {
+          model: 'Corsa',
+          date: {sold: '12/04/2008'},
+          clients: [
+            {firstName: 'Eddie', lastName: 'Gruber'}
+          ],
+          exportedTo: [
+            {country: 'United Kingdom'}
+          ]
+        },
+        {
+          model: 'Meriva',
+          date: {sold: '22/10/2010'},
+          clients: [
+            {firstName: 'Troy', lastName: 'Eder'},
+            {firstName: 'Barry', lastName: 'Anderson'}
+          ],
+          exportedTo: [
+            {country: 'United Kingdom'},
+            {country: 'Belgium'}
+          ]
+        },
+        {
+          model: 'Cascada',
+          date: {sold: '11/01/2004'},
+          clients: [
+            {firstName: 'Jose', lastName: 'Acker'},
+            {firstName: 'Carl', lastName: 'Cole'},
+            {firstName: 'Jerry', lastName: 'Cole'}
+          ],
+          exportedTo: [
+            {country: 'United States'},
+            {country: 'United Kingdom'},
+            {country: 'Poland'}
+          ]
+        },
+        {
+          model: 'Astra',
+          date: {sold: '16/08/2009'},
+          clients: [
+            {firstName: 'James', lastName: 'Cox'},
+            {firstName: 'David', lastName: 'Crewe'}
+          ],
+          exportedTo: [
+            {country: 'France'},
+            {country: 'Spain'}
+          ]
+        }
+      ]
+    }
   ];
 
   document.querySelector('template').cars = cars;
