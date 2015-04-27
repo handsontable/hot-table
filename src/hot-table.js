@@ -45,7 +45,7 @@
      * Try to destroy handsontable instance if hadn't been destroyed
      */
     detached: function() {
-      if (!this.destroyed) {
+      if (this.instance && !this.destroyed) {
         this.instance.destroy();
       }
     },
