@@ -521,6 +521,8 @@ describe('Nested <hot-table>\'s', function() {
         data = nestedData(),
         hot;
 
+      data[1].company[0].partners.push({since: 2000, name: 'Z Company'});
+
       div.innerHTML = template;
       div.querySelector('template').nestedData = data;
 
