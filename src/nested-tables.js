@@ -15,11 +15,8 @@
   NestedTable.prototype.setStrategy = function(strategyName, rootHotTable) {
     var strategy;
 
-    if (strategyName === 'native') {
-      strategy = new NativeSupport(rootHotTable);
-
-    } else if (strategyName === 'emulation') {
-      strategy = new EmulationSupport(rootHotTable);
+    if (NestedTable.strategies[strategyName]) {
+      strategy = new NestedTable.strategies[strategyName](rootHotTable);
 
     } else {
       throw new Error('Strategy name (' + strategyName + ') is not supported');
@@ -179,6 +176,10 @@
     hotTable.fire('initialize');
   };
 
+  NestedTable.strategies = {
+    emulation: EmulationSupport,
+    native: NativeSupport
+  };
 
   w.HotTableUtils = w.HotTableUtils || {};
   w.HotTableUtils.NestedTable = NestedTable;
