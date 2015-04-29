@@ -1,5 +1,4 @@
 (function(w) {
-
   /**
    * @param {HTMLElement} hotTable
    * @constructor
@@ -8,18 +7,17 @@
     this.hotTable = hotTable;
   }
 
+  NestedTable.strategies = {};
+
   /**
    * @param {String} strategyName
-   * @param {HTMLElement} parentTable
+   * @param {HTMLElement} rootHotTable
    */
-  NestedTable.prototype.setStrategy = function(strategyName, parentTable) {
+  NestedTable.prototype.setStrategy = function(strategyName, rootHotTable) {
     var strategy;
 
-    if (strategyName === 'native') {
-      strategy = new NativeSupport(parentTable);
-
-    } else if (strategyName === 'emulation') {
-      strategy = new EmulationSupport(parentTable);
+    if (NestedTable.strategies[strategyName]) {
+      strategy = new NestedTable.strategies[strategyName](rootHotTable);
 
     } else {
       throw new Error('Strategy name (' + strategyName + ') is not supported');
@@ -28,7 +26,7 @@
   };
 
   /**
-   * Push founded nested table to collection
+   * Push nested table to collection
    *
    * @param {HTMLElement} hotTable
    */
@@ -39,12 +37,30 @@
   };
 
   /**
-   * Get tables
+   * Get child tables
    *
-   * @returns {Array}
+   * @returns {Array} Array of HTMLElements (hot-table)
    */
-  NestedTable.prototype.getTables = function() {
+  NestedTable.prototype.getChildren = function() {
     return this.strategy.tables;
+  };
+
+  /**
+   * Get parent table
+   *
+   * @returns {NestedTable}
+   */
+  NestedTable.prototype.getParent = function() {
+    return this.parent;
+  };
+
+  /**
+   * Set parent table
+   *
+   * @returns {NestedTable}
+   */
+  NestedTable.prototype.setParent = function(parent) {
+    this.parent = parent;
   };
 
   /**
@@ -63,7 +79,7 @@
   NestedTable.prototype.isNested = function(hotInstance) {
     function isNestedTable(nestedTable, hotInstance) {
       var result = false,
-        tables = nestedTable.getTables();
+        tables = nestedTable.getChildren();
 
       for (var i = 0, len = tables.length; i < len; i++) {
         if (wrap(tables[i]).instance === hotInstance) {
@@ -82,51 +98,25 @@
     return isNestedTable(this, hotInstance);
   };
 
+  w.HotTableUtils = w.HotTableUtils || {};
+  w.HotTableUtils.NestedTable = NestedTable;
+
+}(window));
+
+
+(function(strategies) {
+  strategies.emulation = EmulationSupport;
+
   /**
-   * Strategy for browsers which support web components natively
+   * Strategy for browsers which not support web components natively (emulation from polymer).
+   * Update is called by hot-table from child to parent.
    *
-   * @param {HTMLElement} hotParentTable
+   * @param {HTMLElement} rootHotTable
    * @constructor
    */
-  function NativeSupport(hotParentTable) {
-    this.hotParentTable = hotParentTable;
+  function EmulationSupport(rootHotTable) {
+    this.rootHotTable = rootHotTable;
     this.tables = [];
-    this.totalLength = 0;
-  }
-
-  /**
-   * @param {HTMLElement} hotTable
-   */
-  NativeSupport.prototype.update = function(hotTable) {
-    var hotTables = hotTable.instance.rootElement.querySelectorAll('hot-table'),
-      index = hotTables.length,
-      parentTable;
-
-    if (index) {
-      this.totalLength = hotTables[index - 1].nestedTables.totalLength;
-    }
-    while (index --) {
-      this.totalLength ++;
-      this.tables.unshift(hotTables[index]);
-    }
-    // On table new col/row insert update nested tables collection
-    parentTable = Handsontable.Dom.closest(hotTable.parentNode, ['HOT-TABLE']);
-
-    if (parentTable && parentTable.nestedTables) {
-      parentTable.nestedTables.push(hotTable);
-    }
-  };
-
-  /**
-   * Strategy for browsers which not support web components natively (emulation from polymer)
-   *
-   * @param {HTMLElement} hotParentTable
-   * @constructor
-   */
-  function EmulationSupport(hotParentTable) {
-    this.hotParentTable = hotParentTable;
-    this.tables = [];
-    this.totalLength = 0;
   }
 
   /**
@@ -135,7 +125,7 @@
   EmulationSupport.prototype.update = function(hotTable) {
     var latestParent = null;
 
-    if (this.hotParentTable && this.hotParentTable === hotTable) {
+    if (this.rootHotTable && this.rootHotTable === hotTable) {
       hotTable.addEventListener('initialize', function(event) {
         var target, parent;
 
@@ -147,22 +137,59 @@
 
           return;
         }
-        parent = Handsontable.Dom.closest(target.parentNode, ['HOT-TABLE']);
+        parent = Handsontable.Dom.closest(target.parentNode, [target.nodeName]);
 
         if (parent === latestParent) {
-          wrap(latestParent).nestedTables.push(target);
+          wrap(latestParent).nestedTables.push(wrap(target));
+          wrap(target).nestedTables.setParent(wrap(latestParent));
 
         } else {
           latestParent = parent;
-          wrap(parent).nestedTables.push(target);
+          wrap(latestParent).nestedTables.push(wrap(target));
+          wrap(target).nestedTables.setParent(wrap(latestParent));
         }
       });
     }
     hotTable.fire('initialize');
   };
+}(HotTableUtils.NestedTable.strategies));
 
 
-  w.HotTableUtils = w.HotTableUtils || {};
-  w.HotTableUtils.NestedTable = NestedTable;
+(function(strategies) {
+  strategies.native = NativeSupport;
 
-}(window));
+  /**
+   * Strategy for browsers which support web components natively.
+   * Update is called by hot-table from parent to child.
+   *
+   * @param {HTMLElement} rootHotTable
+   * @constructor
+   */
+  function NativeSupport(rootHotTable) {
+    this.rootHotTable = rootHotTable;
+    this.tables = [];
+  }
+
+  /**
+   * @param {HTMLElement} hotTable
+   */
+  NativeSupport.prototype.update = function(hotTable) {
+    var childHotTables = hotTable.instance.rootElement.querySelectorAll(hotTable.nodeName),
+      index = childHotTables.length,
+      parentTable;
+
+    while (index --) {
+      childHotTables[index].nestedTables.setParent(hotTable);
+      this.tables.unshift(childHotTables[index]);
+    }
+    // On table new col/row insert update nested tables collection
+    parentTable = Handsontable.Dom.closest(hotTable.parentNode, [hotTable.nodeName]);
+
+    if (parentTable && parentTable.nestedTables) {
+      parentTable.nestedTables.push(hotTable);
+      hotTable.nestedTables.setParent(parentTable);
+    }
+  };
+}(HotTableUtils.NestedTable.strategies));
+
+

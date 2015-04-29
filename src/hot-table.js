@@ -1,269 +1,12 @@
 (function() {
 
   var
-    publicMethods = ['updateSettings', 'loadData', 'render', 'setDataAtCell', 'setDataAtRowProp', 'getDataAtCell',
-      'getDataAtRowProp', 'countRows', 'countCols', 'rowOffset', 'colOffset', 'countVisibleRows', 'countVisibleCols',
-      'clear', 'clearUndo', 'getData', 'alter', 'getCell', 'getCellMeta', 'selectCell', 'deselectCell', 'getSelected',
-      'getSelectedRange', 'destroyEditor', 'getRowHeader', 'getColHeader', 'destroy', 'isUndoAvailable',
-      'isRedoAvailable', 'undo', 'redo', 'countEmptyRows',
-      'countEmptyCols', /*'isEmptyRow', 'isEmptyCol', -- those are also publicProperties*/ 'parseSettingsFromDOM',
-      'addHook', 'addHookOnce', 'getValue', 'getInstance', 'getSettings', 'getSchema'
-    ],
-    publicHooks = Object.keys(Handsontable.PluginHooks.hooks),
-    publicProperties = Object.keys(Handsontable.DefaultSettings.prototype),
-    wcDefaults = webComponentDefaults(),
-    publish = {}
-  ;
+    settingsParser = new HotTableUtils.SettingsParser(),
+    lastSelectedCellMeta;
 
-  publicProperties.push('className');
-  publicProperties = publicProperties.concat(publicHooks);
-
-  function webComponentDefaults() {
-    return {
-      observeChanges: true
-    };
-  }
-
-  function parseDataColumns(handsontable) {
-    var columns = [],
-      i, ilen;
-
-    for (i = 0, ilen = handsontable.childNodes.length; i < ilen; i++) {
-      if (handsontable.childNodes[i].nodeName === 'HOT-COLUMN') {
-        columns.push(parseDataColumn(handsontable, handsontable.childNodes[i]));
-      }
-    }
-
-    return columns;
-  }
-
-  function parseDataColumn(handsontable, hotcolumn) {
-    var obj = {},
-      innerHandsontable,
-      attrName,
-      len,
-      val,
-      i;
-
-    for (i = 0, len = publicProperties.length; i < len; i++) {
-      attrName = publicProperties[i];
-
-      if (attrName === 'data') {
-        attrName = 'value';
-      }
-      else if (attrName === 'title') {
-        attrName = 'header';
-      }
-      else if (attrName === 'className') {
-        attrName = 'class';
-      }
-
-      if (hotcolumn[attrName] === null) {
-        continue; // default value
-      }
-      else if (hotcolumn[attrName] !== void 0 && hotcolumn[attrName] !== "") {
-        val = hotcolumn[attrName];
-      }
-      else {
-        // Dec 3, 2013 - Polymer returns empty string for node properties such as hotcolumn.width
-        val = hotcolumn.getAttribute(attrName);
-      }
-
-      if (val !== void 0 && val !== handsontable[attrName]) {
-        obj[publicProperties[i]] = readOption(hotcolumn, attrName, val);
-      }
-    }
-    innerHandsontable = hotcolumn.getElementsByTagName('hot-table');
-
-    if (innerHandsontable.length) {
-      obj.handsontable = parseHandsontable(innerHandsontable[0]);
-    }
-
-    return obj;
-  }
-
-  /**
-   * Get template modal object
-   *
-   * @param {Element} handsontable
-   * @returns {Object}
-   */
-  function getModel(handsontable) {
-    if (handsontable.templateInstance) {
-      return handsontable.templateInstance.model;
-    }
-    else {
-      return window;
-    }
-  }
-
-  function getModelPath(handsontable, path) {
-    var model, expression, obj;
-
-    // happens in Polymer when assigning
-    // as datarows="{{ model.subpage.people }}" or settings="{{ model.subpage.settings }}
-    if (typeof path === 'object' || typeof path === 'function') {
-      return path;
-    }
-    model = getModel(handsontable);
-    expression = 'with(model) { ' + path + ';}';
-    /* jshint -W061 */
-    obj = eval(expression);
-
-    return (obj);
-  }
-
-  /**
-   * Read hnadsontable option value
-   *
-   * @param {Element} handsontable hot-table Element
-   * @param {String} key
-   * @param {*} value
-   * @returns {*}
-   */
-  function readOption(handsontable, key, value) {
-    if (key === 'datarows' || key === 'renderer' || key === 'source' || key === 'afterOnCellMouseOver' ||
-        key === 'dataSchema' || publicHooks.indexOf(key) > -1) {
-      return getModelPath(handsontable, value);
-    }
-    if (key === 'className') {
-      return value;
-    }
-
-    return readBool(value);
-  }
-
-  /**
-   * Read value as Boolean
-   *
-   * @param {*} val
-   * @returns {Boolean}
-   */
-  function readBool(val) {
-    if (val === void 0 || val === 'false') {
-      return false;
-    }
-    else if (val === '' || val === 'true') {
-      return true;
-    }
-
-    return val;
-  }
-
-  function filterNonNull(obj) {
-    var result = {};
-
-    for (var i in obj) {
-      if (obj.hasOwnProperty(i) && obj[i] !== null) {
-        result[i] = obj[i];
-      }
-    }
-
-    return result;
-  }
-
-  function parseHandsontable(handsontable) {
-    var columns = parseDataColumns(handsontable),
-      options = webComponentDefaults(),
-      attrName, settingsAttr, i, ilen;
-
-    for (i = 0, ilen = publicProperties.length; i < ilen; i++) {
-      attrName = publicProperties[i];
-
-      if (attrName === 'data') {
-        attrName = 'datarows';
-      }
-      options[publicProperties[i]] = readOption(handsontable, attrName, handsontable[attrName]);
-    }
-
-    if (handsontable.settings) {
-      settingsAttr = getModelPath(handsontable, handsontable.settings);
-
-      for (i in settingsAttr) {
-        if (settingsAttr.hasOwnProperty(i)) {
-          options[i] = settingsAttr[i];
-        }
-      }
-    }
-
-    if (columns.length) {
-      options.columns = columns;
-    }
-
-    // Polymer reports null default values for all declared custom element properties.
-    // We don't want them to override Handsontable defaults
-    options = filterNonNull(options);
-
-    return options;
-  }
-
-  // Apply public web component method into handsontable
-  publicMethods.forEach(function (hotMethod) {
-    publish[hotMethod] = function () {
-      return this.instance[hotMethod].apply(this.instance, arguments);
-    };
-  });
-
-  publicProperties.forEach(function (hotProp) {
-    var wcProp, val;
-
-    if (publish[hotProp]) {
-      return;
-    }
-    wcProp = hotProp;
-
-    if (hotProp === 'data') {
-      wcProp = 'datarows';
-    }
-    else if (hotProp === 'title') {
-      // rename 'title' attribute to 'header' because 'title' was causing
-      // problems (https://groups.google.com/forum/#!topic/polymer-dev/RMMsV-D4HVw)
-      wcProp = 'header';
-    }
-    val = wcDefaults[hotProp] === void 0 ? Handsontable.DefaultSettings.prototype[hotProp] : wcDefaults[hotProp];
-
-    if (val === void 0) {
-      // Polymer does not like undefined
-      publish[wcProp] = null;
-    }
-    else if (hotProp === 'observeChanges') {
-      // on by default
-      publish[wcProp] = true;
-    }
-    else {
-      publish[wcProp] = val;
-    }
-
-    publish[wcProp + 'Changed'] = function() {
-      var settings = {};
-
-      // attribute changed callback called before attached
-      if (!this.instance) {
-        return;
-      }
-      if (wcProp === 'settings') {
-        settings = getModelPath(this, this[wcProp]);
-      }
-      else {
-        settings[hotProp] = readOption(this, wcProp, this[wcProp]);
-      }
-
-      if (wcProp === 'datarows') {
-        if (settings[hotProp] !== this.instance.getSettings()[hotProp]) {
-          this.updateSettings(settings);
-        }
-      } else {
-        // TODO (performance) On Chrome (natively supported web components) every single attribute fired updateSettings
-        this.updateSettings(settings);
-      }
-    };
-  });
-
-  publish.highlightedRow = -1;
-  publish.highlightedColumn = -1;
 
   Polymer('hot-table', {
-    publish: publish,
+    publish: settingsParser.getPublishMethodsAndProps(),
 
     /**
      * @property instance
@@ -272,10 +15,21 @@
      */
     instance: null,
 
-    attached: function() {
-      this.activeNestedTable = null;
 
-      this.instance = new Handsontable(this.$.htContainer, parseHandsontable(this));
+    /**
+     * On create element but not attached to DOM
+     */
+    created: function() {
+      this.activeNestedTable = null;
+      this.nestedTables = null;
+      this.destroyed = false;
+    },
+
+    /**
+     * On attached element to DOM
+     */
+    attached: function() {
+      this.instance = new Handsontable(this.$.htContainer, settingsParser.parse(this));
 
       this.collectNestedTables();
       this.registerHooks();
@@ -287,8 +41,13 @@
       }
     },
 
+    /**
+     * Try to destroy handsontable instance if hadn't been destroyed
+     */
     detached: function() {
-      this.instance.destroy();
+      if (this.instance && !this.destroyed) {
+        this.instance.destroy();
+      }
     },
 
     /**
@@ -305,7 +64,8 @@
           _this.onAfterOnCellMouseDown.apply(_this, [this].concat(Array.prototype.slice.call(arguments)));
         });
       }
-
+      this.addHook('afterModifyTransformStart', this.onAfterModifyTransformStart.bind(this));
+      this.addHook('beforeKeyDown', this.onBeforeKeyDown.bind(this));
       this.addHook('afterDeselect', function() {
         _this.highlightedRow = -1;
         _this.highlightedColumn = -1;
@@ -315,6 +75,9 @@
 
         _this.highlightedRow = range.highlight.row;
         _this.highlightedColumn = range.highlight.col;
+      });
+      this.addHook('afterDestroy', function() {
+        _this.destroyed = true;
       });
     },
 
@@ -345,14 +108,13 @@
       if (!this.nestedTables.isNested(hotInstance) && hotInstance !== this.instance) {
         return;
       }
+      cellMeta = hotInstance.getCellMeta(coords.row, coords.col);
 
       if (this.activeNestedTable) {
-        cellMeta = hotInstance.getCellMeta(coords.row, coords.col);
-
-        cellMeta._disableVisualSelection = cellMeta.disableVisualSelection;
         cellMeta.disableVisualSelection = true;
 
       } else {
+        cellMeta.disableVisualSelection = false;
         this.activeNestedTable = hotInstance;
       }
       // on last event set first table as listening
@@ -366,18 +128,84 @@
      * @param {Handsontable} hotInstance
      * @param {DOMEvent} event
      * @param {Object} coords
-     * @param {HTMLElement} TD
      */
-    onAfterOnCellMouseDown: function(hotInstance, event, coords, TD) {
+    onAfterOnCellMouseDown: function(hotInstance, event, coords) {
       var cellMeta;
 
       if (!this.nestedTables.isNested(hotInstance) && hotInstance !== this.instance) {
         return;
       }
       cellMeta = hotInstance.getCellMeta(coords.row, coords.col);
+      cellMeta.disableVisualSelection = false;
+    },
 
-      if (cellMeta._disableVisualSelection !== undefined) {
-        cellMeta.disableVisualSelection = cellMeta._disableVisualSelection;
+    /**
+     * @param {WalkontableCellCoords} coords
+     * @param {Number} rowTransform
+     * @param {Number} colTransform
+     */
+    onAfterModifyTransformStart: function(coords, rowTransform, colTransform) {
+      var parent = this.nestedTables.getParent(),
+        cellMeta,
+        newCoords,
+        selected;
+
+      cellMeta = this.getCellMeta(coords.row, coords.col);
+      cellMeta.disableVisualSelection = false;
+      lastSelectedCellMeta = cellMeta;
+
+      if (parent && (rowTransform !== 0 || colTransform !== 0)) {
+        selected = parent.getSelected();
+        cellMeta.disableVisualSelection = true;
+        newCoords = {
+          row: selected[0] + rowTransform,
+          col: selected[1] + colTransform
+        };
+
+        if (newCoords.row < 0 || newCoords.row >= parent.countRows()) {
+          newCoords.row -= rowTransform;
+        }
+        if (newCoords.col < 0 || newCoords.col >= parent.countCols()) {
+          newCoords.col -= colTransform;
+        }
+        cellMeta = parent.getCellMeta(newCoords.row, newCoords.col);
+        cellMeta.disableVisualSelection = false;
+        lastSelectedCellMeta = cellMeta;
+
+        parent.selectCell(newCoords.row, newCoords.col, undefined, undefined, true, false);
+        parent.listen();
+      }
+    },
+
+    /**
+     * @param {DOMEvent} event
+     */
+    onBeforeKeyDown: function(event) {
+      var td, childTable, cellMeta;
+
+      if (!this.isListening() || event.keyCode !== Handsontable.helper.keyCode.ENTER) {
+        return;
+      }
+      if (!lastSelectedCellMeta || lastSelectedCellMeta.editor !== false) {
+        return;
+      }
+      td = this.getCell(lastSelectedCellMeta.row, lastSelectedCellMeta.col);
+
+      if (td) {
+        cellMeta = this.getCellMeta(lastSelectedCellMeta.row, lastSelectedCellMeta.col);
+        cellMeta.disableVisualSelection = true;
+        // Refresh cell border according to disableVisualSelection setting
+        this.selectCell(lastSelectedCellMeta.row, lastSelectedCellMeta.col);
+
+        childTable = td.querySelector(this.nodeName);
+        cellMeta = childTable.getCellMeta(0, 0);
+        cellMeta.disableVisualSelection = false;
+        lastSelectedCellMeta = cellMeta;
+        childTable.selectCell(0, 0, undefined, undefined, true, false);
+
+        setTimeout(function() {
+          childTable.listen();
+        }, 0);
       }
     },
 
@@ -392,7 +220,7 @@
         // happens in Handsontable WC demo page in Chrome 33-dev
         return;
       }
-      columns = parseDataColumns(this);
+      columns = settingsParser.parseColumns(this);
 
       if (columns.length) {
         this.updateSettings({columns: columns});

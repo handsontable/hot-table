@@ -6,9 +6,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="hot-column.html">
 
-<!-- Handsontable various cell type dependencies -->
-<!--<script data-jsfiddle="common" src="../../handsontable/lib/numeral.de-de.js"></script>&lt;!&ndash; numeric cell type &ndash;&gt;-->
-
 <polymer-element name="hot-table">
   <template>
     <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
@@ -20,6 +17,7 @@
     <div id="htContainer" style="clear: both"></div>
     <content></content>
   </template>
-  <script src="hot-table.js"></script>
+  <script src="settings-parser.js"></script>
   <script src="nested-tables.js"></script>
+  <script src="hot-table.js"></script>
 </polymer-element>

@@ -93,24 +93,24 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-    &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; contextMenu=&#x22;true&#x22; maxRows=&#x22;{{ people.length }}&#x22; highlightedRow=&#x22;{{ highlightedRow }}&#x22;
-               class=&#x22;htLeft&#x22;&#x3E;
-      &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;span&#x3E;{{ name.first }}...&#x3C;/span&#x3E;&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date&#x22; header=&#x22;Birthday&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column value=&#x22;gender&#x22; header=&#x22;Gender&#x22; source=&#x22;[&#x27;Male&#x27;, &#x27;Female&#x27;]&#x22; type=&#x22;dropdown&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
-                  uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
-                  uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
-                  uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;/hot-table&#x3E;
+  &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; contextMenu=&#x22;true&#x22; maxRows=&#x22;{{ people.length }}&#x22; highlightedRow=&#x22;{{ highlightedRow }}&#x22;
+             class=&#x22;htLeft&#x22;&#x3E;
+    &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
+      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;span&#x3E;{{ name.first }}...&#x3C;/span&#x3E;&#x3C;/template&#x3E;
+    &#x3C;/hot-column&#x3E;
+    &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date&#x22; header=&#x22;Birthday&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column value=&#x22;gender&#x22; header=&#x22;Gender&#x22; source=&#x22;[&#x27;Male&#x27;, &#x27;Female&#x27;]&#x22; type=&#x22;dropdown&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
+                uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
+                uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
+                uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+  &#x3C;/hot-table&#x3E;
   </code></pre>
 
   <h2>More demos</h2>
