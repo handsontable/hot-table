@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
   <meta charset="utf-8">
   <title>Jasmine Spec Runner</title>
-  <link rel="stylesheet" type="text/css" href="lib/jasmine/jasmine.css">
+  <link rel="icon" href="lib/jasmine-2.2.0/jasmine_favicon.png"/>
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-2.2.0/jasmine.css">
   <link rel="stylesheet" type="text/css" href="css/SpecRunner.css">
+  <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
 
-  <script src="lib/jasmine/phantom-polyfill.js"></script>
-  <script src="lib/jasmine/jasmine.js"></script>
-  <script src="lib/jasmine/jasmine-html.js"></script>
+  <!--<script src="lib/jasmine/phantom-polyfill.js"></script>-->
+  <script src="lib/jasmine-2.2.0/jasmine.js"></script>
+  <script src="lib/jasmine-2.2.0/jasmine-html.js"></script>
+  <script src="lib/jasmine-2.2.0/boot.js"></script>
+  <script src="lib/jquery.min.js"></script>
+  <script src="lib/jquery.simulate.js"></script>
 
   <!-- Importing Web Component's Polyfill -->
   <script src="../../webcomponentsjs/webcomponents.js"></script>
+
+  <script src="utils/spec-helper.js"></script>
 
   <!-- Importing Custom Elements -->
   <link rel="import" href="../src/hot-table.html">
@@ -20,9 +26,8 @@
   <!-- Specs -->
   <script src="spec/table-spec.js"></script>
   <script src="spec/column-spec.js"></script>
-
-  <script src="lib/jasmine/reporter.js"></script>
-  <script src="lib/jasmine/jasmine-helper.js"></script>
+  <script src="spec/settings-parser-spec.js"></script>
+  <script src="spec/nested-tables-spec.js"></script>
 </head>
 <body>
 </body>
