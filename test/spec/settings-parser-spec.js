@@ -26,8 +26,8 @@ describe('SettingsParser', function() {
     expect(publish.afterColumnResize).toBeDefined();
     expect(publish.afterColumnResizeChanged).isFunction();
 
-    expect(publish.afterColumnSort).toBeDefined();
-    expect(publish.afterColumnSortChanged).isFunction();
+    //expect(publish.afterColumnSort).toBeDefined();
+    //expect(publish.afterColumnSortChanged).isFunction();
 
     expect(publish.afterContextMenuDefaultOptions).toBeDefined();
     expect(publish.afterContextMenuDefaultOptionsChanged).isFunction();
@@ -163,8 +163,8 @@ describe('SettingsParser', function() {
     expect(publish.beforeChangeRender).toBeDefined();
     expect(publish.beforeChangeRenderChanged).isFunction();
 
-    expect(publish.beforeColumnSort).toBeDefined();
-    expect(publish.beforeColumnSortChanged).isFunction();
+    //expect(publish.beforeColumnSort).toBeDefined();
+    //expect(publish.beforeColumnSortChanged).isFunction();
 
     expect(publish.beforeDrawBorders).toBeDefined();
     expect(publish.beforeDrawBordersChanged).isFunction();
