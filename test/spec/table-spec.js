@@ -281,7 +281,7 @@ describe('<hot-table>', function () {
 
     this.$container.append(hot);
 
-    expect(unwrap(getHotTable()).className).toBe('');
+    expect(wrap(getHotTable()).className).toBe(null);
   });
 
   it('should parse class attribute and apply to table', function(done) {
@@ -292,7 +292,7 @@ describe('<hot-table>', function () {
     hot.classList.add('my-table');
 
     setTimeout(function() {
-      expect(unwrap(getHotTable()).className).toBe('my-table');
+      expect(getHotTable().classList.contains('my-table')).toBe(true);
       done();
     }, timeout);
   });

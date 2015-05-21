@@ -40,6 +40,7 @@
 
     ready: function () {
       this.registerRenderer(findRenderer(this));
+      this.registerEditor(findEditor(this));
 
       if (this.parentNode && this.parentNode.onMutation) {
         this.parentNode.onMutation();
@@ -82,6 +83,7 @@
           row: row,
           col: col
         };
+
         if (prop.indexOf('.') !== -1) {
           valueKey = prop.split('.')[0];
           model[valueKey] = instance.getDataAtRowProp(row, valueKey);
@@ -93,6 +95,30 @@
         TD.textContent = '';
         TD.appendChild(node);
       };
+    },
+
+    /**
+     * Register cell editor
+     *
+     * @param {Element} element Template element
+     */
+    registerEditor: function(element) {
+      if (!element) {
+        return;
+      }
+      this.editor = ProxyEditor;
+
+      function ProxyEditor(instance) {
+        HotTableUtils.Editor.call(this, instance);
+        this.template = element;
+      }
+
+      ProxyEditor.prototype = Object.create(HotTableUtils.Editor.prototype, {
+        constructor: {
+          value: HotTableUtils.Editor,
+          configurable: true
+        }
+      });
     }
   });
-})();
+}());
