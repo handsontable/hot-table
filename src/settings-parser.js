@@ -161,7 +161,8 @@
             this.updateSettings(settings);
           }
         } else {
-          // TODO (performance) On Chrome (natively supported web components) every single attribute fired updateSettings
+          // TODO (performance) On Chrome (natively supported web components) every single
+          // attribute fired updateSettings
           this.updateSettings(settings);
         }
       };
