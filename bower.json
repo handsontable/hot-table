@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.6",
-    "handsontable": "~0.15.0-beta3"
+    "handsontable": "~0.15.0-beta6"
   },
   "devDependencies": {
     "google-map": "GoogleWebComponents/google-map#~0.4.1"
