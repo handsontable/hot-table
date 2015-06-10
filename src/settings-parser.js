@@ -77,7 +77,7 @@
       'validateCell',
       'validateCells'
     ],
-    publicHooks = Object.keys(Handsontable.hooks.hooks),
+    publicHooks = Handsontable.hooks.getRegistered(),
     publicProperties = Object.keys(Handsontable.DefaultSettings.prototype),
     wcDefaults = webComponentDefaults()
   ;
