@@ -35,7 +35,9 @@
     return element.querySelector('template[data-hot-role=editor]');
   }
 
-  Polymer('hot-column', {
+  Polymer({
+    is: 'hot-column',
+    
     publish: getPublishProperties(),
 
     ready: function () {
