@@ -5,7 +5,8 @@
     lastSelectedCellMeta;
 
 
-  Polymer('hot-table', {
+  Polymer({
+    is: 'hot-table',
     publish: settingsParser.getPublishMethodsAndProps(),
 
     /**
