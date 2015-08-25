@@ -69,10 +69,5 @@
     }
   };
 
-  AgeRenderer.prototype.ageChanged = function(attribute, oldVal, newVal) {
-
-    console.log(arguments);
-  };
-
   document.registerElement('age-renderer', AgeRenderer);
 }());
