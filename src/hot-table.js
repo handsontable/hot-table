@@ -43,6 +43,10 @@
         if (!this.hot) {
           return;
         }
+        // Fix detection of Polymer environment
+        this.hot.isHotTableEnv = true;
+        Handsontable.eventManager.isHotTableEnv = this.hot.isHotTableEnv;
+
         var settings = settingsParser.parse(this);
 
         if (settings.colHeaders !== false && Array.isArray(this.datarows) && this.datarows.length &&
