@@ -1,9 +1,11 @@
 (function(w) {
   var BaseEditor = Handsontable.editors.BaseEditor;
 
-  function Editor(instance) {
-    BaseEditor.call(this, instance);
-    this.model = {};
+  var models = new WeakMap();
+
+  function Editor(hotInstance) {
+    BaseEditor.call(this, hotInstance);
+    this.model = null;
     this.template = null;
     this.eventManager = Handsontable.eventManager(this);
     this.createContainerElement();
@@ -29,7 +31,7 @@
    */
   Editor.prototype.createContainerElement = function() {
     this.container = document.createElement('div');
-    Handsontable.Dom.addClass(this.container, 'handsontableInputHolder');
+    Handsontable.dom.addClass(this.container, 'handsontableInputHolder');
 
     this.containerStyle = this.container.style;
     this.containerStyle.display = 'none';
@@ -43,15 +45,10 @@
    * Create editor element from template
    */
   Editor.prototype.createEditorElement = function() {
-    var element;
-
-    if (this.container.firstChild) {
-      return;
+    if (!this.model) {
+      this.model = this.template.stamp();
+      Polymer.dom(this.container).appendChild(this.model.root);
     }
-    element = this.template.createInstance({});
-    this.model = element.templateInstance.model;
-    this.container.appendChild(element);
-    element.templateInstance.editor = this;
   };
 
   /**
@@ -65,16 +62,13 @@
    * @param {Object} cellProperties
    */
   Editor.prototype.prepare = function(row, col, prop, td, originalValue, cellProperties) {
-    var propNames;
-
     BaseEditor.prototype.prepare.call(this, row, col, prop, td, originalValue, cellProperties);
+    this.createEditorElement();
 
-    propNames = prop.split('.');
-
-    this.propertyRootName = propNames[0];
-    this.propertyValueName = propNames.length === 1 ? null : propNames[propNames.length - 1];
     this.model.row = row;
     this.model.col = col;
+    this.model.value = originalValue;
+    this.model.editor = this;
   };
 
   /**
@@ -98,7 +92,7 @@
     });
 
     this.instance.addHook('afterDestroy', function() {
-      _this.eventManager.clear();
+      _this.eventManager.destroy();
     });
   };
 
@@ -130,7 +124,7 @@
   /**
    * Get edited cell element (TD)
    *
-   * @returns {Element|undefined}
+   * @returns {HTMLTableCellElement|undefined}
    */
   Editor.prototype.getEditedCell = function() {
     var editorSection = this.getEditorSection(), editedCell;
@@ -155,7 +149,7 @@
     var editorSection = this.getEditorSection(), offset;
 
     if (editorSection) {
-      offset = Handsontable.Dom.getCssTransform(this.instance.view.wt.wtScrollbars[editorSection].clone.
+      offset = Handsontable.dom.getCssTransform(this.instance.view.wt.wtScrollbars[editorSection].clone.
           wtTable.holder.parentNode);
     }
 
@@ -176,17 +170,17 @@
     if (!this.TD) {
       return;
     }
-    width = Handsontable.Dom.outerWidth(this.TD);
-    height = Handsontable.Dom.outerHeight(this.TD);
-    rootOffset = Handsontable.Dom.offset(this.instance.rootElement);
-    tdOffset = Handsontable.Dom.offset(this.TD);
+    width = Handsontable.dom.outerWidth(this.TD);
+    height = Handsontable.dom.outerHeight(this.TD);
+    rootOffset = Handsontable.dom.offset(this.instance.rootElement);
+    tdOffset = Handsontable.dom.offset(this.TD);
     cssTransformOffset = this.getSectionOffset();
 
     if (cssTransformOffset && cssTransformOffset !== -1) {
       this.containerStyle[cssTransformOffset[0]] = cssTransformOffset[1];
 
     } else {
-      Handsontable.Dom.resetCssTransform(this.container);
+      Handsontable.dom.resetCssTransform(this.container);
     }
     this.containerStyle.minWidth = width + 'px';
     this.containerStyle.height = height + 'px';
@@ -199,14 +193,12 @@
    * Fired on begin editing
    *
    * @param {*} initialValue
-   * @param {DOMEvent} event
+   * @param {Event} event
    */
   Editor.prototype.beginEditing = function(initialValue, event) {
     if (this.state !== Handsontable.EditorState.VIRGIN) {
       return;
     }
-    this.createEditorElement();
-
     this.instance.view.scrollViewport(new WalkontableCellCoords(this.row, this.col));
     this.instance.view.render();
     this.state = Handsontable.EditorState.EDITING;
@@ -254,16 +246,7 @@
    * @returns {*}
    */
   Editor.prototype.getValue = function() {
-    var value;
-
-    if (this.propertyValueName) {
-      value = this.model[this.propertyRootName][this.propertyValueName];
-
-    } else {
-      value = this.model[this.propertyRootName];
-    }
-
-    return value;
+    return this.model.value;
   };
 
   /**
@@ -272,20 +255,7 @@
    * @param {*} value
    */
   Editor.prototype.setValue = function(value) {
-    this.model[this.propertyRootName] = {};
-
-    if (Object.prototype.toString.call(value) === '[object Object]') {
-      for (var i in value) {
-        if (value.hasOwnProperty(i)) {
-          this.model[this.propertyRootName][i] = value[i];
-        }
-      }
-    } else if (this.propertyValueName) {
-      this.model[this.propertyRootName][this.propertyValueName] = value;
-
-    } else {
-      this.model[this.propertyRootName] = value;
-    }
+    this.model.value = value;
   };
 
   /**

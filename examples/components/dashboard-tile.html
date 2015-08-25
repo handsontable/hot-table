@@ -1,46 +1,56 @@
-<polymer-element name="dashboard-tile" attributes="label value skin">
+<dom-module id="dashboard-tile">
+  <style>
+    .tile {
+      background: #0F9D23;
+      width: 65px;
+      padding: 9px 0;
+      color: #FFF;
+      margin: 0 1px 9px 0;
+      float: left;
+    }
+
+    .tile .small {
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .tile .big {
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .tile.pink {
+      background: hotpink;
+    }
+
+    .tile.blue {
+      background: cornflowerblue;
+    }
+
+    .tile.gray {
+      background: #222;
+    }
+  </style>
   <template>
-    <style>
-      .tile {
-        background: #0F9D23;
-        width: 65px;
-        padding: 9px 0;
-        color: #FFF;
-        margin: 0 1px 9px 0;
-        float: left;
-      }
-
-      .tile .small {
-        font-size: 11px;
-        text-align: center;
-      }
-
-      .tile .big {
-        font-size: 22px;
-        text-align: center;
-      }
-
-      .tile.pink {
-        background: hotpink;
-      }
-
-      .tile.blue {
-        background: cornflowerblue;
-      }
-
-      .tile.gray {
-        background: #222;
-      }
-    </style>
-    <div class="tile {{ skin }}">
+    <div class$="{{ computeClass(skin) }}">
       <div class="small">{{ label }}</div>
       <div class="big">{{ value }}</div>
     </div>
     <content></content>
   </template>
   <script>
-    Polymer('dashboard-tile', {
+    Polymer({
+      is: 'dashboard-tile',
 
+      properties: {
+        label: { notify: true },
+        skin: { notify: true },
+        value: { notify: true }
+      },
+
+      computeClass: function (skin) {
+        return 'tile ' + skin;
+      }
     });
   </script>
-</polymer-element>
+</dom-module>

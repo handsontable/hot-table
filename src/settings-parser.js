@@ -1,176 +1,101 @@
 (function(w) {
 
   var
-    publicMethods = [
-      'addHook',
-      'addHookOnce',
-      'alter',
-      'clear',
-      'clearUndo',
-      'colOffset',
-      'colToProp',
-      'countCols',
-      'countEmptyCols',
-      'countEmptyRows',
-      'countRenderedCols',
-      'countRenderedRows',
-      'countRows',
-      'countVisibleCols',
-      'countVisibleRows',
-      'deselectCell',
-      'destroy',
-      'destroyEditor',
-      'determineColumnWidth',
-      'getCell',
-      'getCellEditor',
-      'getCellMeta',
-      'getCellRenderer',
-      'getCellValidator',
-      'getColHeader',
-      'getColWidth',
-      'getCopyableData',
-      'getData',
-      'getDataAtCell',
-      'getDataAtCol',
-      'getDataAtProp',
-      'getDataAtRow',
-      'getDataAtRowProp',
-      'getInstance',
-      'getRowHeader',
-      'getRowHeight',
-      'getSchema',
-      'getSelected',
-      'getSelectedRange',
-      'getSettings',
-      'getSourceDataAtCol',
-      'getSourceDataAtRow',
-      'getValue',
-      'hasColHeaders',
-      'hasRowHeaders',
-      'init',
-      //'isEmptyCol',
-      //'isEmptyRow',
-      'isListening',
-      'isRedoAvailable',
-      'isUndoAvailable',
-      'listen',
-      'loadData',
-      'populateFromArray',
-      'propToCol',
-      'redo',
-      'removeCellMeta',
-      'removeHook',
-      'render',
-      'rowOffset',
-      'runHooks',
-      'selectCell',
-      'selectCellByProp',
-      'setCellMeta',
-      'setCellMetaObject',
-      'setDataAtCell',
-      'setDataAtRowProp',
-      'spliceCol',
-      'spliceRow',
-      'undo',
-      'unlisten',
-      'updateSettings',
-      'validateCell',
-      'validateCells'
-    ],
     publicHooks = Handsontable.hooks.getRegistered(),
-    publicProperties = Object.keys(Handsontable.DefaultSettings.prototype),
-    wcDefaults = webComponentDefaults()
+    publicOptions = Object.keys(Handsontable.DefaultSettings.prototype),
+    publicProperties = []
   ;
 
-  publicProperties = publicProperties.concat(publicHooks);
+  publicProperties = publicProperties.concat(publicOptions, publicHooks);
 
-  function webComponentDefaults() {
-    return {
-      observeChanges: true
-    };
-  }
 
   /**
    * @constructor
    */
-  function SettingsParser() {
-
-  }
+  function SettingsParser() {}
 
   /**
-   * Get handsontable public methods and properties
+   * Get handsontable properties.
    *
    * @returns {Object}
    */
-  SettingsParser.prototype.getPublishMethodsAndProps = function() {
-    var _this = this,
-      publish = {};
+  SettingsParser.prototype.getAvailableProperties = function() {
+    var publish = {};
 
-    publicMethods.forEach(function(hotMethod) {
-      publish[hotMethod] = function() {
-        return this.instance[hotMethod].apply(this.instance, arguments);
-      };
-    });
-
-    publicProperties.forEach(function(hotProp) {
-      var wcProp, val;
-
-      if (publish[hotProp]) {
+    publicProperties.forEach(function(prop) {
+      if (publish[prop]) {
         return;
       }
-      wcProp = hotProp;
+      var defaultValue = Handsontable.DefaultSettings.prototype[prop];
 
-      if (hotProp === 'data') {
-        wcProp = 'datarows';
-
-      } else if (hotProp === 'title') {
+      if (prop === 'data') {
+        prop = 'datarows';
+      }
+      else if (prop === 'className') {
+        prop = 'class';
+      }
+      else if (prop === 'title') {
         // rename 'title' attribute to 'header' because 'title' was causing
         // problems (https://groups.google.com/forum/#!topic/polymer-dev/RMMsV-D4HVw)
-        wcProp = 'header';
+        prop = 'header';
       }
-      val = wcDefaults[hotProp] === void 0 ? Handsontable.DefaultSettings.prototype[hotProp] : wcDefaults[hotProp];
-
-      if (val === void 0) {
-        // Polymer does not like undefined
-        publish[wcProp] = null;
-
-      } else if (hotProp === 'observeChanges') {
-        // on by default
-        publish[wcProp] = true;
-
-      } else {
-        publish[wcProp] = val;
-      }
-
-      publish[wcProp + 'Changed'] = function() {
-        var settings = {};
-
-        // attribute changed callback called before attached
-        if (!this.instance || this.destroyed) {
-          return;
-        }
-        if (wcProp === 'settings') {
-          settings = _this.getModelPath(this, this[wcProp]);
-
-        } else {
-          settings[hotProp] = _this.readOption(this, wcProp, this[wcProp]);
-        }
-
-        if (wcProp === 'datarows') {
-          if (settings[hotProp] !== this.instance.getSettings()[hotProp]) {
-            this.updateSettings(settings);
-          }
-        } else {
-          // TODO (performance) On Chrome (natively supported web components) every single
-          // attribute fired updateSettings
-          this.updateSettings(settings);
-        }
+      publish[prop] = {
+        observer: '_onChanged'
       };
+      if (prop === 'settings' || prop === 'source' || prop === 'datarows') {
+        publish[prop].type = Object;
+      }
+
+      if (typeof defaultValue === 'function') {
+        publish[prop].value = function() {
+          return function() {
+            return defaultValue.apply(this.hot, arguments);
+          };
+        };
+      } else if (defaultValue !== void 0) {
+        publish[prop].value = defaultValue;
+      }
     });
-    publish.highlightedRow = -1;
-    publish.highlightedColumn = -1;
 
     return publish;
+  };
+
+  /**
+   * Get handsontable properties.
+   *
+   * @returns {Object}
+   */
+  SettingsParser.prototype.getHotTableProperties = function() {
+    var props = this.getAvailableProperties();
+
+    props.highlightedRow = {
+      type: Number,
+      value: -1,
+      notify: true
+    };
+    props.highlightedColumn = {
+      type: Number,
+      value: -1,
+      notify: true
+    };
+
+    return props;
+  };
+
+  /**
+   * Get handsontable properties.
+   *
+   * @returns {Object}
+   */
+  SettingsParser.prototype.getHotColumnProperties = function() {
+    var props = this.getAvailableProperties();
+
+    delete props.datarows;
+    props.value = {
+      observer: '_onChanged'
+    };
+
+    return props;
   };
 
   /**
@@ -181,8 +106,8 @@
    */
   SettingsParser.prototype.parse = function(hotTable) {
     var columns = this.parseColumns(hotTable),
-      options = webComponentDefaults(),
-      attrName, settingsAttr, i, iLen;
+      options = {},
+      attrName, i, iLen;
 
     for (i = 0, iLen = publicProperties.length; i < iLen; i ++) {
       attrName = publicProperties[i];
@@ -194,21 +119,16 @@
     }
 
     if (hotTable.settings) {
-      settingsAttr = this.getModelPath(hotTable, hotTable.settings);
-
-      for (i in settingsAttr) {
-        if (settingsAttr.hasOwnProperty(i)) {
-          options[i] = settingsAttr[i];
+      for (i in hotTable.settings) {
+        if (hotTable.settings.hasOwnProperty(i)) {
+          options[i] = hotTable.settings[i];
         }
       }
     }
-
     if (columns.length) {
       options.columns = columns;
     }
-    // Polymer reports null default values for all declared custom element properties.
-    // We don't want them to override Handsontable defaults
-    options = this.filterNonNull(options);
+    options.observeChanges = true;
 
     return options;
   };
@@ -247,8 +167,8 @@
       val,
       i;
 
-    for (i = 0, len = publicProperties.length; i < len; i++) {
-      attrName = publicProperties[i];
+    for (i = 0, len = publicOptions.length; i < len; i++) {
+      attrName = publicOptions[i];
 
       if (attrName === 'data') {
         attrName = 'value';
@@ -259,20 +179,10 @@
       } else if (attrName === 'className') {
         attrName = 'class';
       }
-
-      if (hotColumn[attrName] === null) {
-        continue; // default value
-
-      } else if (hotColumn[attrName] !== void 0 && hotColumn[attrName] !== '') {
-        val = hotColumn[attrName];
-
-      } else {
-        // Dec 3, 2013 - Polymer returns empty string for node properties such as hotcolumn.width
-        val = hotColumn.getAttribute(attrName);
-      }
+      val = hotColumn[attrName];
 
       if (val !== void 0 && val !== hotTable[attrName]) {
-        object[publicProperties[i]] = this.readOption(hotColumn, attrName, val);
+        object[publicOptions[i]] = this.readOption(hotColumn, attrName, val);
       }
     }
     innerHotTable = hotColumn.getElementsByTagName('hot-table');
@@ -293,14 +203,12 @@
    * @returns {*}
    */
   SettingsParser.prototype.readOption = function(hotTable, key, value) {
-    if (key === 'datarows' || key === 'renderer' || key === 'source' || key === 'dataSchema') {
-      return this.getModelPath(hotTable, value);
-    }
-    if (key === 'className') {
+    if (key === 'datarows' || key === 'renderer' || key === 'source' || key === 'dataSchema' || key === 'className') {
       return value;
     }
+    value = this.readBool(value);
 
-    return this.readBool(value);
+    return value;
   };
 
   /**
@@ -310,7 +218,7 @@
    * @returns {*}
    */
   SettingsParser.prototype.readBool = function(value) {
-    if (value === void 0 || value === 'false') {
+    if (value === 'false') {
       return false;
 
     } else if (value === '' || value === 'true') {
@@ -318,59 +226,6 @@
     }
 
     return value;
-  };
-
-  /**
-   * @param {Object} object
-   * @returns {Object}
-   */
-  SettingsParser.prototype.filterNonNull = function(object) {
-    var result = {};
-
-    for (var i in object) {
-      if (object.hasOwnProperty(i) && object[i] !== null) {
-        result[i] = object[i];
-      }
-    }
-
-    return result;
-  };
-
-  /**
-   * @param {HTMLElement} hotTable
-   * @returns {*}
-   */
-  SettingsParser.prototype.getModel = function(hotTable) {
-    var model;
-
-    if (hotTable.templateInstance) {
-      model = hotTable.templateInstance.model;
-    } else {
-      model = window;
-    }
-
-    return model;
-  };
-
-  /**
-   * @param {HTMLElement} hotTable
-   * @param {*} path
-   * @returns {*}
-   */
-  SettingsParser.prototype.getModelPath = function(hotTable, path) {
-    var model, expression, object;
-
-    // happens in Polymer when assigning
-    // as datarows="{{ model.subpage.people }}" or settings="{{ model.subpage.settings }}
-    if (typeof path === 'object' || typeof path === 'function') {
-      return path;
-    }
-    model = this.getModel(hotTable);
-    expression = 'with(model) { ' + path + ';}';
-    /* jshint -W061 */
-    object = eval(expression);
-
-    return object;
   };
 
 

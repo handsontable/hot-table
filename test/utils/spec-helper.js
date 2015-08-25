@@ -28,7 +28,7 @@ afterEach(function() {
 
 beforeEach(function() {
   jasmine.addMatchers({
-    isFunction: function() {
+    toBeFunction: function() {
       return {
         compare: function(actual, expected) {
           var passed = typeof actual === 'function';

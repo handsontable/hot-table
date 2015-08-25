@@ -1,5 +1,9 @@
 (function() {
 
+  if (!Handsontable.helper.isWebComponentSupportedNatively()) {
+    return;
+  }
+
   var
     owner = (document._currentScript || document.currentScript).ownerDocument;
 
@@ -15,7 +19,7 @@
   });
 
   /**
-   * On create custom element
+   * On create custom element.
    */
   AgeRenderer.prototype.createdCallback = function() {
     this.shadow = this.createShadowRoot();
@@ -24,7 +28,14 @@
   };
 
   /**
-   * Render element
+   * On attached to the DOM custom element.
+   */
+  AgeRenderer.prototype.attachedCallback = function() {
+    this.updateAge(this.age);
+  };
+
+  /**
+   * Render element.
    */
   AgeRenderer.prototype.updateAge = function(age) {
     var desc = this.holder.querySelector('#message');
@@ -56,6 +67,11 @@
     if (attribute === 'age') {
       this.updateAge(newVal);
     }
+  };
+
+  AgeRenderer.prototype.ageChanged = function(attribute, oldVal, newVal) {
+
+    console.log(arguments);
   };
 
   document.registerElement('age-renderer', AgeRenderer);

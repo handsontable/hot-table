@@ -2,17 +2,17 @@
 <!-- Import Polymer -->
 <link rel="import" href="../../../polymer/polymer.html">
 
-<polymer-element name="language-editor" constructor="LanguageEditor" attributes="selected">
+<dom-module id="language-editor">
   <template>
-    <template repeat="{{ lang in languages }}">
+    <template is="dom-repeat" items="{{ languages }}" as="lang">
       <div>
         <label>
-          <input on-change="{{ onChange }}" type="checkbox" checked="{{ lang.checked }}">
-          <img src="./resources/flags/{{ lang.code }}.png" alt="{{ lang.code }}"/>
-          {{ lang.name }}
+          <input on-change="onChange" type="checkbox" checked="{{ lang.checked }}">
+          <img src="{{ computeSrc(lang) }}" alt="{{ lang.code }}">
+          <span>{{ lang.name }}</span>
         </label>
       </div>
     </template>
   </template>
   <script src="language-editor.js"></script>
-</polymer-element>
+</dom-module>

@@ -5,7 +5,7 @@
   <title>&lt;hot-table&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
   <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
@@ -18,10 +18,9 @@
   <link rel="stylesheet" href="css/main.css"/>
 
   <!-- Importing Custom Elements -->
-  <!-- Importing Custom Elements -->
-  <link rel="import" href="../src/hot-table.html">
+  <link rel="import" href="../hot-table.html">
   <link rel="import" href="../../google-map/google-map.html">
-  <link rel="import" href="../../google-map/google-map-search.html">
+  <link rel="import" href="components/google-map/google-map-search.html">
   <link rel="import" href="components/bold-renderer.html">
   <link rel="import" href="components/colored-renderer.html">
   <link rel="import" href="components/age-renderer.html">
@@ -31,31 +30,6 @@
     hot-table {
       font-size: 12px;
     }
-    hot-table /deep/ google-map {
-      height: 200px;
-      width: 400px;
-    }
-    hot-table /deep/ .map-editor {
-      background-color: white;
-      width: 400px;
-      padding: 5px;
-      box-shadow: 0 0 5px 0 #ddd;
-    }
-    hot-table /deep/ .languages-editor {
-      background-color: white;
-      width: 169px;
-      padding: 5px;
-      box-shadow: 0 0 5px 0 #ddd;
-    }
-    hot-table /deep/ .color-editor {
-      width: 100%;
-      height: 100%;
-    }
-    hot-table /deep/ .no-padding {
-      padding: 0 !important;
-    }
-
-    /* For browser which not supported web component natively yet */
     hot-table google-map {
       height: 200px;
       width: 400px;
@@ -79,6 +53,27 @@
     .no-padding {
       padding: 0 !important;
     }
+    .color-editor div {
+      height: 100%;
+    }
+    .black {
+      background-color: black;
+    }
+    .blue {
+      background-color: blue;
+    }
+    .green {
+      background-color: green;
+    }
+    .orange {
+      background-color: orange;
+    }
+    .red {
+      background-color: red;
+    }
+    .yellow {
+      background-color: yellow;
+    }
   </style>
 </head>
 <body>
@@ -92,59 +87,59 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template is="auto-binding">
-      <hot-table datarows="{{ people }}" contextMenu="true" maxRows="10">
-        <hot-column width="30" readOnly value="id" header="ID"></hot-column>
-        <hot-column width="70" value="name.first" header="First Name">
-          <template data-hot-role="renderer">
-            <template bind="{{ name }}">
-              {{ first }}
-            </template>
-          </template>
-        </hot-column>
+    <template id="tpl" is="dom-bind">
+      <hot-table width="790" height="490" datarows="{{ people }}" context-menu="true" max-rows="10">
+        <hot-column width="30" read-only value="id" header="ID"></hot-column>
+        <hot-column width="70" value="name.first" header="First Name"></hot-column>
         <hot-column width="100" value="name.last" header="Last Name">
-          <template data-hot-role="renderer">
-            <bold-renderer value="{{ name.last }}"></bold-renderer>
+          <template data-hot-role="renderer" is="dom-template">
+            <bold-renderer value="{{ value }}"></bold-renderer>
           </template>
         </hot-column>
         <hot-column width="80" value="gender" type="dropdown" source="genderList" header="Gender">
-          <template data-hot-role="renderer">({{ gender }})</template>
+          <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
         </hot-column>
-        <hot-column width="100" value="skillLevel" header="Color skill level" class="no-padding">
-          <template data-hot-role="renderer">
-            <div class="color-editor" style="background-color: {{ skillLevel }}"></div>
+        <hot-column width="100" value="skillLevel" header="Color skill level" class="no-padding color-editor">
+          <template data-hot-role="renderer" is="dom-template">
+            <div class$="{{ value }}"></div>
           </template>
-          <template data-hot-role="editor">
-            <input type="color" name="color" value="{{ skillLevel }}">
+          <template data-hot-role="editor" is="dom-template">
+            <select name="color" value="{{ value::input }}">
+              <option value="black">Black</option>
+              <option value="blue">Blue</option>
+              <option value="green">Green</option>
+              <option value="orange">Orange</option>
+              <option value="red">Red</option>
+              <option value="yellow">Yellow</option>
+            </select>
           </template>
         </hot-column>
         <hot-column width="180" value="coordinates" header="Last seen">
-          <template data-hot-role="renderer">
-            <template bind="{{ coordinates }}">
-              lat: <b>{{ lat }}</b><br/>
-              lng: <b>{{ lng }}</b>
-            </template>
+          <template data-hot-role="renderer" is="dom-template" style="white-space: normal;">
+            lat: <b>{{ value.lat }}</b><br/>
+            lng: <b>{{ value.lng }}</b>
           </template>
-          <template data-hot-role="editor">
+          <template data-hot-role="editor" is="dom-template">
             <div class="map-editor">
-              Latitude: <b>{{ coordinates.lat }}</b>, <br>
-              Longitude: <b>{{ coordinates.lng }}</b>
-              <template bind if="{{ showed }}">
-                <google-map showCenterMarker="true" zoomable="true" map="{{ map }}"
-                            latitude="{{ coordinates.lat }}" longitude="{{ coordinates.lng }}"></google-map>
+              Latitude: <b>{{ value.lat }}</b>, <br>
+              Longitude: <b>{{ value.lng }}</b>
+              <template is="dom-if" if="[[ showed ]]">
+                <google-map disable-zoom latitude="{{ value.lat }}" longitude="{{ value.lng }}">
+                  <google-map-marker latitude="[[ value.lat ]]" longitude="[[ value.lng ]]"></google-map-marker>
+                </google-map>
               </template>
             </div>
           </template>
         </hot-column>
         <hot-column width="180" value="languages" header="Languages">
-          <template data-hot-role="renderer">
-            <template repeat="{{ code in languages }}">
-              <img src="resources/flags/{{ code }}.png" alt="{{ code }}"/>
+          <template id="abcde" data-hot-role="renderer" is="dom-template">
+            <template  is="dom-repeat" items="{{ value }}" as="code">
+              <img src="{{ languagesComputedSrc(code) }}" alt="{{ code }}"/>
             </template>
           </template>
-          <template data-hot-role="editor">
+          <template data-hot-role="editor" is="dom-template">
             <div class="languages-editor">
-              <language-editor selected="{{ languages }}"></language-editor>
+              <language-editor selected="{{ value }}"></language-editor>
             </div>
           </template>
         </hot-column>
@@ -164,91 +159,101 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; contextMenu=&#x22;true&#x22; maxRows=&#x22;10&#x22;&#x3E;
-    &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
-        &#x3C;template bind=&#x22;{{ name }}&#x22;&#x3E;
-          {{ first }}
+  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
+    &#x3C;hot-table width=&#x22;790&#x22; height=&#x22;490&#x22; datarows=&#x22;{{ people }}&#x22; context-menu=&#x22;true&#x22; max-rows=&#x22;10&#x22;&#x3E;
+      &#x3C;hot-column width=&#x22;30&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
         &#x3C;/template&#x3E;
-      &#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
-        &#x3C;bold-renderer value=&#x22;{{ name.last }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
-      &#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; type=&#x22;dropdown&#x22; source=&#x22;genderList&#x22; header=&#x22;Gender&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;({{ gender }})&#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;skillLevel&#x22; header=&#x22;Color skill level&#x22; class=&#x22;no-padding&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
-        &#x3C;div class=&#x22;color-editor&#x22; style=&#x22;background-color: {{ skillLevel }}&#x22;&#x3E;&#x3C;/div&#x3E;
-      &#x3C;/template&#x3E;
-      &#x3C;template data-hot-role=&#x22;editor&#x22;&#x3E;
-        &#x3C;input type=&#x22;color&#x22; name=&#x22;color&#x22; value=&#x22;{{ skillLevel }}&#x22;&#x3E;
-      &#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;coordinates&#x22; header=&#x22;Last seen&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
-        &#x3C;template bind=&#x22;{{ coordinates }}&#x22;&#x3E;
-          lat: &#x3C;b&#x3E;{{ lat }}&#x3C;/b&#x3E;&#x3C;br/&#x3E;
-          lng: &#x3C;b&#x3E;{{ lng }}&#x3C;/b&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; type=&#x22;dropdown&#x22; source=&#x22;genderList&#x22; header=&#x22;Gender&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;(&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;)&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;skillLevel&#x22; header=&#x22;Color skill level&#x22; class=&#x22;no-padding color-editor&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;div class$=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/div&#x3E;
         &#x3C;/template&#x3E;
-      &#x3C;/template&#x3E;
-      &#x3C;template data-hot-role=&#x22;editor&#x22;&#x3E;
-        &#x3C;div class=&#x22;map-editor&#x22;&#x3E;
-          Latitude: &#x3C;b&#x3E;{{ coordinates.lat }}&#x3C;/b&#x3E;, &#x3C;br&#x3E;
-          Longitude: &#x3C;b&#x3E;{{ coordinates.lng }}&#x3C;/b&#x3E;
-          &#x3C;template bind if=&#x22;{{ showed }}&#x22;&#x3E;
-            &#x3C;google-map showCenterMarker=&#x22;true&#x22; zoomable=&#x22;true&#x22; map=&#x22;{{ map }}&#x22;
-                        latitude=&#x22;{{ coordinates.lat }}&#x22; longitude=&#x22;{{ coordinates.lng }}&#x22;&#x3E;&#x3C;/google-map&#x3E;
+        &#x3C;template data-hot-role=&#x22;editor&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;select name=&#x22;color&#x22; value=&#x22;{{ value::input }}&#x22;&#x3E;
+            &#x3C;option value=&#x22;black&#x22;&#x3E;Black&#x3C;/option&#x3E;
+            &#x3C;option value=&#x22;blue&#x22;&#x3E;Blue&#x3C;/option&#x3E;
+            &#x3C;option value=&#x22;green&#x22;&#x3E;Green&#x3C;/option&#x3E;
+            &#x3C;option value=&#x22;orange&#x22;&#x3E;Orange&#x3C;/option&#x3E;
+            &#x3C;option value=&#x22;red&#x22;&#x3E;Red&#x3C;/option&#x3E;
+            &#x3C;option value=&#x22;yellow&#x22;&#x3E;Yellow&#x3C;/option&#x3E;
+          &#x3C;/select&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;coordinates&#x22; header=&#x22;Last seen&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22; style=&#x22;white-space: normal;&#x22;&#x3E;
+          lat: &#x3C;b&#x3E;{{ value.lat }}&#x3C;/b&#x3E;&#x3C;br/&#x3E;
+          lng: &#x3C;b&#x3E;{{ value.lng }}&#x3C;/b&#x3E;
+        &#x3C;/template&#x3E;
+        &#x3C;template data-hot-role=&#x22;editor&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;div class=&#x22;map-editor&#x22;&#x3E;
+            Latitude: &#x3C;b&#x3E;{{ value.lat }}&#x3C;/b&#x3E;, &#x3C;br&#x3E;
+            Longitude: &#x3C;b&#x3E;{{ value.lng }}&#x3C;/b&#x3E;
+            &#x3C;template is=&#x22;dom-if&#x22; if=&#x22;[[ showed ]]&#x22;&#x3E;
+              &#x3C;google-map disable-zoom latitude=&#x22;{{ value.lat }}&#x22; longitude=&#x22;{{ value.lng }}&#x22;&#x3E;
+                &#x3C;google-map-marker latitude=&#x22;[[ value.lat ]]&#x22; longitude=&#x22;[[ value.lng ]]&#x22;&#x3E;&#x3C;/google-map-marker&#x3E;
+              &#x3C;/google-map&#x3E;
+            &#x3C;/template&#x3E;
+          &#x3C;/div&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;languages&#x22; header=&#x22;Languages&#x22;&#x3E;
+        &#x3C;template id=&#x22;abcde&#x22; data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;template  is=&#x22;dom-repeat&#x22; items=&#x22;{{ value }}&#x22; as=&#x22;code&#x22;&#x3E;
+            &#x3C;img src=&#x22;{{ languagesComputedSrc(code) }}&#x22; alt=&#x22;{{ code }}&#x22;/&#x3E;
           &#x3C;/template&#x3E;
-        &#x3C;/div&#x3E;
-      &#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;languages&#x22; header=&#x22;Languages&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
-        &#x3C;template repeat=&#x22;{{ code in languages }}&#x22;&#x3E;
-          &#x3C;img src=&#x22;resources/flags/{{ code }}.png&#x22; alt=&#x22;{{ code }}&#x22;/&#x3E;
         &#x3C;/template&#x3E;
-      &#x3C;/template&#x3E;
-      &#x3C;template data-hot-role=&#x22;editor&#x22;&#x3E;
-        &#x3C;div class=&#x22;languages-editor&#x22;&#x3E;
-          &#x3C;language-editor selected=&#x22;{{ languages }}&#x22;&#x3E;&#x3C;/language-editor&#x3E;
-        &#x3C;/div&#x3E;
-      &#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-  &#x3C;/hot-table&#x3E;
+        &#x3C;template data-hot-role=&#x22;editor&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;div class=&#x22;languages-editor&#x22;&#x3E;
+            &#x3C;language-editor selected=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/language-editor&#x3E;
+          &#x3C;/div&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
+  &#x3C;/template&#x3E;
   </code></pre>
 
 
   <script>
     var genderList = ['Male', 'Female'];
     var people = [
-      {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 17, skillLevel: '#C00000',
+      {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 17, skillLevel: 'blue',
         coordinates: {lat: 54.4967769, lng: 18.537945}, languages: ['us', 'se', 'pl', 'es', 'tk', 'pk']},
-      {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, skillLevel: '#080808',
+      {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, skillLevel: 'black',
         coordinates: {lat: 51.5286416, lng: -0.1015987}, languages: ['dk', 'de']},
-      {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, skillLevel: '#888888',
+      {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, skillLevel: 'orange',
         coordinates: {lat: 39.764389, lng: -104.8551114}, languages: ['us']},
-      {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, skillLevel: '#FFFFCC',
+      {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, skillLevel: 'yellow',
         coordinates: {lat: 41.9100711, lng: 12.5359979}, languages: ['us', 'es']},
-      {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 65, skillLevel: '#AAAAAA',
+      {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 65, skillLevel: 'green',
         coordinates: {lat: 48.8588589, lng: 2.3470599}, languages: ['us', 'es']},
-      {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, skillLevel: '#FFCC00',
+      {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, skillLevel: 'green',
         coordinates: {lat: 41.8758149, lng: -87.623408}, languages: ['us', 'ru']},
-      {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, skillLevel: '#3366CC',
+      {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, skillLevel: 'blue',
         coordinates: {lat: 25.782324, lng: -80.2310801}, languages: ['us', 'no']},
-      {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, skillLevel: '#999966',
+      {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, skillLevel: 'green',
         coordinates: {lat: 40.415235, lng: -3.7027017}, languages: ['us', 'tj']},
-      {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 88, skillLevel: '#336600',
+      {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 88, skillLevel: 'white',
         coordinates: {lat: 43.6478215, lng: -79.3728996}, languages: ['us']},
-      {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, skillLevel: '#FF99FF',
+      {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, skillLevel: 'orange',
         coordinates: {lat: 59.3288242, lng: 18.0729393}, languages: ['us']}
     ];
 
-    document.querySelector('template').people = people;
+    window.addEventListener('dom-change', function () {
+      var tpl = document.getElementById('tpl');
+
+      tpl.people = people;
+      tpl.genderList = genderList;
+      tpl.languagesComputedSrc = function(code) {
+        return 'resources/flags/' + code + '.png';
+      }
+    });
   </script>
   <script>hljs.initHighlightingOnLoad();</script>
 </div>
