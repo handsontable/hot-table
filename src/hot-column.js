@@ -1,44 +1,20 @@
 (function () {
 
-  var publicProperties = Object.keys(Handsontable.DefaultSettings.prototype);
-
-  function getPublishProperties() {
-    var publish = {};
-
-    publicProperties.forEach(function (hotProp) {
-      var wcProp;
-
-      if (!publish[hotProp]) {
-        wcProp = hotProp;
-
-        if (hotProp === 'data') {
-          wcProp = 'value';
-        }
-        else if (hotProp === 'title') {
-          // rename 'title' attribute to 'header' because 'title' was causing
-          // problems (https://groups.google.com/forum/#!topic/polymer-dev/RMMsV-D4HVw)
-          wcProp = 'header';
-        }
-
-        // Polymer does not like undefined
-        publish[wcProp] = null;
-      }
-    });
-
-    return publish;
-  }
+  var
+    settingsParser = new HotTableUtils.SettingsParser();
 
   function findRenderer(element) {
-    return element.querySelector('template[data-hot-role=renderer]');
+    return Polymer.dom(element).querySelector('template[data-hot-role=renderer]');
   }
   function findEditor(element) {
-    return element.querySelector('template[data-hot-role=editor]');
+    return Polymer.dom(element).querySelector('template[data-hot-role=editor]');
   }
 
-  Polymer('hot-column', {
-    publish: getPublishProperties(),
+  Polymer({
+    is: 'hot-column',
+    properties: settingsParser.getHotColumnProperties(),
 
-    ready: function () {
+    attached: function () {
       this.registerRenderer(findRenderer(this));
       this.registerEditor(findEditor(this));
 
@@ -47,70 +23,67 @@
       }
     },
 
-    attributeChanged: function () {
+    attributeChanged: function() {
+      this._onChanged();
+    },
+
+    _onChanged: function () {
       if (this.parentNode) {
         this.parentNode.onMutation();
       }
     },
 
     /**
-     * Register cell renderer
+     * Register cell renderer.
      *
-     * @param {Element} element Template element
+     * @param {Element} template Template element
      */
-    registerRenderer: function(element) {
-      var cache;
-
-      if (!element) {
+    registerRenderer: function(template) {
+      if (!template) {
         return;
       }
-      cache = new WeakMap();
+      var models = new WeakMap();
 
       this.renderer = function(instance, TD, row, col, prop, value, cellProperties) {
-        var valueKey = prop,
-          node, model, oldValue;
+        var model, hasModel;
 
-        oldValue = cache.get(TD);
         Handsontable.renderers.cellDecorator.apply(this, arguments);
+        hasModel = models.has(TD);
 
-        // Prevent re-render cells that are not changed
-        if (oldValue === value) {
-          return;
+        if (hasModel) {
+          model = models.get(TD);
         }
-        cache.set(TD, value);
-
-        model = {
-          row: row,
-          col: col
-        };
-
-        if (prop.indexOf('.') !== -1) {
-          valueKey = prop.split('.')[0];
-          model[valueKey] = instance.getDataAtRowProp(row, valueKey);
-        } else {
-          model[valueKey] = value;
+        else {
+          model = template.stamp();
+          models.set(TD, model);
         }
-        node = element.createInstance(model);
+        model.row = row;
+        model.col = col;
+        model.value = value;
 
-        TD.textContent = '';
-        TD.appendChild(node);
+        TD.style.whiteSpace = 'normal';
+
+        if (!hasModel) {
+          TD.textContent = '';
+          Polymer.dom(TD).appendChild(model.root);
+        }
       };
     },
 
     /**
-     * Register cell editor
+     * Register cell editor.
      *
-     * @param {Element} element Template element
+     * @param {Element} template Template element
      */
-    registerEditor: function(element) {
-      if (!element) {
+    registerEditor: function(template) {
+      if (!template) {
         return;
       }
       this.editor = ProxyEditor;
 
-      function ProxyEditor(instance) {
-        HotTableUtils.Editor.call(this, instance);
-        this.template = element;
+      function ProxyEditor(hotInstance) {
+        HotTableUtils.Editor.call(this, hotInstance);
+        this.template = template;
       }
 
       ProxyEditor.prototype = Object.create(HotTableUtils.Editor.prototype, {

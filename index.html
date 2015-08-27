@@ -5,20 +5,20 @@
   <title>&lt;hot-table&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
 
   <!-- Code highlighter -->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="examples/css/main.css"/>
 
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
   <link rel="stylesheet" href="http://docs.handsontable.com/0.15.1/bower_components/handsontable/dist/handsontable.full.js">
 
   <!-- Importing Custom Elements -->
-  <link rel="import" href="src/hot-table.html">
+  <link rel="import" href="hot-table.html">
 </head>
 <body>
 
@@ -43,11 +43,11 @@
   <br>
   1. Import Web Components' polyfill:
   <pre><code class="html">
-    &#x3C;script src=&#x22;bower_components/webcomponentsjs/webcomponents.js&#x22;&#x3E;&#x3C;/script&#x3E;
+    &#x3C;script src=&#x22;bower_components/webcomponentsjs/webcomponents-lite.js&#x22;&#x3E;&#x3C;/script&#x3E;
   </code></pre>
   2. Import Custom Element:
   <pre><code class="html">
-    &#x3C;link rel=&#x22;import&#x22; href=&#x22;bower_components/hot-table/src/hot-table.html&#x22;&#x3E;
+    &#x3C;link rel=&#x22;import&#x22; href=&#x22;bower_components/hot-table/hot-table.html&#x22;&#x3E;
   </code></pre>
   3. Start using it!
   <pre><code class="html">
@@ -61,26 +61,26 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template id="tpl" bind>
+    <template id="tpl" is="dom-bind">
       <p>
-        Name of first person: <strong>{{ people[0].name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
+        Name of first person: <strong>{{ people.0.name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
       </p>
-      <hot-table datarows="{{ people }}" contextMenu="true" maxRows="{{ people.length }}" highlightedRow="{{ highlightedRow }}"
-                 class="htLeft">
-        <hot-column width="30" readOnly value="id" header="ID"></hot-column>
+      <hot-table width="655" height="295" datarows="{{ people }}" context-menu max-rows="{{ people.length }}"
+                 highlighted-row="{{ highlightedRow }}" class="htLeft">
+        <hot-column width="30" read-only value="id" header="ID"></hot-column>
         <hot-column value="name.first" header="First Name">
-          <template data-hot-role="renderer"><span>{{ name.first }}...</span></template>
+          <template data-hot-role="renderer" is="dom-template"><span>{{ value }}</span>...</template>
         </hot-column>
         <hot-column width="100" value="name.last" header="Last Name"></hot-column>
         <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
-        <hot-column value="gender" header="Gender" source="['Male', 'Female']" type="dropdown"></hot-column>
+        <hot-column value="gender" header="Gender" source="[[ genderSource ]]" type="dropdown"></hot-column>
         <hot-column type="numeric" value="age" header="Age"></hot-column>
-        <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
-                    uncheckedTemplate="No"></hot-column>
-        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
-                    uncheckedTemplate="No"></hot-column>
-        <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
-                    uncheckedTemplate="No"></hot-column>
+        <hot-column type="checkbox" value="languages.english" header="English" checked-template="Yes"
+                    unchecked-template="No"></hot-column>
+        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checked-template="Yes"
+                    unchecked-template="No"></hot-column>
+        <hot-column type="checkbox" value="languages.french" header="French" checked-template="Yes"
+                    unchecked-template="No"></hot-column>
         <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
       </hot-table>
     </template>
@@ -89,24 +89,29 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; contextMenu=&#x22;true&#x22; maxRows=&#x22;{{ people.length }}&#x22; highlightedRow=&#x22;{{ highlightedRow }}&#x22;
-             class=&#x22;htLeft&#x22;&#x3E;
-    &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;span&#x3E;{{ name.first }}...&#x3C;/span&#x3E;&#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date&#x22; header=&#x22;Birthday&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column value=&#x22;gender&#x22; header=&#x22;Gender&#x22; source=&#x22;[&#x27;Male&#x27;, &#x27;Female&#x27;]&#x22; type=&#x22;dropdown&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
-                uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
-                uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
-                uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-  &#x3C;/hot-table&#x3E;
+  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
+    &#x3C;p&#x3E;
+      Name of first person: &#x3C;strong&#x3E;{{ people.0.name.first }}&#x3C;/strong&#x3E; | Highlighted row: &#x3C;strong&#x3E;{{ highlightedRow }}&#x3C;/strong&#x3E;
+    &#x3C;/p&#x3E;
+    &#x3C;hot-table width=&#x22;655&#x22; height=&#x22;295&#x22; datarows=&#x22;{{ people }}&#x22; context-menu max-rows=&#x22;{{ people.length }}&#x22;
+               highlighted-row=&#x22;{{ highlightedRow }}&#x22; class=&#x22;htLeft&#x22;&#x3E;
+      &#x3C;hot-column width=&#x22;30&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;...&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date&#x22; header=&#x22;Birthday&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column value=&#x22;gender&#x22; header=&#x22;Gender&#x22; source=&#x22;[[ genderSource ]]&#x22; type=&#x22;dropdown&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checked-template=&#x22;Yes&#x22;
+                  unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checked-template=&#x22;Yes&#x22;
+                  unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checked-template=&#x22;Yes&#x22;
+                  unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
+  &#x3C;/template&#x3E;
   </code></pre>
 
   <h2>More demos</h2>
@@ -115,7 +120,7 @@
     <li><a href="examples/dashboard.html">Dashboard</a></li>
     <li><a href="examples/renderers.html">Custom Renderers</a></li>
     <li><a href="examples/editors.html">Custom Editors</a></li>
-    <li><a href="examples/nested-tables.html">Nested Tables</a></li>
+    <li>Nested Tables (comming soon)</li>
   </ul>
 
   <script>
@@ -144,13 +149,12 @@
         languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
     ];
 
-    window.addEventListener('polymer-ready', function () {
+    window.addEventListener('dom-change', function () {
       var tpl = document.getElementById('tpl');
 
-      tpl.model = {
-        highlightedRow: -1,
-        people: people
-      };
+      tpl.highlightedRow = -1;
+      tpl.people = people;
+      tpl.genderSource = ['Male', 'Female'];
     });
   </script>
   <script>hljs.initHighlightingOnLoad();</script>

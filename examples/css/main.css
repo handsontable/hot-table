@@ -381,6 +381,6 @@ hot-table {
   display: inline-block;
 }
 
-hot-table /deep/ .handsontableInputHolder {
+hot-table .handsontableInputHolder {
   text-align: left !important;
 }

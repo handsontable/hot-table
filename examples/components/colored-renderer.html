@@ -2,14 +2,14 @@
 <!-- Import Polymer -->
 <link rel="import" href="../../../polymer/polymer.html">
 
-<polymer-element name="colored-renderer" constructor="ColoredRenderer">
+<dom-module id="colored-renderer">
+  <style>
+    :host {
+      white-space: normal;
+    }
+  </style>
   <template>
-    <style>
-      :host {
-        white-space: normal;
-      }
-    </style>
-    <template repeat="{{ v, i in splitedValue }}"><span style="color: {{ i % 2 ? 'red' : 'green' }}">{{ v }}</span></template>
+    <template is="dom-repeat" items="{{ splitedValue }}" as="v" index-as="i"><span style$="{{computeStyle(i)}}">{{ v }}</span></template>
   </template>
   <script src="colored-renderer.js"></script>
-</polymer-element>
+</dom-module>

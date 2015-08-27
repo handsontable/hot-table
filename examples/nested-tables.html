@@ -5,7 +5,7 @@
   <title>&lt;hot-table&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
   <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
@@ -18,28 +18,12 @@
   <link rel="stylesheet" href="css/main.css"/>
 
   <!-- Importing Custom Elements -->
-  <link rel="import" href="../src/hot-table.html">
+  <link rel="import" href="../hot-table.html">
 
   <style>
     hot-table {
       display: inline-block;
     }
-    hot-table /deep/ td {
-      background-color: transparent !important;
-    }
-    hot-table /deep/ .no-padding {
-      padding: 0;
-      border-right: none;
-      border-left: none;
-    }
-    hot-table /deep/ .ht_clone_top {
-      display: none !important;
-    }
-    hot-table /deep/ .htMiddle {
-      font-size: 1.3em;
-    }
-
-    /* For browser which not supported web component natively yet */
     hot-table td {
       background-color: transparent !important;
     }
@@ -71,27 +55,27 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template is="auto-binding">
-      <hot-table dataRows="{{ cars }}" contextMenu="true">
-        <hot-column width="30" readOnly value="id" header="ID" class="htCenter htMiddle"></hot-column>
+    Comming soon (feature plan)
+    <template id="tpl">
+      <hot-table datarows="{{ cars }}" context-menu>
+        <hot-column width="30" read-only value="id" header="ID" class="htCenter htMiddle"></hot-column>
         <hot-column width="100" value="brand" header="Brand" class="htCenter htMiddle"></hot-column>
         <hot-column width="700" value="cars" header="Cars" editor="false" class="no-padding no-header-shadow">
-          <template data-hot-role="renderer">
-            <hot-table width="700" stretchH="all" dataRows="{{ cars }}" contextMenu="true" class="nested" minSpareRows="1">
+          <template data-hot-role="renderer" is="dom-template">
+            <hot-table width="700" stretch-h="all" datarows="{{ value }}" context-menu class="nested" min-spare-rows="0">
               <hot-column width="100" value="model" header="Model" class="htCenter htMiddle"></hot-column>
               <hot-column width="230" value="clients" header="Clients" editor="false" class="no-padding">
-                <template data-hot-role="renderer">
-                  <hot-table width="230" stretchH="all" datarows="{{ clients }}" contextMenu="true"
-                             class="nested" minSpareRows="1">
+                <template data-hot-role="renderer" is="dom-template">
+                  <hot-table width="230" stretch-h="all" datarows="{{ value }}" context-menu class="nested" min-spare-rows="0">
                     <hot-column width="115" value="firstName" class="htLeft" header="First name"></hot-column>
                     <hot-column width="115" value="lastName" class="htLeft" header="Last name"></hot-column>
                   </hot-table>
                 </template>
               </hot-column>
               <hot-column width="200" value="exportedTo" header="Exported to" editor="false" class="no-padding">
-                <template data-hot-role="renderer">
-                  <hot-table width="200" stretchH="all" datarows="{{ exportedTo }}" contextMenu="true"
-                             class="nested" minSpareRows="1">
+                <template data-hot-role="renderer" is="dom-template">
+                  <hot-table width="200" stretch-h="all" datarows="{{ exportedTo }}" context-menu="true"
+                             class="nested" min-spare-rows="1">
                     <hot-column value="country" header="Country" class="htLeft"></hot-column>
                   </hot-table>
                 </template>
@@ -258,7 +242,11 @@
     }
   ];
 
-  document.querySelector('template').cars = cars;
+  window.addEventListener('dom-change', function () {
+    var tpl = document.getElementById('tpl');
+
+    tpl.cars = cars;
+  });
 </script>
 
 </body>

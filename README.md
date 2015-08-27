@@ -23,7 +23,7 @@ Or [download as ZIP](https://github.com/handsontable/hot-table/archive/gh-pages.
 1. Import Web Components' polyfill:
 
     ```html
-    <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     ```
 
 2. Import Custom Element:
