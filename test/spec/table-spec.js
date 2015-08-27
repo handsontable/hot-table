@@ -19,92 +19,91 @@ describe('<hot-table>', function () {
 
     this.$container.append(hot);
 
-    expect(hot.addHook).isFunction();
-    expect(hot.addHookOnce).isFunction();
-    expect(hot.alter).isFunction();
-    expect(hot.clear).isFunction();
-    expect(hot.clearUndo).isFunction();
-    expect(hot.colOffset).isFunction();
-    expect(hot.colToProp).isFunction();
-    expect(hot.countCols).isFunction();
-    expect(hot.countEmptyCols).isFunction();
-    expect(hot.countEmptyRows).isFunction();
-    expect(hot.countRenderedCols).isFunction();
-    expect(hot.countRenderedRows).isFunction();
-    expect(hot.countRows).isFunction();
-    expect(hot.countVisibleCols).isFunction();
-    expect(hot.countVisibleRows).isFunction();
-    expect(hot.deselectCell).isFunction();
-    expect(hot.destroy).isFunction();
-    expect(hot.destroyEditor).isFunction();
-    expect(hot.determineColumnWidth).isFunction();
-    expect(hot.getCell).isFunction();
-    expect(hot.getCellEditor).isFunction();
-    expect(hot.getCellMeta).isFunction();
-    expect(hot.getCellRenderer).isFunction();
-    expect(hot.getCellValidator).isFunction();
-    expect(hot.getColHeader).isFunction();
-    expect(hot.getColWidth).isFunction();
-    expect(hot.getCopyableData).isFunction();
-    expect(hot.getData).isFunction();
-    expect(hot.getDataAtCell).isFunction();
-    expect(hot.getDataAtCol).isFunction();
-    expect(hot.getDataAtProp).isFunction();
-    expect(hot.getDataAtRow).isFunction();
-    expect(hot.getDataAtRowProp).isFunction();
-    expect(hot.getInstance).isFunction();
-    expect(hot.getRowHeader).isFunction();
-    expect(hot.getRowHeight).isFunction();
-    expect(hot.getSchema).isFunction();
-    expect(hot.getSelected).isFunction();
-    expect(hot.getSelectedRange).isFunction();
-    expect(hot.getSettings).isFunction();
-    expect(hot.getSourceDataAtCol).isFunction();
-    expect(hot.getSourceDataAtRow).isFunction();
-    expect(hot.getValue).isFunction();
-    expect(hot.hasColHeaders).isFunction();
-    expect(hot.hasRowHeaders).isFunction();
-    expect(hot.init).isFunction();
-    expect(hot.isEmptyCol).isFunction();
-    expect(hot.isEmptyRow).isFunction();
-    expect(hot.isListening).isFunction();
-    expect(hot.isRedoAvailable).isFunction();
-    expect(hot.isUndoAvailable).isFunction();
-    expect(hot.listen).isFunction();
-    expect(hot.loadData).isFunction();
-    expect(hot.populateFromArray).isFunction();
-    expect(hot.propToCol).isFunction();
-    expect(hot.removeCellMeta).isFunction();
-    expect(hot.removeHook).isFunction();
-    expect(hot.render).isFunction();
-    expect(hot.rowOffset).isFunction();
-    expect(hot.runHooks).isFunction();
-    expect(hot.selectCell).isFunction();
-    expect(hot.selectCellByProp).isFunction();
-    expect(hot.setCellMeta).isFunction();
-    expect(hot.setCellMetaObject).isFunction();
-    expect(hot.setDataAtCell).isFunction();
-    expect(hot.setDataAtRowProp).isFunction();
-    expect(hot.spliceCol).isFunction();
-    expect(hot.spliceRow).isFunction();
-    expect(hot.undo).isFunction();
-    expect(hot.unlisten).isFunction();
-    expect(hot.updateSettings).isFunction();
-    expect(hot.validateCell).isFunction();
-    expect(hot.validateCells).isFunction();
+    expect(hot.addHook).toBeFunction();
+    expect(hot.addHookOnce).toBeFunction();
+    expect(hot.alter).toBeFunction();
+    expect(hot.clear).toBeFunction();
+    expect(hot.clearUndo).toBeFunction();
+    expect(hot.colOffset).toBeFunction();
+    expect(hot.colToProp).toBeFunction();
+    expect(hot.countCols).toBeFunction();
+    expect(hot.countEmptyCols).toBeFunction();
+    expect(hot.countEmptyRows).toBeFunction();
+    expect(hot.countRenderedCols).toBeFunction();
+    expect(hot.countRenderedRows).toBeFunction();
+    expect(hot.countRows).toBeFunction();
+    expect(hot.countVisibleCols).toBeFunction();
+    expect(hot.countVisibleRows).toBeFunction();
+    expect(hot.deselectCell).toBeFunction();
+    expect(hot.destroy).toBeFunction();
+    expect(hot.destroyEditor).toBeFunction();
+    expect(hot.determineColumnWidth).toBeFunction();
+    expect(hot.getCell).toBeFunction();
+    expect(hot.getCellEditor).toBeFunction();
+    expect(hot.getCellMeta).toBeFunction();
+    expect(hot.getCellRenderer).toBeFunction();
+    expect(hot.getCellValidator).toBeFunction();
+    expect(hot.getColHeader).toBeFunction();
+    expect(hot.getColWidth).toBeFunction();
+    expect(hot.getCopyableData).toBeFunction();
+    expect(hot.getData).toBeFunction();
+    expect(hot.getDataAtCell).toBeFunction();
+    expect(hot.getDataAtCol).toBeFunction();
+    expect(hot.getDataAtProp).toBeFunction();
+    expect(hot.getDataAtRow).toBeFunction();
+    expect(hot.getDataAtRowProp).toBeFunction();
+    expect(hot.getInstance).toBeFunction();
+    expect(hot.getRowHeader).toBeFunction();
+    expect(hot.getRowHeight).toBeFunction();
+    expect(hot.getSchema).toBeFunction();
+    expect(hot.getSelected).toBeFunction();
+    expect(hot.getSelectedRange).toBeFunction();
+    expect(hot.getSettings).toBeFunction();
+    expect(hot.getSourceDataAtCol).toBeFunction();
+    expect(hot.getSourceDataAtRow).toBeFunction();
+    expect(hot.getValue).toBeFunction();
+    expect(hot.hasColHeaders).toBeFunction();
+    expect(hot.hasRowHeaders).toBeFunction();
+    //expect(hot.init).toBeFunction();
+    //expect(hot.isEmptyCol).toBeFunction();
+    //expect(hot.isEmptyRow).toBeFunction();
+    expect(hot.isListening).toBeFunction();
+    expect(hot.isRedoAvailable).toBeFunction();
+    expect(hot.isUndoAvailable).toBeFunction();
+    expect(hot.listen).toBeFunction();
+    expect(hot.loadData).toBeFunction();
+    expect(hot.populateFromArray).toBeFunction();
+    expect(hot.propToCol).toBeFunction();
+    expect(hot.removeCellMeta).toBeFunction();
+    expect(hot.removeHook).toBeFunction();
+    expect(hot.render).toBeFunction();
+    expect(hot.rowOffset).toBeFunction();
+    expect(hot.runHooks).toBeFunction();
+    expect(hot.selectCell).toBeFunction();
+    expect(hot.selectCellByProp).toBeFunction();
+    expect(hot.setCellMeta).toBeFunction();
+    expect(hot.setCellMetaObject).toBeFunction();
+    expect(hot.setDataAtCell).toBeFunction();
+    expect(hot.setDataAtRowProp).toBeFunction();
+    expect(hot.spliceCol).toBeFunction();
+    expect(hot.spliceRow).toBeFunction();
+    expect(hot.unlisten).toBeFunction();
+    expect(hot.updateSettings).toBeFunction();
+    expect(hot.validateCell).toBeFunction();
+    expect(hot.validateCells).toBeFunction();
   });
 
-  it('should detect that table is running in hot-table environment', function(done) {
-    var
-      hot = document.createElement('hot-table');
-
-    this.$container.append(hot);
-
-    setTimeout(function() {
-      expect(hot.instance.isHotTableEnv).toBe(true);
-      done();
-    }, timeout);
-  });
+  //it('should detect that table is running in hot-table environment', function(done) {
+  //  var
+  //    hot = document.createElement('hot-table');
+  //
+  //  this.$container.append(hot);
+  //
+  //  setTimeout(function() {
+  //    expect(hot.hot.isHotTableEnv).toBe(true);
+  //    done();
+  //  }, timeout);
+  //});
 
   it('undefined attribute should return default value', function(done) {
     var
@@ -124,7 +123,7 @@ describe('<hot-table>', function () {
       hot = document.createElement('hot-table');
 
     this.$container.append(hot);
-    hot.setAttribute('pasteMode', 'shift_down');
+    hot.setAttribute('paste-mode', 'shift_down');
 
     setTimeout(function() {
       expect(hot.pasteMode).toBe('shift_down');
@@ -137,11 +136,7 @@ describe('<hot-table>', function () {
     var
       hot = document.createElement('hot-table');
 
-    window.mySettings = {
-      minSpareRows: 3
-    };
-    // same notation is used in
-    hot.setAttribute('settings', 'mySettings');
+    hot.setAttribute('settings', '{"minSpareRows":3}');
     this.$container.append(hot);
 
     setTimeout(function() {
@@ -160,10 +155,9 @@ describe('<hot-table>', function () {
       },
       tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
+    tpl.data = model.data;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -182,10 +176,9 @@ describe('<hot-table>', function () {
       },
       tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
+    tpl.settings = model.settings;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -197,14 +190,12 @@ describe('<hot-table>', function () {
   it('should parse empty property as boolean true', function(done) {
     var
       model = {
-        html: '<hot-table id="hot" colHeaders></hot-table>'
+        html: '<hot-table id="hot" col-headers></hot-table>'
       },
       tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -216,14 +207,12 @@ describe('<hot-table>', function () {
   it('should parse string "true" as boolean true', function(done) {
     var
       model = {
-        html: '<hot-table id="hot" colHeaders="true"></hot-table>'
+        html: '<hot-table id="hot" col-headers="true"></hot-table>'
       },
       tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -235,14 +224,12 @@ describe('<hot-table>', function () {
   it('should parse string "false" as boolean false', function(done) {
     var
       model = {
-        html: '<hot-table id="hot" colHeaders="false"></hot-table>'
+        html: '<hot-table id="hot" col-headers="false"></hot-table>'
       },
       tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -255,7 +242,7 @@ describe('<hot-table>', function () {
     var
       model = {
         fn: myFunction,
-        html: '<hot-table id="hot" colHeaders="{{fn}}"></hot-table>'
+        html: '<hot-table id="hot" col-headers="{{fn}}"></hot-table>'
       },
       tpl;
 
@@ -263,10 +250,9 @@ describe('<hot-table>', function () {
       return col;
     }
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
+    tpl.fn = model.fn;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -281,7 +267,7 @@ describe('<hot-table>', function () {
 
     this.$container.append(hot);
 
-    expect(wrap(getHotTable()).className).toBe(null);
+    expect(wrap(getHotTable()).className).toBe('');
   });
 
   it('should parse class attribute and apply to table', function(done) {
@@ -311,10 +297,10 @@ describe('<hot-table>', function () {
       },
       lastCount, tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
+    tpl.settings = model.settings;
+    tpl.data = model.data;
     this.$container.append(tpl);
 
     lastCount = afterRender.calls.count();

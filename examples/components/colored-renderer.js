@@ -1,19 +1,28 @@
 (function () {
 
-  Polymer('colored-renderer', {
-    attributeChanged: function(attrName, oldVal, newVal) {
-      if (attrName === 'value') {
-        this.splitValue(newVal);
+  Polymer({
+    is: 'colored-renderer',
+
+    properties: {
+      value: {
+        type: String,
+        observer: '_onChanged'
       }
     },
 
     /**
      * Split string into array
      */
-    splitValue: function(value) {
-      if (value) {
-        this.splitedValue = value.split('');
-      }
+    splitValue: function (value) {
+      this.splitedValue = typeof value === 'string' ? value.split('') : [];
+    },
+
+    computeStyle: function(i) {
+      return 'color: ' + (i % 2 ? 'red' : 'green');
+    },
+
+    _onChanged: function(value) {
+      this.splitValue(value);
     }
   });
 

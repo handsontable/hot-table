@@ -82,7 +82,7 @@
         tables = nestedTable.getChildren();
 
       for (var i = 0, len = tables.length; i < len; i++) {
-        if (wrap(tables[i]).instance === hotInstance) {
+        if (wrap(tables[i]).hot === hotInstance) {
           result = true;
           break;
         }
@@ -137,7 +137,7 @@
 
           return;
         }
-        parent = Handsontable.Dom.closest(target.parentNode, [target.nodeName]);
+        parent = Handsontable.dom.closest(target.parentNode, [target.nodeName]);
 
         if (parent === latestParent) {
           wrap(latestParent).nestedTables.push(wrap(target));
@@ -174,7 +174,7 @@
    * @param {HTMLElement} hotTable
    */
   NativeSupport.prototype.update = function(hotTable) {
-    var childHotTables = hotTable.instance.rootElement.querySelectorAll(hotTable.nodeName),
+    var childHotTables = hotTable.hot.rootElement.querySelectorAll(hotTable.nodeName),
       index = childHotTables.length,
       parentTable;
 
@@ -183,7 +183,7 @@
       this.tables.unshift(childHotTables[index]);
     }
     // On table new col/row insert update nested tables collection
-    parentTable = Handsontable.Dom.closest(hotTable.parentNode, [hotTable.nodeName]);
+    parentTable = Handsontable.dom.closest(hotTable.parentNode, [hotTable.nodeName]);
 
     if (parentTable && parentTable.nestedTables) {
       parentTable.nestedTables.push(hotTable);
