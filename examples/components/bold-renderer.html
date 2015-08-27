@@ -2,17 +2,17 @@
 <!-- Import Polymer -->
 <link rel="import" href="../../../polymer/polymer.html">
 
-<polymer-element name="bold-renderer" constructor="BoldRenderer">
+<dom-module id="bold-renderer">
+  <style>
+    :host {
+      white-space: normal;
+    }
+    .bold-value {
+      font-weight: bold;
+    }
+  </style>
   <template>
-    <style>
-      :host {
-       white-space: normal;
-      }
-      span {
-        font-weight: bold;
-      }
-    </style>
     <span class="bold-value">{{ value }}</span>
   </template>
   <script src="bold-renderer.js"></script>
-</polymer-element>
+</dom-module>

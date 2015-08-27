@@ -25,7 +25,7 @@ describe('<hot-column>', function() {
     this.$container.append(hot);
 
     setTimeout(function() {
-      expect(hot.shadowRoot.querySelector('th').textContent).toBe('My header');
+      expect(hot.hotRootElement.querySelector('th').textContent).toBe('My header');
       done();
     }, timeout);
   });
@@ -42,7 +42,7 @@ describe('<hot-column>', function() {
     hotColumn.setAttribute('header', 'My another header');
 
     setTimeout(function() {
-      expect(hot.shadowRoot.querySelector('th').textContent).toBe('My another header');
+      expect(hot.hotRootElement.querySelector('th').textContent).toBe('My another header');
       done();
     }, timeout);
   });
@@ -52,14 +52,13 @@ describe('<hot-column>', function() {
       hot = document.createElement('hot-table'),
       hotColumn = document.createElement('hot-column');
 
-    window.names = ["Fred", "Freddie", "Frederick"];
     hotColumn.setAttribute('type', 'autocomplete');
-    hotColumn.setAttribute('source', 'names');
+    hotColumn.setAttribute('source', '["Fred","Freddie","Frederick"]');
     hot.appendChild(hotColumn);
     this.$container.append(hot);
 
     setTimeout(function() {
-      expect(hot.getCellMeta(0, 0).source).toBe(window.names);
+      expect(hot.getCellMeta(0, 0).source).toEqual(["Fred", "Freddie", "Frederick"]);
       done();
     }, timeout);
   });
@@ -69,14 +68,13 @@ describe('<hot-column>', function() {
       hot = document.createElement('hot-table'),
       hotColumn = document.createElement('hot-column');
 
-    window.names = ['Fred', 'Freddie', 'Frederick'];
     hotColumn.setAttribute('type', 'dropdown');
-    hotColumn.setAttribute('source', 'names');
+    hotColumn.setAttribute('source', '["Fred","Freddie","Frederick"]');
     hot.appendChild(hotColumn);
     this.$container.append(hot);
 
     setTimeout(function() {
-      expect(hot.getCellMeta(0, 0).source).toBe(window.names);
+      expect(hot.getCellMeta(0, 0).source).toEqual(["Fred","Freddie","Frederick"]);
       done();
     }, timeout);
   });
@@ -95,10 +93,10 @@ describe('<hot-column>', function() {
       },
       tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
+    tpl.data = model.data;
+    tpl.names = names;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -121,10 +119,10 @@ describe('<hot-column>', function() {
       },
       tpl;
 
-    tpl = document.createElement('template');
-    tpl.setAttribute('bind', '');
+    tpl = document.createElement('template', 'dom-bind');
     tpl.innerHTML = model.html;
-    tpl.model = model;
+    tpl.data = model.data;
+    tpl.names = names;
     this.$container.append(tpl);
 
     setTimeout(function() {
@@ -143,17 +141,19 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{id: 1},{id: 2},{id: 3}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"id":1},{"id":2},{"id":3}]\'>' +
                         '<hot-column value="id" header="ID">' +
-                          '<template data-hot-role="renderer">{{ id }}...({{ row }}:{{ col }})</template>' +
+                          '<template data-hot-role="renderer" is="dom-template">' +
+                            '<span>{{ value }}</span>...(<span>{{ row }}</span>:<span>{{ col }}</span>)' +
+                          '</template>' +
                         '</hot-column>' +
                       '</hot-table>';
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').textContent).toBe('1...(0:0)');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').textContent).toBe('2...(1:0)');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(3) td').textContent).toBe('3...(2:0)');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').textContent).toBe('1...(0:0)');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').textContent).toBe('2...(1:0)');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').textContent).toBe('3...(2:0)');
         done();
       }, timeout);
     });
@@ -163,16 +163,18 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{name: {first: \'Joe\', last: \'Fabiano\'}},{name: {first: \'Mike\', last: \'Foo\'}}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"name":{"first":"Joe","last":"Fabiano"}},{"name":{"first":"Mike","last":"Foo"}}]\'>' +
                         '<hot-column value="name" header="ID">' +
-                          '<template data-hot-role="renderer">{{ name.first }} {{ name.last }}</template>' +
+                          '<template data-hot-role="renderer" is="dom-template">' +
+                            '<span>{{ value.first }}</span> <span>{{ value.last }}</span>'
+                          '</template>' +
                         '</hot-column>' +
                       '</hot-table>';
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').textContent).toBe('Joe Fabiano');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').textContent).toBe('Mike Foo');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').textContent).toBe('Joe Fabiano');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').textContent).toBe('Mike Foo');
         done();
       }, timeout);
     });
@@ -182,17 +184,17 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{id: 1},{id: 2},{id: 3}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"id":1},{"id":2},{"id":3}]\'>' +
                         '<hot-column value="id" header="ID">' +
-                          '<template>{{ id }}...</template>' +
+                          '<template is="dom-template"><span>{{ value }}</span>...</template>' +
                         '</hot-column>' +
                       '</hot-table>';
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').textContent).toBe('1');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').textContent).toBe('2');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(3) td').textContent).toBe('3');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').textContent).toBe('1');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').textContent).toBe('2');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').textContent).toBe('3');
         done();
       }, timeout);
     });
@@ -202,19 +204,19 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{id: 1},{id: 2},{id: 3}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"id":1},{"id":2},{"id":3}]\'>' +
                         '<hot-column value="id" header="ID">' +
-                          '<template data-hot-role="renderer">{{ id }}...</template>' +
-                          '<template data-hot-role="renderer">{{ id }}!!!</template>' +
-                          '<template data-hot-role="renderer">{{ id }}???</template>' +
+                          '<template data-hot-role="renderer" is="dom-template"><span>{{ value }}</span>...</template>' +
+                          '<template data-hot-role="renderer" is="dom-template"><span>{{ value }}</span>!!!</template>' +
+                          '<template data-hot-role="renderer" is="dom-template"><span>{{ value }}</span>???</template>' +
                         '</hot-column>' +
                       '</hot-table>';
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').textContent).toBe('1...');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').textContent).toBe('2...');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(3) td').textContent).toBe('3...');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').textContent).toBe('1...');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').textContent).toBe('2...');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').textContent).toBe('3...');
         done();
       }, timeout);
     });
@@ -224,50 +226,24 @@ describe('<hot-column>', function() {
   // Declarative Renderers - CustomElement
   //
   describe('Renderer (CustomElement)', function() {
-    var work = document.createElement('div');
-
-    Polymer('my-custom-renderer', {
-      forceReady: true
-    });
-    Polymer('my-second-custom-renderer', {
-      forceReady: true
-    });
-    work.innerHTML = '<polymer-element name="my-custom-renderer" attributes="value">' +
-                        '<template>' +
-                          '<span>{{ value }}!</span>' +
-                        '</template>' +
-                      '</polymer-element>' +
-                      '<polymer-element name="my-second-custom-renderer" attributes="value">' +
-                        '<template>' +
-                          '<span>{{ value }}!</span>' +
-                        '</template>' +
-                      '</polymer-element>';
-
-    beforeEach(function() {
-      if (!work.parentNode) {
-        document.body.appendChild(work);
-      }
-    });
-
-
     it('should use custom renderer to render cell value', function(done) {
       var
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{id: 1},{id: 2},{id: 3}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"id":1},{"id":2},{"id":3}]\'>' +
                         '<hot-column value="id" header="ID">' +
-                          '<template data-hot-role="renderer">' +
-                            '<my-custom-renderer value="{{ id }}"></my-custom-renderer>' +
+                          '<template data-hot-role="renderer" is="dom-template">' +
+                            '<my-custom-renderer value="{{ value }}"></my-custom-renderer>' +
                           '</template>' +
                         '</hot-column>' +
                       '</hot-table>';
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1!');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2!');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3!');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1!');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2!');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3!');
         done();
       }, timeout);
     });
@@ -277,18 +253,18 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{name: {first: \'Joe\', last: \'Fabiano\'}},{name: {first: \'Mike\', last: \'Foo\'}}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"name":{"first":"Joe","last":"Fabiano"}},{"name":{"first":"Mike","last":"Foo"}}]\'>' +
                         '<hot-column value="name" header="NAME">' +
-                          '<template data-hot-role="renderer">' +
-                            '<my-custom-renderer value="{{ name.first }} {{ name.last }}"></my-custom-renderer>' +
+                          '<template data-hot-role="renderer" is="dom-template">' +
+                            '<my-custom-renderer value="{{ value.first }}"></my-custom-renderer>' +
                           '</template>' +
                         '</hot-column>' +
                       '</hot-table>';
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('Joe Fabiano!');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('Mike Foo!');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('Joe!');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('Mike!');
         done();
       }, timeout);
     });
@@ -298,7 +274,7 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{id: 1},{id: 2},{id: 3}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"id":1},{"id":2},{"id":3}]\'>' +
                         '<hot-column value="id" header="ID">' +
                           '<my-custom-renderer data-hot-role="renderer" value="id"></my-custom-renderer>' +
                         '</hot-column>' +
@@ -306,9 +282,9 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').textContent).toBe('1');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').textContent).toBe('2');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(3) td').textContent).toBe('3');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').textContent).toBe('1');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').textContent).toBe('2');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').textContent).toBe('3');
         done();
       }, timeout);
     });
@@ -318,7 +294,7 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{id: 1},{id: 2},{id: 3}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"id":1},{"id":2},{"id":3}]\'>' +
                         '<hot-column value="id" header="ID">' +
                           '<template>' +
                             '<my-custom-renderer></my-custom-renderer>' +
@@ -328,9 +304,9 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').textContent).toBe('1');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').textContent).toBe('2');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(3) td').textContent).toBe('3');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').textContent).toBe('1');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').textContent).toBe('2');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').textContent).toBe('3');
         done();
       }, timeout);
     });
@@ -340,22 +316,22 @@ describe('<hot-column>', function() {
         div = document.createElement('div'),
         hot;
 
-      div.innerHTML = '<hot-table datarows="[{id: 1},{id: 2},{id: 3}]">' +
+      div.innerHTML = '<hot-table datarows=\'[{"id":1},{"id":2},{"id":3}]\'>' +
                         '<hot-column value="id" header="ID">' +
-                          '<template data-hot-role="renderer">' +
-                            '<my-second-custom-renderer value="{{ id }}..."></my-second-custom-renderer>' +
+                          '<template data-hot-role="renderer" is="dom-template">' +
+                            '<my-second-custom-renderer value="{{ value }}"></my-second-custom-renderer>' +
                           '</template>' +
-                          '<template data-hot-role="renderer">' +
-                            '<my-custom-renderer value="{{ id }}."></my-custom-renderer>' +
+                          '<template data-hot-role="renderer" is="dom-template">' +
+                            '<my-custom-renderer value="{{ value }}"></my-custom-renderer>' +
                           '</template>' +
                         '</hot-column>' +
                       '</hot-table>';
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1...!');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2...!');
-        expect(getHotTable().shadowRoot.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3...!');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1?');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2?');
+        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3?');
         done();
       }, timeout);
     });

@@ -5,7 +5,7 @@
   <title>&lt;hot-table&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
   <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
@@ -18,9 +18,9 @@
   <link rel="stylesheet" href="css/main.css"/>
 
   <!-- Importing Custom Elements -->
-  <link rel="import" href="../src/hot-table.html">
+  <link rel="import" href="../hot-table.html">
   <link rel="import" href="../../google-map/google-map.html">
-  <link rel="import" href="../../google-map/google-map-search.html">
+  <link rel="import" href="components/google-map/google-map-search.html">
   <link rel="import" href="components/bold-renderer.html">
   <link rel="import" href="components/colored-renderer.html">
   <link rel="import" href="components/age-renderer.html">
@@ -29,20 +29,16 @@
     hot-table {
       display: inline-block;
     }
-    hot-table /deep/ google-map {
+    hot-table google-map, hot-table .google-map-empty {
       height: 100px;
       width: 200px;
     }
-    hot-table /deep/ td.maps {
-      padding: 0;
-    }
-    /* For browser which not supported web component natively yet */
-    hot-table google-map {
-      height: 100px;
-      width: 200px;
+    hot-table .google-map-empty {
+      font-size: 1.2em;
     }
     hot-table td.maps {
       padding: 0;
+      white-space: normal;
     }
   </style>
 </head>
@@ -57,34 +53,39 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template is="auto-binding">
-      <hot-table datarows="{{ people }}" maxRows="{{ people.length }}" contextMenu="true">
-        <hot-column width="30" readOnly value="id" header="ID"></hot-column>
+    <template id="tpl" is="dom-bind">
+      <hot-table width="830" height="1050" datarows="{{ people }}" max-rows="{{ people.length }}" context-menu>
+        <hot-column width="30" read-only value="id" header="ID"></hot-column>
         <hot-column width="70" value="name.first" header="First Name">
-          <template data-hot-role="renderer"><colored-renderer value="{{ name.first }}"></colored-renderer></template>
+          <template data-hot-role="renderer" is="dom-template"><colored-renderer value="{{ value }}"></colored-renderer></template>
         </hot-column>
         <hot-column width="100" value="name.last" header="Last Name">
-          <template data-hot-role="renderer"><bold-renderer value="{{ name.last }}"></bold-renderer></template>
+          <template data-hot-role="renderer" is="dom-template"><bold-renderer value="{{ value }}"></bold-renderer></template>
         </hot-column>
         <hot-column width="80" value="gender" header="Gender">
-          <template data-hot-role="renderer">({{ gender }})</template>
+          <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
         </hot-column>
         <hot-column width="120" value="age" header="Age">
-          <template data-hot-role="renderer"><age-renderer age="{{ age }}"></age-renderer></template>
+          <template data-hot-role="renderer" is="dom-template"><age-renderer age="{{ value }}"></age-renderer></template>
         </hot-column>
         <hot-column width="200" value="address" header="Map" class="maps">
-          <template data-hot-role="renderer">
-            <google-map-search map="{{ map }}" query="{{ address }}" result="{{ result }}"></google-map-search>
-            <google-map disableDefaultUI zoomable="false" map="{{ map }}"
-                        latitude="{{ result.latitude }}" longitude="{{ result.longitude }}"></google-map>
+          <template data-hot-role="renderer" is="dom-template">
+            <template is="dom-if" if="{{ value }}">
+              <google-map-search map="{{ map }}" query="{{ value }}" global-search results="{{ results }}"></google-map-search>
+              <google-map disable-default-ui disable-zoom map="{{ map }}"
+                          latitude="{{ results.0.latitude }}" longitude="{{ results.0.longitude }}"></google-map>
+            </template>
+            <template is="dom-if" if="{{ !value }}">
+              <div class="google-map-empty">Double click me to provide address to show.</div>
+            </template>
           </template>
         </hot-column>
-        <hot-column type="checkbox" value="languages.english" header="English" checkedTemplate="Yes"
-            uncheckedTemplate="No"></hot-column>
-        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checkedTemplate="Yes"
-            uncheckedTemplate="No"></hot-column>
-        <hot-column type="checkbox" value="languages.french" header="French" checkedTemplate="Yes"
-            uncheckedTemplate="No"></hot-column>
+        <hot-column type="checkbox" value="languages.english" header="English" checked-template="Yes"
+            unchecked-template="No"></hot-column>
+        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checked-template="Yes"
+            unchecked-template="No"></hot-column>
+        <hot-column type="checkbox" value="languages.french" header="French" checked-template="Yes"
+            unchecked-template="No"></hot-column>
         <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
       </hot-table>
     </template>
@@ -96,42 +97,49 @@
     <li><b>First Name</b> column uses polymer &lt;colored-renderer&gt; element</li>
     <li><b>Last Name</b> column uses polymer &lt;bold-renderer&gt; element</li>
     <li><b>Gender</b> column uses &lt;template&gt; element to render cells (as simple cell decorator)</li>
-    <li><b>Age</b> column uses native &lt;age-renderer&gt; (CustomElement with webcomponents polyfills) to render cells</li>
-    <li><b>Map</b> column uses native &lt;google-maps&gt; element</li>
+    <li><b>Age</b> column uses native &lt;age-renderer&gt; (CustomElement + ShadowDOM) to render cells</li>
+    <li><b>Map</b> column uses polymer &lt;google-maps&gt; element</li>
   </ul>
 
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;hot-table datarows=&#x22;{{ people }}&#x22; maxRows=&#x22;{{ people.length }}&#x22; contextMenu=&#x22;true&#x22;&#x3E;
-    &#x3C;hot-column width=&#x22;30&#x22; readOnly value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;colored-renderer value=&#x22;{{ name.first }}&#x22;&#x3E;&#x3C;/colored-renderer&#x3E;&#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;bold-renderer value=&#x22;{{ name.last }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;&#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; header=&#x22;Gender&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;({{ gender }})&#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;120&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;&#x3C;age-renderer age=&#x22;{{ age }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;address&#x22; header=&#x22;Map&#x22; class=&#x22;maps&#x22;&#x3E;
-      &#x3C;template data-hot-role=&#x22;renderer&#x22;&#x3E;
-        &#x3C;google-map-search map=&#x22;{{ map }}&#x22; query=&#x22;{{ address }}&#x22; result=&#x22;{{ result }}&#x22;&#x3E;&#x3C;/google-map-search&#x3E;
-        &#x3C;google-map disableDefaultUI zoomable=&#x22;false&#x22; map=&#x22;{{ map }}&#x22;
-                    latitude=&#x22;{{ result.latitude }}&#x22; longitude=&#x22;{{ result.longitude }}&#x22;&#x3E;&#x3C;/google-map&#x3E;
-      &#x3C;/template&#x3E;
-    &#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checkedTemplate=&#x22;Yes&#x22;
-        uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checkedTemplate=&#x22;Yes&#x22;
-        uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checkedTemplate=&#x22;Yes&#x22;
-        uncheckedTemplate=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-  &#x3C;/hot-table&#x3E;
+  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
+    &#x3C;hot-table width=&#x22;830&#x22; height=&#x22;1050&#x22; datarows=&#x22;{{ people }}&#x22; max-rows=&#x22;{{ people.length }}&#x22; context-menu&#x3E;
+      &#x3C;hot-column width=&#x22;30&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;colored-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/colored-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; header=&#x22;Gender&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;(&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;)&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;120&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;age-renderer age=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;address&#x22; header=&#x22;Map&#x22; class=&#x22;maps&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;template is=&#x22;dom-if&#x22; if=&#x22;{{ value }}&#x22;&#x3E;
+            &#x3C;google-map-search map=&#x22;{{ map }}&#x22; query=&#x22;{{ value }}&#x22; global-search results=&#x22;{{ results }}&#x22;&#x3E;&#x3C;/google-map-search&#x3E;
+            &#x3C;google-map disable-default-ui disable-zoom map=&#x22;{{ map }}&#x22;
+                        latitude=&#x22;{{ results.0.latitude }}&#x22; longitude=&#x22;{{ results.0.longitude }}&#x22;&#x3E;&#x3C;/google-map&#x3E;
+          &#x3C;/template&#x3E;
+          &#x3C;template is=&#x22;dom-if&#x22; if=&#x22;{{ !value }}&#x22;&#x3E;
+            &#x3C;div class=&#x22;google-map-empty&#x22;&#x3E;Double click me to provide address to show.&#x3C;/div&#x3E;
+          &#x3C;/template&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checked-template=&#x22;Yes&#x22;
+          unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checked-template=&#x22;Yes&#x22;
+          unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checked-template=&#x22;Yes&#x22;
+          unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
+  &#x3C;/template&#x3E;
   </code></pre>
 
   <script>
@@ -158,7 +166,11 @@
         languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090}
     ];
 
-    document.querySelector('template').people = people;
+    window.addEventListener('dom-change', function () {
+      var tpl = document.getElementById('tpl');
+
+      tpl.people = people;
+    });
   </script>
   <script>hljs.initHighlightingOnLoad();</script>
 </div>

@@ -1,9 +1,9 @@
 {
   "name": "hot-table",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "Polymer Element wrapper for Handsontable data grid editor",
   "license": "MIT",
-  "main": "src/hot-table.html",
+  "main": "hot-table.html",
   "keywords": [
     "polymer",
     "web-components",
@@ -21,10 +21,10 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.5.6",
-    "handsontable": "~0.15.0-beta6"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "handsontable": "~0.17.0"
   },
   "devDependencies": {
-    "google-map": "GoogleWebComponents/google-map#~0.4.1"
+    "google-map": "GoogleWebComponents/google-map#^1.0.0"
   }
 }

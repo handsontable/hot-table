@@ -16,18 +16,24 @@
   <script src="lib/jquery.simulate.js"></script>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <script src="utils/spec-helper.js"></script>
 
+  <!-- Import Polymer -->
+  <link rel="import" href="../../polymer/polymer.html">
+
   <!-- Importing Custom Elements -->
-  <link rel="import" href="../src/hot-table.html">
+  <link rel="import" href="utils/my-custom-renderer.html">
+  <link rel="import" href="utils/my-second-custom-renderer.html">
+  <link rel="import" href="../hot-table.html">
 
   <!-- Specs -->
   <script src="spec/table-spec.js"></script>
   <script src="spec/column-spec.js"></script>
   <script src="spec/settings-parser-spec.js"></script>
-  <script src="spec/nested-tables-spec.js"></script>
+  <script src="spec/public-methods-behavior-spec.js"></script>
+  <!--<script src="spec/nested-tables-spec.js"></script>-->
 </head>
 <body>
 </body>
