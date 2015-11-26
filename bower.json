@@ -25,6 +25,6 @@
     "handsontable": "~0.17.0"
   },
   "devDependencies": {
-    "google-map": "GoogleWebComponents/google-map#^1.0.0"
+    "google-map": "GoogleWebComponents/google-map#^1.1.7"
   }
 }
