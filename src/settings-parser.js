@@ -5,21 +5,6 @@
     publicProperties = []
   ;
 
-  publicOptions.push(
-    'bindRowsWithHeaders',
-    'collapsibleColumns',
-    'columnSummary',
-    'dropdownMenu',
-    'filters',
-    'fixedRowsBottom',
-    'ganttChart',
-    'headerTooltips',
-    'hiddenColumns',
-    'hiddenRows',
-    'nestedHeaders',
-    'trimRows'
-  );
-
   publicProperties = publicProperties.concat(publicOptions, publicHooks);
 
   /**
