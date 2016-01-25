@@ -25,9 +25,6 @@
   <link rel="import" href="components/colored-renderer.html">
   <link rel="import" href="components/age-renderer.html">
 
-  <!-- Fix for downloaded the latest version of HOT -->
-  <script src="http://docs.handsontable.com/0.17.0/bower_components/handsontable/dist/handsontable.full.js"></script>
-
   <style>
     hot-table {
       display: inline-block;
@@ -69,12 +66,12 @@
           <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
         </hot-column>
         <hot-column width="120" value="age" header="Age">
-          <template data-hot-role="renderer" is="dom-template"><age-renderer age="{{ value }}"></age-renderer></template>
+          <template data-hot-role="renderer" is="dom-template"><age-renderer age$="{{ value }}"></age-renderer></template>
         </hot-column>
         <hot-column width="200" value="address" header="Map" class="maps">
           <template data-hot-role="renderer" is="dom-template">
             <template is="dom-if" if="{{ value }}">
-              <google-map-search map="{{ map }}" query="{{ value }}" global-search results="{{ results }}"></google-map-search>
+              <google-map-search map="[[ map ]]" query="{{ value }}" global-search results="{{ results }}"></google-map-search>
               <google-map disable-default-ui disable-zoom map="{{ map }}"
                           latitude="{{ results.0.latitude }}" longitude="{{ results.0.longitude }}"></google-map>
             </template>
@@ -120,7 +117,7 @@
         &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;(&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;)&#x3C;/template&#x3E;
       &#x3C;/hot-column&#x3E;
       &#x3C;hot-column width=&#x22;120&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;age-renderer age=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;age-renderer age$=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
       &#x3C;/hot-column&#x3E;
       &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;address&#x22; header=&#x22;Map&#x22; class=&#x22;maps&#x22;&#x3E;
         &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;

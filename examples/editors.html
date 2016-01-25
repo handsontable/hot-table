@@ -26,9 +26,6 @@
   <link rel="import" href="components/age-renderer.html">
   <link rel="import" href="components/language-editor.html">
 
-  <!-- Fix for downloaded the latest version of HOT -->
-  <script src="http://docs.handsontable.com/0.17.0/bower_components/handsontable/dist/handsontable.full.js"></script>
-
   <style>
     hot-table {
       font-size: 12px;
@@ -84,7 +81,7 @@
 <div id="wrapper">
   <header>
     <h1>&lt;hot-table&gt;</h1>
-    <h2 class="logo-desc">Nested tables demo</h2>
+    <h2 class="logo-desc">Custom editors demo</h2>
   </header>
 
   <h2>Simple Example</h2>
@@ -135,14 +132,16 @@
           </template>
         </hot-column>
         <hot-column width="180" value="languages" header="Languages">
-          <template id="abcde" data-hot-role="renderer" is="dom-template">
-            <template  is="dom-repeat" items="{{ value }}" as="code">
-              <img src="{{ languagesComputedSrc(code) }}" alt="{{ code }}"/>
+          <template data-hot-role="renderer" is="dom-template">
+            <template is="dom-if" if="{{ value }}">
+              <template is="dom-repeat" items="{{ value }}" as="code">
+                <img src="{{ languagesComputedSrc(code) }}" alt$="{{ code }}">
+              </template>
             </template>
           </template>
           <template data-hot-role="editor" is="dom-template">
             <div class="languages-editor">
-              <language-editor selected="{{ value }}"></language-editor>
+              <language-editor selected="[[ value ]]"></language-editor>
             </div>
           </template>
         </hot-column>
@@ -208,7 +207,7 @@
       &#x3C;/hot-column&#x3E;
       &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;languages&#x22; header=&#x22;Languages&#x22;&#x3E;
         &#x3C;template id=&#x22;abcde&#x22; data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;template  is=&#x22;dom-repeat&#x22; items=&#x22;{{ value }}&#x22; as=&#x22;code&#x22;&#x3E;
+          &#x3C;template is=&#x22;dom-repeat&#x22; items=&#x22;{{ value }}&#x22; as=&#x22;code&#x22;&#x3E;
             &#x3C;img src=&#x22;{{ languagesComputedSrc(code) }}&#x22; alt=&#x22;{{ code }}&#x22;/&#x3E;
           &#x3C;/template&#x3E;
         &#x3C;/template&#x3E;
