@@ -1,5 +1,4 @@
-(function () {
-
+(function() {
   var
     settingsParser = new HotTableUtils.SettingsParser();
 
@@ -14,7 +13,7 @@
     is: 'hot-column',
     properties: settingsParser.getHotColumnProperties(),
 
-    attached: function () {
+    attached: function() {
       this.registerRenderer(findRenderer(this));
       this.registerEditor(findEditor(this));
 
@@ -27,7 +26,7 @@
       this._onChanged();
     },
 
-    _onChanged: function () {
+    _onChanged: function() {
       if (this.parentNode) {
         this.parentNode.onMutation();
       }
@@ -52,13 +51,17 @@
 
         if (hasModel) {
           model = models.get(TD);
-        }
-        else {
-          model = template.stamp();
+
+        } else {
+          // Don't copy parent properties. Stamp fresh template instance.
+          template._parentProps = {};
+          model = template.stamp({});
           models.set(TD, model);
         }
         model.row = row;
         model.col = col;
+        model.prop = prop;
+        model.cellProperties = cellProperties;
         model.value = value;
 
         TD.style.whiteSpace = 'normal';

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>&lt;hot-table&gt;</title>
+
+  <!-- Importing Web Component's Polyfill -->
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <!-- Code highlighter -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/main.css"/>
+
+  <!-- Importing Custom Elements -->
+  <link rel="import" href="../hot-table.html">
+  <link rel="import" href="../../google-map/google-map.html">
+  <link rel="import" href="components/google-map/google-map-search.html">
+  <link rel="import" href="components/bold-renderer.html">
+  <link rel="import" href="components/colored-renderer.html">
+  <link rel="import" href="components/age-renderer.html">
+  <link rel="import" href="components/language-editor.html">
+
+  <!-- Handsontable PRO trial files -->
+  <link rel="stylesheet" href="//handsontable.com/static/bower_components/handsontable-pro/dist/handsontable.full.min.css">
+  <script src="//handsontable.com/static/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
+
+  <style>
+    hot-table {
+      font-size: 12px;
+    }
+    hot-table google-map {
+      height: 200px;
+      width: 400px;
+    }
+    hot-table .map-editor {
+      background-color: white;
+      width: 400px;
+      padding: 5px;
+      box-shadow: 0 0 5px 0 #ddd;
+    }
+    hot-table .languages-editor {
+      background-color: white;
+      width: 169px;
+      padding: 5px;
+      box-shadow: 0 0 5px 0 #ddd;
+    }
+    hot-table .color-editor {
+      width: 100%;
+      height: 100%;
+    }
+    .no-padding {
+      padding: 0 !important;
+    }
+    .color-editor div {
+      height: 100%;
+    }
+    .black {
+      background-color: black;
+    }
+    .blue {
+      background-color: blue;
+    }
+    .green {
+      background-color: green;
+    }
+    .orange {
+      background-color: orange;
+    }
+    .red {
+      background-color: red;
+    }
+    .yellow {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+
+<div id="wrapper">
+  <header>
+    <h1>&lt;hot-table&gt;</h1>
+    <h2 class="logo-desc">Binding rows with headers demo</h2>
+  </header>
+
+  <h2>Simple Example (strict mode)</h2>
+
+  <div class="example">
+    <template id="tpl" is="dom-bind">
+      <hot-table width="420" height="280" datarows="{{ people }}" row-headers context-menu bind-rows-with-headers="strict">
+        <hot-column width="50" read-only value="id" header="ID" type="numeric"></hot-column>
+        <hot-column width="100" value="name.first" header="First Name"></hot-column>
+        <hot-column width="100" value="name.last" header="Last Name">
+          <template data-hot-role="renderer" is="dom-template">
+            <bold-renderer value="{{ value }}"></bold-renderer>
+          </template>
+        </hot-column>
+        <hot-column width="100" value="gender" type="dropdown" source="genderList" header="Gender">
+          <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
+        </hot-column>
+      </hot-table>
+    </template>
+  </div>
+
+  <p>
+    Try to add or remove rows using context menu. You will see that in strict mode all rows headers' keep to their initial rows.
+  </p>
+
+  <h2>Code</h2>
+
+  <pre><code class="html">
+  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
+    &#x3C;hot-table width=&#x22;420&#x22; height=&#x22;280&#x22; datarows=&#x22;{{ people }}&#x22; row-headers context-menu bind-rows-with-headers=&#x22;strict&#x22;&#x3E;
+      &#x3C;hot-column width=&#x22;50&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22; type=&#x22;numeric&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;gender&#x22; type=&#x22;dropdown&#x22; source=&#x22;genderList&#x22; header=&#x22;Gender&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;(&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;)&#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
+  &#x3C;/template&#x3E;
+  </code></pre>
+
+
+  <script>
+    var genderList = ['Male', 'Female'];
+    var people = [
+      {id: 1, name: {first: 'Joe', last: 'Fabiano'}, gender: 'Male', age: 17, skillLevel: 'blue',
+        coordinates: {lat: 54.4967769, lng: 18.537945}, languages: ['us', 'se', 'pl', 'es', 'tk', 'pk']},
+      {id: 2, name: {first: 'Fred', last: 'Wecler'}, gender: 'Male', age: 25, skillLevel: 'black',
+        coordinates: {lat: 51.5286416, lng: -0.1015987}, languages: ['dk', 'de']},
+      {id: 3, name: {first: 'Steve', last: 'Wilson'}, gender: 'Male', age: 32, skillLevel: 'orange',
+        coordinates: {lat: 39.764389, lng: -104.8551114}, languages: ['us']},
+      {id: 4, name: {first: 'Maria', last: 'Fernandez'}, gender: 'Female', age: 27, skillLevel: 'yellow',
+        coordinates: {lat: 41.9100711, lng: 12.5359979}, languages: ['us', 'es']},
+      {id: 5, name: {first: 'Pierre', last: 'Barbault'}, gender: 'Male', age: 65, skillLevel: 'green',
+        coordinates: {lat: 48.8588589, lng: 2.3470599}, languages: ['us', 'es']},
+      {id: 6, name: {first: 'Nancy', last: 'Moore'}, gender: 'Female', age: 34, skillLevel: 'green',
+        coordinates: {lat: 41.8758149, lng: -87.623408}, languages: ['us', 'ru']},
+      {id: 7, name: {first: 'Barbara', last: 'MacDonald'}, gender: 'Female', age: 19, skillLevel: 'blue',
+        coordinates: {lat: 25.782324, lng: -80.2310801}, languages: ['us', 'no']},
+      {id: 8, name: {first: 'Wilma', last: 'Williams'}, gender: 'Female', age: 33, skillLevel: 'green',
+        coordinates: {lat: 40.415235, lng: -3.7027017}, languages: ['us', 'tj']},
+      {id: 9, name: {first: 'Sasha', last: 'Silver'}, gender: 'Male', age: 88, skillLevel: 'white',
+        coordinates: {lat: 43.6478215, lng: -79.3728996}, languages: ['us']},
+      {id: 10, name: {first: 'Don', last: 'Pérignon'}, gender: 'Male', age: 42, skillLevel: 'orange',
+        coordinates: {lat: 59.3288242, lng: 18.0729393}, languages: ['us']}
+    ];
+
+    window.addEventListener('dom-change', function () {
+      var tpl = document.getElementById('tpl');
+
+      tpl.people = people;
+      tpl.genderList = genderList;
+      tpl.languagesComputedSrc = function(code) {
+        return 'resources/flags/' + code + '.png';
+      }
+    });
+  </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</div>
+
+</body>
+</html>
