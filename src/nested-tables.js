@@ -100,9 +100,7 @@
 
   w.HotTableUtils = w.HotTableUtils || {};
   w.HotTableUtils.NestedTable = NestedTable;
-
 }(window));
-
 
 (function(strategies) {
   strategies.emulation = EmulationSupport;
@@ -154,7 +152,6 @@
   };
 }(HotTableUtils.NestedTable.strategies));
 
-
 (function(strategies) {
   strategies.native = NativeSupport;
 
@@ -178,7 +175,7 @@
       index = childHotTables.length,
       parentTable;
 
-    while (index --) {
+    while (index--) {
       childHotTables[index].nestedTables.setParent(hotTable);
       this.tables.unshift(childHotTables[index]);
     }
@@ -191,5 +188,3 @@
     }
   };
 }(HotTableUtils.NestedTable.strategies));
-
-

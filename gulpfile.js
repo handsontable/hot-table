@@ -1,8 +1,8 @@
-
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var vulcanize = require('gulp-vulcanize');
+var jscs = require('gulp-jscs');
 
 gulp.task('jshint', function() {
   return gulp.src('./src/*.js')
@@ -10,6 +10,12 @@ gulp.task('jshint', function() {
       lookup: true
     }))
     .pipe(jshint.reporter(stylish));
+});
+
+gulp.task('jscs', function() {
+  return gulp.src('./src/*.js')
+    .pipe(jscs())
+    .pipe(jscs.reporter());
 });
 
 //gulp.task('vulcanize', function () {
@@ -28,4 +34,4 @@ gulp.task('jshint', function() {
 //    .pipe(gulp.dest(DIST));
 //});
 
-gulp.task('default', ['jshint']);
+gulp.task('default', ['jscs', 'jshint']);

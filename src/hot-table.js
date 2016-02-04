@@ -1,5 +1,4 @@
 (function() {
-
   var
     settingsParser = new HotTableUtils.SettingsParser(),
     lastSelectedCellMeta;
@@ -19,7 +18,6 @@
      */
     hot: null,
 
-
     /**
      * On create element but not attached to DOM
      */
@@ -29,6 +27,10 @@
       this.destroyed = false;
       this.initialized = false;
       this.hotRootElement = document.createElement('div');
+
+      if (this.id) {
+        this.hotRootElement.id = this.id;
+      }
 
       this.hot = new Handsontable.Core(this.hotRootElement, {});
     },

@@ -1,4 +1,3 @@
-
 describe('<hot-table>', function () {
 
   it('should create table', function(done) {
@@ -32,33 +31,43 @@ describe('<hot-table>', function () {
     expect(hot.countRenderedCols).toBeFunction();
     expect(hot.countRenderedRows).toBeFunction();
     expect(hot.countRows).toBeFunction();
+    expect(hot.countSourceRows).toBeFunction();
     expect(hot.countVisibleCols).toBeFunction();
     expect(hot.countVisibleRows).toBeFunction();
     expect(hot.deselectCell).toBeFunction();
     expect(hot.destroy).toBeFunction();
     expect(hot.destroyEditor).toBeFunction();
-    expect(hot.determineColumnWidth).toBeFunction();
+    expect(hot.getActiveEditor).toBeFunction();
     expect(hot.getCell).toBeFunction();
     expect(hot.getCellEditor).toBeFunction();
     expect(hot.getCellMeta).toBeFunction();
     expect(hot.getCellRenderer).toBeFunction();
     expect(hot.getCellValidator).toBeFunction();
+    expect(hot.getCellsMeta).toBeFunction();
     expect(hot.getColHeader).toBeFunction();
     expect(hot.getColWidth).toBeFunction();
+    expect(hot.getColspanOffset).toBeFunction();
+    expect(hot.getCoords).toBeFunction();
     expect(hot.getCopyableData).toBeFunction();
+    expect(hot.getCopyableText).toBeFunction();
     expect(hot.getData).toBeFunction();
     expect(hot.getDataAtCell).toBeFunction();
     expect(hot.getDataAtCol).toBeFunction();
     expect(hot.getDataAtProp).toBeFunction();
     expect(hot.getDataAtRow).toBeFunction();
     expect(hot.getDataAtRowProp).toBeFunction();
+    expect(hot.getDataType).toBeFunction();
+    expect(hot.getHeaderColspan).toBeFunction();
     expect(hot.getInstance).toBeFunction();
+    expect(hot.getPlugin).toBeFunction();
     expect(hot.getRowHeader).toBeFunction();
     expect(hot.getRowHeight).toBeFunction();
     expect(hot.getSchema).toBeFunction();
     expect(hot.getSelected).toBeFunction();
     expect(hot.getSelectedRange).toBeFunction();
     expect(hot.getSettings).toBeFunction();
+    expect(hot.getSourceData).toBeFunction();
+    expect(hot.getSourceDataAtCell).toBeFunction();
     expect(hot.getSourceDataAtCol).toBeFunction();
     expect(hot.getSourceDataAtRow).toBeFunction();
     expect(hot.getValue).toBeFunction();
@@ -93,17 +102,17 @@ describe('<hot-table>', function () {
     expect(hot.validateCells).toBeFunction();
   });
 
-  //it('should detect that table is running in hot-table environment', function(done) {
-  //  var
-  //    hot = document.createElement('hot-table');
-  //
-  //  this.$container.append(hot);
-  //
-  //  setTimeout(function() {
-  //    expect(hot.hot.isHotTableEnv).toBe(true);
-  //    done();
-  //  }, timeout);
-  //});
+  it('should detect that table is running in hot-table environment', function(done) {
+    var
+      hot = document.createElement('hot-table');
+
+    this.$container.append(hot);
+
+    setTimeout(function() {
+      expect(hot.hot.isHotTableEnv).toBe(true);
+      done();
+    }, timeout);
+  });
 
   it('undefined attribute should return default value', function(done) {
     var
@@ -112,8 +121,9 @@ describe('<hot-table>', function () {
     this.$container.append(hot);
 
     setTimeout(function() {
-      expect(hot.getSettings().pasteMode).toBe('overwrite');
+      // value of the property in element should be the same as property in handsontable settings object.
       expect(hot.pasteMode).toBe('overwrite');
+      expect(hot.getSettings().pasteMode).toBe('overwrite');
       done();
     }, timeout);
   });
@@ -126,6 +136,7 @@ describe('<hot-table>', function () {
     hot.setAttribute('paste-mode', 'shift_down');
 
     setTimeout(function() {
+      // value of the property in element should be the same as property in handsontable settings object.
       expect(hot.pasteMode).toBe('shift_down');
       expect(hot.getSettings().pasteMode).toBe('shift_down');
       done();
@@ -161,7 +172,8 @@ describe('<hot-table>', function () {
     this.$container.append(tpl);
 
     setTimeout(function() {
-      expect(getHotTable().getData()).toBe(model.data);
+      expect(getHotTable().getData()).toEqual([[model.data[0].name]]);
+      expect(getHotTable().getSourceData()).toBe(model.data);
       done();
     }, timeout);
   });
@@ -267,7 +279,7 @@ describe('<hot-table>', function () {
 
     this.$container.append(hot);
 
-    expect(wrap(getHotTable()).className).toBe('');
+    expect(Handsontable.dom.polymerWrap(getHotTable()).className).toBe('');
   });
 
   it('should parse class attribute and apply to table', function(done) {

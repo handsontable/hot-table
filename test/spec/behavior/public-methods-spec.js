@@ -25,7 +25,6 @@ describe('PublicMethodsBehavior', function() {
     expect(o.deselectCell).toBeFunction();
     expect(o.destroy).toBeFunction();
     expect(o.destroyEditor).toBeFunction();
-    expect(o.determineColumnWidth).toBeFunction();
     expect(o.getCell).toBeFunction();
     expect(o.getCellEditor).toBeFunction();
     expect(o.getCellMeta).toBeFunction();
