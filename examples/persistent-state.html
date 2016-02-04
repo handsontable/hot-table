@@ -81,7 +81,6 @@
 
         hot.addHook('afterInit', function() {
           var resetButton = document.querySelector('.reset-button');
-          var stateLoaded = document.querySelector('.state-loaded');
 
           Handsontable.dom.addEvent(resetButton, 'click', function(){
             hot.runHooks('persistentStateReset');
@@ -93,8 +92,7 @@
             });
             hot.render();
           });
-      });
-
+        });
       });
     }
 
