@@ -1,5 +1,4 @@
 (function(w) {
-
   var
     publicHooks = Handsontable.hooks.getRegistered(),
     publicOptions = Object.keys(Handsontable.DefaultSettings.prototype),
@@ -7,7 +6,6 @@
   ;
 
   publicProperties = publicProperties.concat(publicOptions, publicHooks);
-
 
   /**
    * @constructor
@@ -30,11 +28,11 @@
 
       if (prop === 'data') {
         prop = 'datarows';
-      }
-      else if (prop === 'className') {
+
+      }  else if (prop === 'className') {
         prop = 'class';
-      }
-      else if (prop === 'title') {
+
+      }  else if (prop === 'title') {
         // rename 'title' attribute to 'header' because 'title' was causing
         // problems (https://groups.google.com/forum/#!topic/polymer-dev/RMMsV-D4HVw)
         prop = 'header';
@@ -49,7 +47,7 @@
       if (typeof defaultValue === 'function') {
         publish[prop].value = function() {
           return function() {
-            return defaultValue.apply(this.hot, arguments);
+            return defaultValue.apply(this.hot || this, arguments);
           };
         };
       } else if (defaultValue !== void 0) {
@@ -71,12 +69,17 @@
     props.highlightedRow = {
       type: Number,
       value: -1,
-      notify: true
+      notify: true,
     };
     props.highlightedColumn = {
       type: Number,
       value: -1,
-      notify: true
+      notify: true,
+    };
+    props.id = {
+      type: String,
+      value: '',
+      notify: false,
     };
 
     return props;
@@ -109,7 +112,7 @@
       options = {},
       attrName, i, iLen;
 
-    for (i = 0, iLen = publicProperties.length; i < iLen; i ++) {
+    for (i = 0, iLen = publicProperties.length; i < iLen; i++) {
       attrName = publicProperties[i];
 
       if (attrName === 'data') {
@@ -227,7 +230,6 @@
 
     return value;
   };
-
 
   w.HotTableUtils = w.HotTableUtils || {};
   w.HotTableUtils.SettingsParser = SettingsParser;

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>&lt;hot-table&gt;</title>
+
+  <!-- Importing Web Component's Polyfill -->
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <!-- Code highlighter -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/main.css"/>
+
+  <!-- Importing Custom Elements -->
+  <link rel="import" href="../hot-table.html">
+  <link rel="import" href="../../google-map/google-map.html">
+  <link rel="import" href="components/google-map/google-map-search.html">
+  <link rel="import" href="components/bold-renderer.html">
+  <link rel="import" href="components/colored-renderer.html">
+  <link rel="import" href="components/age-renderer.html">
+  <link rel="import" href="components/language-editor.html">
+</head>
+<body>
+
+<div id="wrapper">
+  <header>
+    <h1>&lt;hot-table&gt;</h1>
+    <h2 class="logo-desc">Saving table state (persistent state) demo</h2>
+  </header>
+
+  <h2>Simple Example</h2>
+
+  <div class="example">
+    <template id="tpl" is="dom-bind">
+      <hot-table id="example" width="570" height="280" datarows="{{ people }}" row-headers context-menu column-sorting sort-indicator
+                 persistent-state manual-column-resize manual-column-move manual-row-resize manual-row-move>
+        <hot-column width="125" value="name" header="Full Name"></hot-column>
+        <hot-column width="125" value="address" header="Address"></hot-column>
+        <hot-column width="125" value="registered" header="Registered" type="date"></hot-column>
+        <hot-column width="125" value="balance" header="Balance" type="numeric">
+          <template data-hot-role="renderer" is="dom-template">
+            <bold-renderer value="{{ value }}"></bold-renderer>
+          </template>
+        </hot-column>
+      </hot-table>
+    </template>
+  </div>
+
+  <p>
+    <div class="state-loaded">Click the button to <button class="mini reset-button">reset table</button> to the initial state.</div>
+  </p>
+
+  <h2>Code</h2>
+
+  <pre><code class="html">
+  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
+    &#x3C;hot-table id=&#x22;example&#x22; width=&#x22;570&#x22; height=&#x22;280&#x22; datarows=&#x22;{{ people }}&#x22; row-headers context-menu column-sorting sort-indicator persistent-state manual-column-resize manual-column-move manual-row-resize manual-row-move&#x3E;
+      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;name&#x22; header=&#x22;Full Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;address&#x22; header=&#x22;Address&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;registered&#x22; header=&#x22;Registered&#x22; type=&#x22;date&#x22;&#x3E;&#x3C;/hot-column&#x3E;
+      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;balance&#x22; header=&#x22;Balance&#x22; type=&#x22;numeric&#x22;&#x3E;
+        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
+          &#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
+        &#x3C;/template&#x3E;
+      &#x3C;/hot-column&#x3E;
+    &#x3C;/hot-table&#x3E;
+  &#x3C;/template&#x3E;
+  </code></pre>
+
+  <script>
+    var pDomChange = new Promise(function(resolve, reject) {
+      window.addEventListener('dom-change', resolve);
+    });
+
+    function initUntill() {
+      Promise.all(arguments).then(function(responses) {
+        var tpl = document.getElementById('tpl');
+        var hot = document.querySelector('#example');
+
+        tpl.people = responses[0];
+        tpl.genderList = ['Male', 'Female'];
+
+
+        hot.addHook('afterInit', function() {
+          var resetButton = document.querySelector('.reset-button');
+          var stateLoaded = document.querySelector('.state-loaded');
+
+          Handsontable.dom.addEvent(resetButton, 'click', function(){
+            hot.runHooks('persistentStateReset');
+            hot.updateSettings({
+              manualColumnMove: [],
+              manualRowMove: [],
+              manualColumnResize: [],
+              manualRowResize: []
+            });
+            hot.render();
+          });
+      });
+
+      });
+    }
+
+    function _hotData(data) {
+      initUntill(Promise.resolve(data), pDomChange);
+    }
+  </script>
+  <script async defer src="js/data.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</div>
+
+</body>
+</html>

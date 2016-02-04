@@ -60,6 +60,9 @@
         desc.classList.add('invalid');
         desc.textContent = 'Too old!';
       }
+    } else {
+      desc.classList.remove('invalid');
+      desc.textContent = '???';
     }
   };
 

@@ -1,8 +1,6 @@
 (function(w) {
   var BaseEditor = Handsontable.editors.BaseEditor;
 
-  var models = new WeakMap();
-
   function Editor(hotInstance) {
     BaseEditor.call(this, hotInstance);
     this.model = null;
@@ -67,7 +65,9 @@
 
     this.model.row = row;
     this.model.col = col;
+    this.model.prop = prop;
     this.model.value = originalValue;
+    this.model.cellProperties = cellProperties;
     this.model.editor = this;
   };
 

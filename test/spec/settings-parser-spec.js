@@ -24,7 +24,6 @@ describe('SettingsParser', function() {
     expect(prop.afterGetColHeader).toBeDefined();
     expect(prop.afterGetRowHeader).toBeDefined();
     expect(prop.afterInit).toBeDefined();
-    expect(prop.afterIsMultipleSelectionCheck).toBeDefined();
     expect(prop.afterLoadData).toBeDefined();
     expect(prop.afterMomentumScroll).toBeDefined();
     expect(prop.afterOnCellCornerMouseDown).toBeDefined();
@@ -97,7 +96,6 @@ describe('SettingsParser', function() {
     expect(prop.fixedColumnsLeft).toBeDefined();
     expect(prop.format).toBeDefined();
     expect(prop.fragmentSelection).toBeDefined();
-    expect(prop.groups).toBeDefined();
     expect(prop.header).toBeDefined();
     expect(prop.height).toBeDefined();
     expect(prop.invalidCellClassName).toBeDefined();

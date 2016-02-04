@@ -376,8 +376,11 @@ code.hljs {
   width: 149px;
 }
 
-hot-table {
+hot-table, .handsontable {
   font-size: 12px;
+}
+
+hot-table {
   display: inline-block;
 }
 
