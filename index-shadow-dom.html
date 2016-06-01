@@ -5,7 +5,11 @@
   <title>&lt;hot-table&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
-  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+    <script>
+      window.Polymer = window.Polymer || {};
+      window.Polymer.dom = "shadow";
+    </script>
 
   <!-- Code highlighter -->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
