@@ -1,6 +1,13 @@
+<link rel="import" href="hot-table-style.html">
+
 <dom-module id="hot-table">
-  <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
   <template>
+    <!-- this works with Shadow DOM (not Shady DOM)
+    For Shady DOM, add this to your light DOM:
+    <style is="custom-style" include="hot-table-style"></style>
+    -->
+    <style include="hot-table-style"></style>
+
     <div id="htContainer" style="clear: both"></div>
     <content></content>
   </template>
