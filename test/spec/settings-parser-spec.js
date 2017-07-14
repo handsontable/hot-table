@@ -1,180 +1,181 @@
-describe('SettingsParser', function() {
+suite('SettingsParser', function() {
 
-  it('should be defined', function() {
-      expect(HotTableUtils.SettingsParser).toBeDefined();
+  test('should be defined', function() {
+      assert.isDefined(HotTableUtils.SettingsParser);
   });
 
-  it('should return object with all available properties', function() {
+  test('should return object with all available properties', function() {
     var parser = new HotTableUtils.SettingsParser(),
       prop = parser.getAvailableProperties();
 
-    expect(prop.afterCellMetaReset).toBeDefined();
-    expect(prop.afterChange).toBeDefined();
-    expect(prop.afterChangesObserved).toBeDefined();
-    expect(prop.afterColumnMove).toBeDefined();
-    expect(prop.afterColumnResize).toBeDefined();
-    expect(prop.afterContextMenuDefaultOptions).toBeDefined();
-    expect(prop.afterCopyLimit).toBeDefined();
-    expect(prop.afterCreateCol).toBeDefined();
-    expect(prop.afterCreateRow).toBeDefined();
-    expect(prop.afterDeselect).toBeDefined();
-    expect(prop.afterDestroy).toBeDefined();
-    expect(prop.afterDocumentKeyDown).toBeDefined();
-    expect(prop.afterGetCellMeta).toBeDefined();
-    expect(prop.afterGetColHeader).toBeDefined();
-    expect(prop.afterGetRowHeader).toBeDefined();
-    expect(prop.afterInit).toBeDefined();
-    expect(prop.afterLoadData).toBeDefined();
-    expect(prop.afterMomentumScroll).toBeDefined();
-    expect(prop.afterOnCellCornerMouseDown).toBeDefined();
-    expect(prop.afterOnCellMouseDown).toBeDefined();
-    expect(prop.afterOnCellMouseOver).toBeDefined();
-    expect(prop.afterRemoveCol).toBeDefined();
-    expect(prop.afterRemoveRow).toBeDefined();
-    expect(prop.afterRender).toBeDefined();
-    expect(prop.afterRenderer).toBeDefined();
-    expect(prop.afterRowMove).toBeDefined();
-    expect(prop.afterRowResize).toBeDefined();
-    expect(prop.afterScrollHorizontally).toBeDefined();
-    expect(prop.afterScrollVertically).toBeDefined();
-    expect(prop.afterSelection).toBeDefined();
-    expect(prop.afterSelectionByProp).toBeDefined();
-    expect(prop.afterSelectionEnd).toBeDefined();
-    expect(prop.afterSelectionEndByProp).toBeDefined();
-    expect(prop.afterSetCellMeta).toBeDefined();
-    expect(prop.afterUpdateSettings).toBeDefined();
-    expect(prop.afterValidate).toBeDefined();
-    expect(prop.allowInsertColumn).toBeDefined();
-    expect(prop.allowInsertRow).toBeDefined();
-    expect(prop.allowInvalid).toBeDefined();
-    expect(prop.allowRemoveColumn).toBeDefined();
-    expect(prop.allowRemoveRow).toBeDefined();
-    expect(prop.autoComplete).toBeDefined();
-    expect(prop.autoWrapCol).toBeDefined();
-    expect(prop.autoWrapRow).toBeDefined();
-    expect(prop.beforeAutofill).toBeDefined();
-    expect(prop.beforeCellAlignment).toBeDefined();
-    expect(prop.beforeChange).toBeDefined();
-    expect(prop.beforeChangeRender).toBeDefined();
-    expect(prop.beforeDrawBorders).toBeDefined();
-    expect(prop.beforeGetCellMeta).toBeDefined();
-    expect(prop.beforeInit).toBeDefined();
-    expect(prop.beforeInitWalkontable).toBeDefined();
-    expect(prop.beforeKeyDown).toBeDefined();
-    expect(prop.beforeOnCellMouseDown).toBeDefined();
-    expect(prop.beforeRemoveCol).toBeDefined();
-    expect(prop.beforeRemoveRow).toBeDefined();
-    expect(prop.beforeRender).toBeDefined();
-    expect(prop.beforeSetRangeEnd).toBeDefined();
-    expect(prop.beforeTouchScroll).toBeDefined();
-    expect(prop.beforeValidate).toBeDefined();
-    expect(prop.cell).toBeDefined();
-    expect(prop.cells).toBeDefined();
-    expect(prop.checkedTemplate).toBeDefined();
-    expect(prop.class).toBeDefined();
-    expect(prop.colHeaders).toBeDefined();
-    expect(prop.colWidths).toBeDefined();
-    expect(prop.columnSorting).toBeDefined();
-    expect(prop.columns).toBeDefined();
-    expect(prop.commentedCellClassName).toBeDefined();
-    expect(prop.comments).toBeDefined();
-    expect(prop.contextMenu).toBeDefined();
-    expect(prop.copyColsLimit).toBeDefined();
-    expect(prop.copyRowsLimit).toBeDefined();
-    expect(prop.copyable).toBeDefined();
-    expect(prop.currentColClassName).toBeDefined();
-    expect(prop.currentRowClassName).toBeDefined();
-    expect(prop.customBorders).toBeDefined();
-    expect(prop.dataSchema).toBeDefined();
-    expect(prop.datarows).toBeDefined();
-    expect(prop.debug).toBeDefined();
-    expect(prop.disableVisualSelection).toBeDefined();
-    expect(prop.editor).toBeDefined();
-    expect(prop.enterBeginsEditing).toBeDefined();
-    expect(prop.enterMoves).toBeDefined();
-    expect(prop.fillHandle).toBeDefined();
-    expect(prop.fixedColumnsLeft).toBeDefined();
-    expect(prop.format).toBeDefined();
-    expect(prop.fragmentSelection).toBeDefined();
-    expect(prop.header).toBeDefined();
-    expect(prop.height).toBeDefined();
-    expect(prop.invalidCellClassName).toBeDefined();
-    expect(prop.isEmptyCol).toBeDefined();
-    expect(prop.isEmptyRow).toBeDefined();
-    expect(prop.manualColumnFreeze).toBeDefined();
-    expect(prop.manualColumnMove).toBeDefined();
-    expect(prop.manualColumnResize).toBeDefined();
-    expect(prop.manualRowMove).toBeDefined();
-    expect(prop.manualRowResize).toBeDefined();
-    expect(prop.maxCols).toBeDefined();
-    expect(prop.maxRows).toBeDefined();
-    expect(prop.mergeCells).toBeDefined();
-    expect(prop.minCols).toBeDefined();
-    expect(prop.minRows).toBeDefined();
-    expect(prop.minSpareCols).toBeDefined();
-    expect(prop.minSpareRows).toBeDefined();
-    expect(prop.modifyCol).toBeDefined();
-    expect(prop.modifyColWidth).toBeDefined();
-    expect(prop.modifyRow).toBeDefined();
-    expect(prop.modifyRowHeight).toBeDefined();
-    expect(prop.multiSelect).toBeDefined();
-    expect(prop.noWordWrapClassName).toBeDefined();
-    expect(prop.observeDOMVisibility).toBeDefined();
-    expect(prop.outsideClickDeselects).toBeDefined();
-    expect(prop.pasteMode).toBeDefined();
-    expect(prop.persistentState).toBeDefined();
-    expect(prop.persistentStateLoad).toBeDefined();
-    expect(prop.persistentStateReset).toBeDefined();
-    expect(prop.persistentStateSave).toBeDefined();
-    expect(prop.placeholder).toBeDefined();
-    expect(prop.placeholderCellClassName).toBeDefined();
-    expect(prop.readOnly).toBeDefined();
-    expect(prop.readOnlyCellClassName).toBeDefined();
-    expect(prop.renderer).toBeDefined();
-    expect(prop.rowHeaders).toBeDefined();
-    expect(prop.search).toBeDefined();
-    expect(prop.settings).toBeDefined();
-    expect(prop.startCols).toBeDefined();
-    expect(prop.startRows).toBeDefined();
-    expect(prop.stretchH).toBeDefined();
-    expect(prop.tabMoves).toBeDefined();
-    expect(prop.trimWhitespace).toBeDefined();
-    expect(prop.type).toBeDefined();
-    expect(prop.uncheckedTemplate).toBeDefined();
-    expect(prop.validator).toBeDefined();
-    expect(prop.viewportColumnRenderingOffset).toBeDefined();
-    expect(prop.viewportRowRenderingOffset).toBeDefined();
-    expect(prop.width).toBeDefined();
-    expect(prop.wordWrap).toBeDefined();
+    assert.isDefined(prop.afterCellMetaReset);
+    assert.isDefined(prop.afterChange);
+    assert.isDefined(prop.afterChangesObserved);
+    assert.isDefined(prop.afterColumnMove);
+    assert.isDefined(prop.afterColumnResize);
+    assert.isDefined(prop.afterContextMenuDefaultOptions);
+    assert.isDefined(prop.afterCopyLimit);
+    assert.isDefined(prop.afterCreateCol);
+    assert.isDefined(prop.afterCreateRow);
+    assert.isDefined(prop.afterDeselect);
+    assert.isDefined(prop.afterDestroy);
+    assert.isDefined(prop.afterDocumentKeyDown);
+    assert.isDefined(prop.afterGetCellMeta);
+    assert.isDefined(prop.afterGetColHeader);
+    assert.isDefined(prop.afterGetRowHeader);
+    assert.isDefined(prop.afterInit);
+    assert.isDefined(prop.afterLoadData);
+    assert.isDefined(prop.afterMomentumScroll);
+    assert.isDefined(prop.afterOnCellCornerMouseDown);
+    assert.isDefined(prop.afterOnCellMouseDown);
+    assert.isDefined(prop.afterOnCellMouseOver);
+    assert.isDefined(prop.afterRemoveCol);
+    assert.isDefined(prop.afterRemoveRow);
+    assert.isDefined(prop.afterRender);
+    assert.isDefined(prop.afterRenderer);
+    assert.isDefined(prop.afterRowMove);
+    assert.isDefined(prop.afterRowResize);
+    assert.isDefined(prop.afterScrollHorizontally);
+    assert.isDefined(prop.afterScrollVertically);
+    assert.isDefined(prop.afterSelection);
+    assert.isDefined(prop.afterSelectionByProp);
+    assert.isDefined(prop.afterSelectionEnd);
+    assert.isDefined(prop.afterSelectionEndByProp);
+    assert.isDefined(prop.afterSetCellMeta);
+    assert.isDefined(prop.afterUpdateSettings);
+    assert.isDefined(prop.afterValidate);
+    assert.isDefined(prop.allowInsertColumn);
+    assert.isDefined(prop.allowInsertRow);
+    assert.isDefined(prop.allowInvalid);
+    assert.isDefined(prop.allowRemoveColumn);
+    assert.isDefined(prop.allowRemoveRow);
+    assert.isDefined(prop.autoComplete);
+    assert.isDefined(prop.autoWrapCol);
+    assert.isDefined(prop.autoWrapRow);
+    assert.isDefined(prop.beforeAutofill);
+    assert.isDefined(prop.beforeCellAlignment);
+    assert.isDefined(prop.beforeChange);
+    assert.isDefined(prop.beforeChangeRender);
+    assert.isDefined(prop.beforeDrawBorders);
+    assert.isDefined(prop.beforeGetCellMeta);
+    assert.isDefined(prop.beforeInit);
+    assert.isDefined(prop.beforeInitWalkontable);
+    assert.isDefined(prop.beforeKeyDown);
+    assert.isDefined(prop.beforeOnCellMouseDown);
+    assert.isDefined(prop.beforeRemoveCol);
+    assert.isDefined(prop.beforeRemoveRow);
+    assert.isDefined(prop.beforeRender);
+    assert.isDefined(prop.beforeSetRangeEnd);
+    assert.isDefined(prop.beforeTouchScroll);
+    assert.isDefined(prop.beforeValidate);
+    assert.isDefined(prop.cell);
+    assert.isDefined(prop.cells);
+    assert.isDefined(prop.checkedTemplate);
+    assert.isDefined(prop.class);
+    assert.isDefined(prop.colHeaders);
+    assert.isDefined(prop.colWidths);
+    assert.isDefined(prop.columnSorting);
+    assert.isDefined(prop.columns);
+    assert.isDefined(prop.commentedCellClassName);
+    assert.isDefined(prop.comments);
+    assert.isDefined(prop.contextMenu);
+    assert.isDefined(prop.copyColsLimit);
+    assert.isDefined(prop.copyRowsLimit);
+    assert.isDefined(prop.copyable);
+    assert.isDefined(prop.currentColClassName);
+    assert.isDefined(prop.currentRowClassName);
+    assert.isDefined(prop.customBorders);
+    assert.isDefined(prop.dataSchema);
+    assert.isDefined(prop.datarows);
+    assert.isDefined(prop.debug);
+    assert.isDefined(prop.disableVisualSelection);
+    assert.isDefined(prop.editor);
+    assert.isDefined(prop.enterBeginsEditing);
+    assert.isDefined(prop.enterMoves);
+    assert.isDefined(prop.fillHandle);
+    assert.isDefined(prop.fixedColumnsLeft);
+    assert.isDefined(prop.format);
+    assert.isDefined(prop.fragmentSelection);
+    assert.isDefined(prop.header);
+    assert.isDefined(prop.height);
+    assert.isDefined(prop.invalidCellClassName);
+    assert.isDefined(prop.isEmptyCol);
+    assert.isDefined(prop.isEmptyRow);
+    assert.isDefined(prop.manualColumnFreeze);
+    assert.isDefined(prop.manualColumnMove);
+    assert.isDefined(prop.manualColumnResize);
+    assert.isDefined(prop.manualRowMove);
+    assert.isDefined(prop.manualRowResize);
+    assert.isDefined(prop.maxCols);
+    assert.isDefined(prop.maxRows);
+    assert.isDefined(prop.mergeCells);
+    assert.isDefined(prop.minCols);
+    assert.isDefined(prop.minRows);
+    assert.isDefined(prop.minSpareCols);
+    assert.isDefined(prop.minSpareRows);
+    assert.isDefined(prop.modifyCol);
+    assert.isDefined(prop.modifyColWidth);
+    assert.isDefined(prop.modifyRow);
+    assert.isDefined(prop.modifyRowHeight);
+    assert.isDefined(prop.multiSelect);
+    assert.isDefined(prop.noWordWrapClassName);
+    assert.isDefined(prop.observeDOMVisibility);
+    assert.isDefined(prop.outsideClickDeselects);
+    assert.isDefined(prop.pasteMode);
+    assert.isDefined(prop.persistentState);
+    assert.isDefined(prop.persistentStateLoad);
+    assert.isDefined(prop.persistentStateReset);
+    assert.isDefined(prop.persistentStateSave);
+    assert.isDefined(prop.placeholder);
+    assert.isDefined(prop.placeholderCellClassName);
+    assert.isDefined(prop.readOnly);
+    assert.isDefined(prop.readOnlyCellClassName);
+    assert.isDefined(prop.renderer);
+    assert.isDefined(prop.rowHeaders);
+    assert.isDefined(prop.search);
+    assert.isDefined(prop.settings);
+    assert.isDefined(prop.startCols);
+    assert.isDefined(prop.startRows);
+    assert.isDefined(prop.stretchH);
+    assert.isDefined(prop.tabMoves);
+    assert.isDefined(prop.trimWhitespace);
+    assert.isDefined(prop.type);
+    assert.isDefined(prop.uncheckedTemplate);
+    assert.isDefined(prop.validator);
+    assert.isDefined(prop.viewportColumnRenderingOffset);
+    assert.isDefined(prop.viewportRowRenderingOffset);
+    assert.isDefined(prop.width);
+    assert.isDefined(prop.wordWrap);
   });
 
-  it('should return object with all available properties for <hot-table>', function() {
+  test('should return object with all available properties for <hot-table>', function() {
     var parser = new HotTableUtils.SettingsParser();
 
-    spyOn(parser, 'getAvailableProperties').and.callThrough();
+    sinon.spy(parser, 'getAvailableProperties');
+    // spyOn(parser, 'getAvailableProperties').and.callThrough();
 
     var prop = parser.getHotTableProperties();
 
-    expect(prop.highlightedRow).toBeDefined();
-    expect(prop.highlightedColumn).toBeDefined();
+    // assert.isDefined(prop.highlightedRow);
+    // assert.isDefined(prop.highlightedColumn);
 
-    expect(parser.getAvailableProperties).toHaveBeenCalled();
+    asset(parser.getAvailableProperties.calledOnce);
   });
 
-  it('should return object with all available properties for <hot-column>', function() {
+  test('should return object with all available properties for <hot-column>', function() {
     var parser = new HotTableUtils.SettingsParser();
 
     spyOn(parser, 'getAvailableProperties').and.callThrough();
 
     var prop = parser.getHotColumnProperties();
 
-    expect(prop.value).toBeDefined();
-    expect(prop.datarows).not.toBeDefined();
+    assert.isDefined(prop.value);
+    assert.isUndefined(prop.datarows);
 
     expect(parser.getAvailableProperties).toHaveBeenCalled();
   });
 
-  it('should parse <hot-table> attributes of himself', function() {
+  test('should parse <hot-table> attributes of himself', function() {
     var
       parser = new HotTableUtils.SettingsParser(),
       hot, settings;
@@ -189,16 +190,16 @@ describe('SettingsParser', function() {
     hot.setAttribute('width', '100');
     settings = parser.parse(hot);
 
-    expect(settings.allowRemoveRow).toBe(false);
-    expect(settings.enterMoves).toBe(hot.enterMoves);
-    expect(settings.copyable).toBe(false);
-    expect(settings.data).toBe(hot.datarows);
-    expect(settings.editor).toBe(false);
-    expect(settings.minCols).toBe('10');
-    expect(settings.width).toBe('100');
+    assert.isFalse(settings.allowRemoveRow);
+    assert.equal(settings.enterMoves, hot.enterMoves);
+    assert.isFalse(settings.copyable);
+    assert.equal(settings.data, hot.datarows);
+    assert.isFalse(settings.editor);
+    assert.equal(settings.minCols, '10');
+    assert.equal(settings.width, '100');
   });
 
-  it('should parse <hot-table> columns attributes', function() {
+  test('should parse <hot-table> columns attributes', function() {
     var
       parser = new HotTableUtils.SettingsParser(),
       hot, hotColumn, columns;
@@ -216,14 +217,14 @@ describe('SettingsParser', function() {
     hot.appendChild(hotColumn);
     columns = parser.parseColumns(hot);
 
-    expect(columns.length).toBe(1);
-    expect(columns[0].className).toBe('custom-class second-class');
-    expect(columns[0].editor).toBe(false);
-    expect(columns[0].readOnly).toBe(true);
-    expect(columns[0].readOnlyCellClassName).toBe('read-only');
+    assert.equal(columns.length, 1);
+    assert.equal(columns[0].className, 'custom-class second-class');
+    assert.isFalse(columns[0].editor);
+    assert.isTrue(columns[0].readOnly);
+    assert.equal(columns[0].readOnlyCellClassName, 'read-only');
   });
 
-  it('should parse <hot-table> single column attributes', function() {
+  test('should parse <hot-table> single column attributes', function() {
     var
       parser = new HotTableUtils.SettingsParser(),
       hot, hotColumn, columns;
@@ -241,13 +242,13 @@ describe('SettingsParser', function() {
     hot.appendChild(hotColumn);
     columns = parser.parseColumn(hot, hotColumn);
 
-    expect(columns.className).toBe('custom-class second-class');
-    expect(columns.editor).toBe(false);
-    expect(columns.readOnly).toBe(true);
-    expect(columns.readOnlyCellClassName).toBe('read-only');
+    assert.equal(columns.className, 'custom-class second-class');
+    assert.isFalse(columns.editor);
+    assert.isTrue(columns.readOnly);
+    assert.equal(columns.readOnlyCellClassName, 'read-only');
   });
 
-  it('should read table options in correct way', function() {
+  test('should read table options in correct way', function() {
     var
       parser = new HotTableUtils.SettingsParser(),
       hot;
@@ -255,13 +256,13 @@ describe('SettingsParser', function() {
     hot = createHotTable();
     spyOn(parser, 'readBool').and.callThrough();
 
-    expect(parser.readOption(hot, 'className', '')).toBe('');
-    expect(parser.readOption(hot, 'className', 'true')).toBe('true');
-    expect(parser.readOption(hot, 'someProperty', '')).toBe(true);
-    expect(parser.readOption(hot, 'someProperty', 'true')).toBe(true);
-    expect(parser.readOption(hot, 'someProperty', 'false')).toBe(false);
-    expect(parser.readOption(hot, 'someProperty', void 0)).not.toBeDefined();
-    expect(parser.readBool.calls.count()).toEqual(4);
+    assert.equal(parser.readOption(hot, 'className', ''), '');
+    assert.equal(parser.readOption(hot, 'className', 'true', 'true'));
+    assert.isTrue(parser.readOption(hot, 'someProperty', ''));
+    assert.isTrue(parser.readOption(hot, 'someProperty', 'true'));
+    assert.isFalse(parser.readOption(hot, 'someProperty', 'false'));
+    assert.isUndefined(parser.readOption(hot, 'someProperty', void 0));
+    assert.equal(parser.readBool.calls.count(), 4);
 
     parser.readOption(hot, 'renderer', 1);
     parser.readOption(hot, 'datarows', 2);
@@ -269,16 +270,16 @@ describe('SettingsParser', function() {
     parser.readOption(hot, 'dataSchema', 4);
   });
 
-  it('should try to read as boolean if not it returns untouched value', function() {
+  test('should try to read as boolean if not it returns untouched value', function() {
     var
       parser = new HotTableUtils.SettingsParser();
 
-    expect(parser.readBool('')).toBe(true);
-    expect(parser.readBool('true')).toBe(true);
-    expect(parser.readBool('foo')).toBe('foo');
-    expect(parser.readBool('false')).toBe(false);
-    expect(parser.readBool(null)).toBe(null);
-    expect(parser.readBool(void 0)).toBe(void 0);
-    expect(parser.readBool(12345)).toBe(12345);
+    assert.isTrue(parser.readBool(''));
+    assert.isTrue(parser.readBool('true'));
+    assert.equal(parser.readBool('foo'), 'foo');
+    assert.isFalse(parser.readBool('false'));
+    assert.isNull(parser.readBool(null))
+    assert.isUndefined(parser.readBool(void 0));
+    assert.equal(parser.readBool(12345), 12345);
   });
 });
