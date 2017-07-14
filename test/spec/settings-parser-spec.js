@@ -179,7 +179,7 @@ describe('SettingsParser', function() {
       parser = new HotTableUtils.SettingsParser(),
       hot, settings;
 
-    hot = document.createElement('hot-table');
+    hot = createHotTable();
     hot.setAttribute('allow-remove-row', 'false');
     hot.enterMoves = {row: 1, col: 1};
     hot.datarows = [{id: 1, name: 'foo'}];
@@ -203,7 +203,7 @@ describe('SettingsParser', function() {
       parser = new HotTableUtils.SettingsParser(),
       hot, hotColumn, columns;
 
-    hot = document.createElement('hot-table');
+    hot = createHotTable();
     columns = parser.parseColumns(hot);
 
     expect(columns.length).toBe(0);
@@ -228,7 +228,7 @@ describe('SettingsParser', function() {
       parser = new HotTableUtils.SettingsParser(),
       hot, hotColumn, columns;
 
-    hot = document.createElement('hot-table');
+    hot = createHotTable();
     columns = parser.parseColumns(hot);
 
     expect(columns.length).toBe(0);
@@ -252,7 +252,7 @@ describe('SettingsParser', function() {
       parser = new HotTableUtils.SettingsParser(),
       hot;
 
-    hot = document.createElement('hot-table');
+    hot = createHotTable();
     spyOn(parser, 'readBool').and.callThrough();
 
     expect(parser.readOption(hot, 'className', '')).toBe('');

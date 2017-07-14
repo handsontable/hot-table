@@ -28,7 +28,7 @@
 
     _onChanged: function() {
       if (this.parentNode) {
-        this.parentNode.onMutation();
+        this.parentNode.onMutation && this.parentNode.onMutation();
       }
     },
 
@@ -42,6 +42,14 @@
         return;
       }
       var models = new WeakMap();
+      var Template;
+
+      if (Polymer.Element) {
+        Template = Polymer.Templatize.templatize(template, this, {
+          parentModel: false,
+          forwardHostProp: function(prop, value) {}
+        });
+      }
 
       this.renderer = function(instance, TD, row, col, prop, value, cellProperties) {
         var model, hasModel;
@@ -53,9 +61,13 @@
           model = models.get(TD);
 
         } else {
-          // Don't copy parent properties. Stamp fresh template instance.
-          template._parentProps = {};
-          model = template.stamp({});
+          if (Polymer.Element) {
+            model = new Template();
+          } else {
+            // Don't copy parent properties. Stamp fresh template instance.
+            template._parentProps = {};
+            model = template.stamp({});
+          }
           models.set(TD, model);
         }
         model.row = row;
@@ -84,9 +96,18 @@
       }
       this.editor = ProxyEditor;
 
+      var Template;
+
+      if (Polymer.Element) {
+        Template = Polymer.Templatize.templatize(template, this, {
+          parentModel: false,
+          forwardHostProp: function(prop, value) {}
+        });
+      }
+
       function ProxyEditor(hotInstance) {
         HotTableUtils.Editor.call(this, hotInstance);
-        this.template = template;
+        this.setTemplate(Polymer.Element ? Template : template);
       }
 
       ProxyEditor.prototype = Object.create(HotTableUtils.Editor.prototype, {

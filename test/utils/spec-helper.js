@@ -47,6 +47,22 @@ function spec() {
   return currentSpec;
 }
 
+function createHotTable() {
+  var wrapper = document.createElement('div');
+
+  wrapper.innerHTML = '<hot-table></hot-table>';
+
+  return wrapper.firstChild;
+};
+
+function createHotColumn() {
+  var wrapper = document.createElement('div');
+
+  wrapper.innerHTML = '<hot-column></hot-column>';
+
+  return wrapper.firstChild;
+};
+
 /**
  * @returns {HTMLElement}
  */
