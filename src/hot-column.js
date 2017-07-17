@@ -44,11 +44,13 @@
       var models = new WeakMap();
       var Template;
 
-      if (Polymer.Element) {
+      if (Polymer.Element) { // Polymer 2.0
         Template = Polymer.Templatize.templatize(template, this, {
           parentModel: false,
           forwardHostProp: function(prop, value) {}
         });
+      } else if (Polymer.Templatizer && Polymer.Templatizer.templatize) { // Polymer 1.7 - 1.9
+        Polymer.Templatizer.templatize(template);
       }
 
       this.renderer = function(instance, TD, row, col, prop, value, cellProperties) {
@@ -66,7 +68,7 @@
           } else {
             // Don't copy parent properties. Stamp fresh template instance.
             template._parentProps = {};
-            model = template.stamp({});
+            model = template.stamp ? template.stamp({}) : Polymer.Templatizer.stamp({});
           }
           models.set(TD, model);
         }
