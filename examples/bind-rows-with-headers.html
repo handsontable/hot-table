@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
+  <!-- Pikaday styles -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+
   <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/main.css"/>
 
@@ -19,56 +22,12 @@
   <link rel="import" href="components/bold-renderer.html">
 
   <!-- Handsontable PRO trial files -->
-  <link rel="stylesheet" href="//handsontable.com/static/bower_components/handsontable-pro/dist/handsontable.full.min.css">
-  <script src="//handsontable.com/static/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
+  <link rel="stylesheet" href="//docs.handsontable.com/pro/1.10.0/bower_components/handsontable-pro/dist/handsontable.full.min.css">
+  <script src="//docs.handsontable.com/pro/1.10.0/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
 
   <style>
     hot-table {
       font-size: 12px;
-    }
-    hot-table google-map {
-      height: 200px;
-      width: 400px;
-    }
-    hot-table .map-editor {
-      background-color: white;
-      width: 400px;
-      padding: 5px;
-      box-shadow: 0 0 5px 0 #ddd;
-    }
-    hot-table .languages-editor {
-      background-color: white;
-      width: 169px;
-      padding: 5px;
-      box-shadow: 0 0 5px 0 #ddd;
-    }
-    hot-table .color-editor {
-      width: 100%;
-      height: 100%;
-    }
-    .no-padding {
-      padding: 0 !important;
-    }
-    .color-editor div {
-      height: 100%;
-    }
-    .black {
-      background-color: black;
-    }
-    .blue {
-      background-color: blue;
-    }
-    .green {
-      background-color: green;
-    }
-    .orange {
-      background-color: orange;
-    }
-    .red {
-      background-color: red;
-    }
-    .yellow {
-      background-color: yellow;
     }
   </style>
 </head>
@@ -83,20 +42,22 @@
   <h2>Simple Example (strict mode)</h2>
 
   <div class="example">
-    <template id="tpl" is="dom-bind">
-      <hot-table width="420" height="280" datarows="{{ people }}" row-headers context-menu bind-rows-with-headers="strict">
-        <hot-column width="50" read-only value="id" header="ID" type="numeric"></hot-column>
-        <hot-column width="100" value="name.first" header="First Name"></hot-column>
-        <hot-column width="100" value="name.last" header="Last Name">
-          <template data-hot-role="renderer" is="dom-template">
-            <bold-renderer value="{{ value }}"></bold-renderer>
-          </template>
-        </hot-column>
-        <hot-column width="100" value="gender" type="dropdown" source="genderList" header="Gender">
-          <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
-        </hot-column>
-      </hot-table>
-    </template>
+    <dom-bind>
+      <template id="tpl" is="dom-bind">
+        <hot-table width="420" height="280" datarows="{{ people }}" row-headers context-menu bind-rows-with-headers="strict">
+          <hot-column width="50" read-only value="id" header="ID" type="numeric"></hot-column>
+          <hot-column width="100" value="name.first" header="First Name"></hot-column>
+          <hot-column width="100" value="name.last" header="Last Name">
+            <template data-hot-role="renderer" is="dom-template">
+              <bold-renderer value="{{ value }}"></bold-renderer>
+            </template>
+          </hot-column>
+          <hot-column width="100" value="gender" type="dropdown" source="genderList" header="Gender">
+            <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
+          </hot-column>
+        </hot-table>
+      </template>
+    </dom-bind>
   </div>
 
   <p>
@@ -148,15 +109,13 @@
         coordinates: {lat: 59.3288242, lng: 18.0729393}, languages: ['us']}
     ];
 
-    window.addEventListener('dom-change', function () {
-      var tpl = document.getElementById('tpl');
+    var domBind = document.querySelector('dom-bind');
 
-      tpl.people = people;
-      tpl.genderList = genderList;
-      tpl.languagesComputedSrc = function(code) {
-        return 'resources/flags/' + code + '.png';
-      }
-    });
+    domBind.people = people;
+    domBind.genderList = genderList;
+    domBind.languagesComputedSrc = function(code) {
+      return 'resources/flags/' + code + '.png';
+    }
   </script>
   <script>hljs.initHighlightingOnLoad();</script>
 </div>

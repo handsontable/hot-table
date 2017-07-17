@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2015 Google Inc. All rights reserved. -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../../../../polymer/polymer.html">
 
 <!--
 `google-map-search` provides Google Maps Places API functionality.
@@ -27,15 +27,14 @@ information on the API.
  -->
 
 <script>
-
   Polymer({
-
-    is: 'google-map-search',
+    is: 'custom-google-map-search',
 
     properties: {
-
       /**
        * The Google map object.
+       *
+       * @type google.maps.Map
        */
       map: {
         type: Object,
@@ -152,12 +151,11 @@ information on the API.
         if (this.types && typeof this.types == 'string') {
           var types = this.types.split(' ');
         }
-
-        if (!this.globalSearch) {
-          var bounds = this.map.getBounds();
-        } else if (this.radius) {
+        if (this.radius) {
           var radius = this.radius;
           var location = this.location ? this.location : this.map.getCenter();
+        } else if (!this.globalSearch) {
+          var bounds = this.map.getBounds();
         }
         places.textSearch({
           query: this.query,
@@ -171,6 +169,7 @@ information on the API.
 
     /**
      * Fetches details for a given place.
+     *
      * @param {String} placeId The place id.
      * @return {Promise} place The place information.
      */
@@ -193,20 +192,25 @@ information on the API.
       if (status === 'OVER_QUERY_LIMIT') {
         return;
       }
-      this.results = results.map(function(result) {
-        // obtain lat/long from geometry
-        result.latitude  = result.geometry.location.lat();
-        result.longitude = result.geometry.location.lng();
-        return result;
+      var response = results.map(function(result) {
+        return {
+          latitude: result.geometry.location.lat(),
+          longitude: result.geometry.location.lng(),
+        };
       });
+
+      this.results = response.length ? response[0] : {latitude: 54, longitude: 18};
+
       this.fire('google-map-search-results', this.results);
     },
 
     _updateLocation: function() {
       if (!this.map) {
         return;
+
       } else if (typeof this.latitude !== 'number' || isNaN(this.latitude)) {
         return;
+
       } else if (typeof this.longitude !== 'number' || isNaN(this.longitude)) {
         return;
       }

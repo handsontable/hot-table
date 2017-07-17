@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
+  <!-- Pikaday styles -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+
   <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/main.css"/>
 
@@ -19,8 +22,8 @@
   <link rel="import" href="components/bold-renderer.html">
 
   <!-- Handsontable PRO trial files -->
-  <link rel="stylesheet" href="//handsontable.com/static/bower_components/handsontable-pro/dist/handsontable.full.min.css">
-  <script src="//handsontable.com/static/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
+  <link rel="stylesheet" href="//docs.handsontable.com/pro/1.10.0/bower_components/handsontable-pro/dist/handsontable.full.min.css">
+  <script src="//docs.handsontable.com/pro/1.10.0/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
 </head>
 <body>
 
@@ -33,19 +36,21 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template id="tpl" is="dom-bind">
-      <hot-table width="570" height="500" datarows="{{ people }}" row-headers context-menu hidden-columns
-                 nested-headers="{{ settings.nestedHeaders }}" collapsible-columns="{{ settings.collapsibleColumns }}">
-        <hot-column width="125" value="name" header="Full Name"></hot-column>
-        <hot-column width="125" value="address" header="Address"></hot-column>
-        <hot-column width="125" value="registered" header="Registered" type="date" date-format="YYYY-MM-DD"></hot-column>
-        <hot-column width="125" value="balance" header="Balance" type="numeric">
-          <template data-hot-role="renderer" is="dom-template">
-            <bold-renderer value="{{ value }}"></bold-renderer>
-          </template>
-        </hot-column>
-      </hot-table>
-    </template>
+    <dom-bind>
+      <template id="tpl" is="dom-bind">
+        <hot-table width="570" height="500" datarows="{{ people }}" row-headers context-menu hidden-columns
+                   nested-headers="{{ settings.nestedHeaders }}" collapsible-columns="{{ settings.collapsibleColumns }}">
+          <hot-column width="125" value="name" header="Full Name"></hot-column>
+          <hot-column width="125" value="address" header="Address"></hot-column>
+          <hot-column width="125" value="registered" header="Registered" type="date" date-format="YYYY-MM-DD"></hot-column>
+          <hot-column width="125" value="balance" header="Balance" type="numeric">
+            <template data-hot-role="renderer" is="dom-template">
+              <bold-renderer value="{{ value }}"></bold-renderer>
+            </template>
+          </hot-column>
+        </hot-table>
+      </template>
+    </dom-bind>
   </div>
 
   <h2>Code</h2>
@@ -67,34 +72,24 @@
 
 
   <script>
-    var pDomChange = new Promise(function(resolve, reject) {
-      window.addEventListener('dom-change', resolve);
-    });
-
-    function initUntill() {
-      Promise.all(arguments).then(function(responses) {
-        var tpl = document.getElementById('tpl');
-
-        tpl.people = responses[0];
-        tpl.settings = {
-          nestedHeaders: [
-            ['A', {label: 'B', colspan: 3}],
-            ['C', {label: 'D', colspan: 2}, {label: 'E', colspan: 1}],
-            ['F', 'G', 'H', 'I'],
-            ['J', {label: 'K', colspan: 2}, 'L']
-          ],
-          collapsibleColumns: [
-            {row: -4, col: 1, collapsible: true},
-            {row: -3, col: 1, collapsible: true},
-            {row: -2, col: 1, collapsible: true},
-            {row: -2, col: 3, collapsible: true}
-          ],
-        };
-      })
-    }
-
     function _hotData(data) {
-      initUntill(Promise.resolve(data), pDomChange);
+      var domBind = document.querySelector('dom-bind');
+
+      domBind.people = data;
+      domBind.settings = {
+        nestedHeaders: [
+          ['A', {label: 'B', colspan: 3}],
+          ['C', {label: 'D', colspan: 2}, {label: 'E', colspan: 1}],
+          ['F', 'G', 'H', 'I'],
+          ['J', {label: 'K', colspan: 2}, 'L']
+        ],
+        collapsibleColumns: [
+          {row: -4, col: 1, collapsible: true},
+          {row: -3, col: 1, collapsible: true},
+          {row: -2, col: 1, collapsible: true},
+          {row: -2, col: 3, collapsible: true}
+        ],
+      };
     }
   </script>
   <script async defer src="js/data.js"></script>

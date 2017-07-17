@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
+  <!-- Pikaday styles -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+
   <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="examples/css/main.css"/>
 
@@ -59,29 +62,31 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template id="tpl" is="dom-bind">
-      <p>
-        Name of first person: <strong>{{ people.0.name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
-      </p>
-      <hot-table width="655" height="295" datarows="{{ people }}" context-menu max-rows="{{ people.length }}"
-                 highlighted-row="{{ highlightedRow }}" class="htLeft">
-        <hot-column width="30" read-only value="id" header="ID"></hot-column>
-        <hot-column value="name.first" header="First Name">
-          <template data-hot-role="renderer" is="dom-template"><span>{{ value }}</span>...</template>
-        </hot-column>
-        <hot-column width="100" value="name.last" header="Last Name"></hot-column>
-        <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
-        <hot-column value="gender" header="Gender" source="[[ genderSource ]]" type="dropdown"></hot-column>
-        <hot-column type="numeric" value="age" header="Age"></hot-column>
-        <hot-column type="checkbox" value="languages.english" header="English" checked-template="Yes"
-                    unchecked-template="No"></hot-column>
-        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checked-template="Yes"
-                    unchecked-template="No"></hot-column>
-        <hot-column type="checkbox" value="languages.french" header="French" checked-template="Yes"
-                    unchecked-template="No"></hot-column>
-        <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
-      </hot-table>
-    </template>
+    <dom-bind>
+      <template id="tpl" is="dom-bind">
+        <p>
+          Name of first person: <strong>{{ people.0.name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
+        </p>
+        <hot-table width="655" height="295" datarows="{{ people }}" context-menu max-rows="{{ people.length }}"
+                   highlighted-row="{{ highlightedRow }}" class="htLeft">
+          <hot-column width="30" read-only value="id" header="ID"></hot-column>
+          <hot-column value="name.first" header="First Name">
+            <template data-hot-role="renderer" is="dom-template"><span>{{ value }}</span>...</template>
+          </hot-column>
+          <hot-column width="100" value="name.last" header="Last Name"></hot-column>
+          <hot-column width="100" type="date" value="date" header="Birthday"></hot-column>
+          <hot-column value="gender" header="Gender" source="[[ genderSource ]]" type="dropdown"></hot-column>
+          <hot-column type="numeric" value="age" header="Age"></hot-column>
+          <hot-column type="checkbox" value="languages.english" header="English" checked-template="Yes"
+                      unchecked-template="No"></hot-column>
+          <hot-column type="checkbox" value="languages.spanish" header="Spanish" checked-template="Yes"
+                      unchecked-template="No"></hot-column>
+          <hot-column type="checkbox" value="languages.french" header="French" checked-template="Yes"
+                      unchecked-template="No"></hot-column>
+          <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
+        </hot-table>
+      </template>
+    </dom-bind>
   </div>
 
   <h2>Code</h2>
@@ -174,13 +179,11 @@
         languages: {english: 'Yes', spanish: 'Yes', french: 'Yes'}, salary: 2799}
     ];
 
-    window.addEventListener('dom-change', function () {
-      var tpl = document.getElementById('tpl');
+    var domBind = document.querySelector('dom-bind');
 
-      tpl.highlightedRow = -1;
-      tpl.people = people;
-      tpl.genderSource = ['Male', 'Female'];
-    });
+    domBind.highlightedRow = -1;
+    domBind.people = people;
+    domBind.genderSource = ['Male', 'Female'];
   </script>
   <script>hljs.initHighlightingOnLoad();</script>
 </div>

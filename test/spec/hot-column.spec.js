@@ -2,8 +2,8 @@ describe('<hot-column>', function() {
 
   it('property should return value set by attribute', function(done) {
     var
-      hot = document.createElement('hot-table'),
-      hotColumn = document.createElement('hot-column');
+      hot = createHotTable(),
+      hotColumn = createHotColumn();
 
     hotColumn.setAttribute('header', 'My header');
     hot.appendChild(hotColumn);
@@ -17,8 +17,8 @@ describe('<hot-column>', function() {
 
   it('attribute value should be rendered', function(done) {
     var
-      hot = document.createElement('hot-table'),
-      hotColumn = document.createElement('hot-column');
+      hot = createHotTable(),
+      hotColumn = createHotColumn();
 
     hotColumn.setAttribute('header', 'My header');
     hot.appendChild(hotColumn);
@@ -32,8 +32,8 @@ describe('<hot-column>', function() {
 
   it('changed attribute value should be rendered', function(done) {
     var
-      hot = document.createElement('hot-table'),
-      hotColumn = document.createElement('hot-column');
+      hot = createHotTable(),
+      hotColumn = createHotColumn();
 
     hotColumn.setAttribute('header', 'My header');
     hot.appendChild(hotColumn);
@@ -49,8 +49,8 @@ describe('<hot-column>', function() {
 
   it('autocomplete source attribute value should be parsed', function(done) {
     var
-      hot = document.createElement('hot-table'),
-      hotColumn = document.createElement('hot-column');
+      hot = createHotTable(),
+      hotColumn = createHotColumn();
 
     hotColumn.setAttribute('type', 'autocomplete');
     hotColumn.setAttribute('source', '["Fred","Freddie","Frederick"]');
@@ -65,8 +65,8 @@ describe('<hot-column>', function() {
 
   it('dropdown source attribute value should be parsed', function(done) {
     var
-      hot = document.createElement('hot-table'),
-      hotColumn = document.createElement('hot-column');
+      hot = createHotTable(),
+      hotColumn = createHotColumn();
 
     hotColumn.setAttribute('type', 'dropdown');
     hotColumn.setAttribute('source', '["Fred","Freddie","Frederick"]');
@@ -87,17 +87,16 @@ describe('<hot-column>', function() {
           name: 'Freddie'
         }],
         names: names,
-        html: '<hot-table datarows="{{ data }}">' +
-                '<hot-column value="name" type="autocomplete" source="{{ names }}"></hot-column>' +
-              '</hot-table>'
       },
-      tpl;
+      tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    tpl.data = model.data;
-    tpl.names = names;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml(`
+        <hot-table datarows="{{ data }}">
+          <hot-column value="name" type="autocomplete" source="{{ names }}"></hot-column>
+        </hot-table>
+        `, model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getCellMeta(0, 0).source).toBe(names);
@@ -113,17 +112,16 @@ describe('<hot-column>', function() {
           name: 'Freddie'
         }],
         names: names,
-        html: '<hot-table datarows="{{ data }}">' +
-                '<hot-column value="name" type="dropdown" source="{{ names }}"></hot-column>' +
-              '</hot-table>'
       },
-      tpl;
+      tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    tpl.data = model.data;
-    tpl.names = names;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml(`
+        <hot-table datarows="{{ data }}">
+          <hot-column value="name" type="dropdown" source="{{ names }}"></hot-column>
+        </hot-table>
+        `, model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getCellMeta(0, 0).source).toBe(names);
@@ -241,9 +239,15 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1!');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2!');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3!');
+        if (Polymer.Element) {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3!');
+        } else {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3!');
+        }
         done();
       }, timeout);
     });
@@ -263,8 +267,13 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('Joe!');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('Mike!');
+        if (Polymer.Element) {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('Joe!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('Mike!');
+        } else {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('Joe!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('Mike!');
+        }
         done();
       }, timeout);
     });
@@ -329,9 +338,15 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1?');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2?');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3?');
+        if (Polymer.Element) {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3?');
+        } else {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3?');
+        }
         done();
       }, timeout);
     });

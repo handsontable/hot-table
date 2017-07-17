@@ -1,11 +1,18 @@
-
 <!-- Import Polymer -->
 <link rel="import" href="../../../polymer/polymer.html">
 
 <dom-module id="language-editor">
   <template>
+    <style>
+      .languages-editor {
+        background-color: white;
+        width: 169px;
+        padding: 5px;
+        box-shadow: 0 0 5px 0 #ddd;
+      }
+    </style>
     <template is="dom-repeat" items="{{ languages }}" as="lang">
-      <div>
+      <div class="languages-editor">
         <label>
           <input on-change="onChange" type="checkbox" checked="{{ lang.checked }}">
           <img src="{{ computeSrc(lang) }}" alt="{{ lang.code }}">
