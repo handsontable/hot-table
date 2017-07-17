@@ -87,19 +87,16 @@ describe('<hot-column>', function() {
           name: 'Freddie'
         }],
         names: names,
-        html: '<hot-table datarows="{{ data }}">' +
-                '<hot-column value="name" type="autocomplete" source="{{ names }}"></hot-column>' +
-              '</hot-table>'
       },
       tpl, domBind;
 
-    domBind = document.createElement('dom-bind');
-    tpl = document.createElement('template', 'dom-bind');
-    domBind.appendChild(tpl);
-    tpl.innerHTML = model.html;
-    domBind.data = model.data;
-    domBind.names = names;
-    this.$container.append(domBind);
+    this.$container.append(
+      createHtml(`
+        <hot-table datarows="{{ data }}">
+          <hot-column value="name" type="autocomplete" source="{{ names }}"></hot-column>
+        </hot-table>
+        `, model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getCellMeta(0, 0).source).toBe(names);
@@ -115,19 +112,16 @@ describe('<hot-column>', function() {
           name: 'Freddie'
         }],
         names: names,
-        html: '<hot-table datarows="{{ data }}">' +
-                '<hot-column value="name" type="dropdown" source="{{ names }}"></hot-column>' +
-              '</hot-table>'
       },
       tpl, domBind;
 
-    domBind = document.createElement('dom-bind');
-    tpl = document.createElement('template', 'dom-bind');
-    domBind.appendChild(tpl);
-    tpl.innerHTML = model.html;
-    domBind.data = model.data;
-    domBind.names = names;
-    this.$container.append(domBind);
+    this.$container.append(
+      createHtml(`
+        <hot-table datarows="{{ data }}">
+          <hot-column value="name" type="dropdown" source="{{ names }}"></hot-column>
+        </hot-table>
+        `, model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getCellMeta(0, 0).source).toBe(names);
@@ -245,9 +239,15 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1!');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2!');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3!');
+        if (Polymer.Element) {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3!');
+        } else {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3!');
+        }
         done();
       }, timeout);
     });
@@ -267,8 +267,13 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('Joe!');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('Mike!');
+        if (Polymer.Element) {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('Joe!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('Mike!');
+        } else {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('Joe!');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('Mike!');
+        }
         done();
       }, timeout);
     });
@@ -333,9 +338,15 @@ describe('<hot-column>', function() {
       this.$container.append(div);
 
       setTimeout(function() {
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1?');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2?');
-        expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3?');
+        if (Polymer.Element) {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.shadowRoot.textContent).toBe('1?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.shadowRoot.textContent).toBe('2?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.shadowRoot.textContent).toBe('3?');
+        } else {
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(1) td').firstChild.textContent).toBe('1?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(2) td').firstChild.textContent).toBe('2?');
+          expect(getHotTable().hotRootElement.querySelector('tr:nth-child(3) td').firstChild.textContent).toBe('3?');
+        }
         done();
       }, timeout);
     });
