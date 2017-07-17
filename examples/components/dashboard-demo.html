@@ -1,19 +1,19 @@
 <link rel="import" href="dashboard-tile.html">
 
 <dom-module id="dashboard-demo">
-  <style>
-    hot-table {
-      font-size: 12px;
-      display: inline-block;
-    }
-    hot-table .handsontableInputHolder {
-      text-align: left !important;
-    }
-    dashboard-tile {
-      display: inline-block;
-    }
-  </style>
   <template>
+    <style>
+      hot-table {
+        font-size: 12px;
+        display: inline-block;
+      }
+      hot-table .handsontableInputHolder {
+        text-align: left !important;
+      }
+      dashboard-tile {
+        display: inline-block;
+      }
+    </style>
     <dashboard-tile id="ageTile" skin="green" label="Median Age" value=""></dashboard-tile>
     <dashboard-tile id="maleTile" skin="blue" label="Male" value=""></dashboard-tile>
     <dashboard-tile id="femaleTile" skin="pink" label="Female" value=""></dashboard-tile>

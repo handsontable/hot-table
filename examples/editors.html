@@ -14,13 +14,16 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
+  <!-- Pikaday styles -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+
   <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/main.css"/>
 
   <!-- Importing Custom Elements -->
   <link rel="import" href="../hot-table.html">
   <link rel="import" href="../../google-map/google-map.html">
-  <link rel="import" href="components/google-map/google-map-search.html">
+  <link rel="import" href="components/custom-google-map/custom-google-map-search.html">
   <link rel="import" href="components/bold-renderer.html">
   <link rel="import" href="components/colored-renderer.html">
   <link rel="import" href="components/age-renderer.html">
@@ -29,50 +32,6 @@
   <style>
     hot-table {
       font-size: 12px;
-    }
-    hot-table google-map {
-      height: 200px;
-      width: 400px;
-    }
-    hot-table .map-editor {
-      background-color: white;
-      width: 400px;
-      padding: 5px;
-      box-shadow: 0 0 5px 0 #ddd;
-    }
-    hot-table .languages-editor {
-      background-color: white;
-      width: 169px;
-      padding: 5px;
-      box-shadow: 0 0 5px 0 #ddd;
-    }
-    hot-table .color-editor {
-      width: 100%;
-      height: 100%;
-    }
-    .no-padding {
-      padding: 0 !important;
-    }
-    .color-editor div {
-      height: 100%;
-    }
-    .black {
-      background-color: black;
-    }
-    .blue {
-      background-color: blue;
-    }
-    .green {
-      background-color: green;
-    }
-    .orange {
-      background-color: orange;
-    }
-    .red {
-      background-color: red;
-    }
-    .yellow {
-      background-color: yellow;
     }
   </style>
 </head>
@@ -87,73 +46,55 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template id="tpl" is="dom-bind">
-      <hot-table width="790" height="490" datarows="{{ people }}" context-menu="true" max-rows="10">
-        <hot-column width="30" read-only value="id" header="ID"></hot-column>
-        <hot-column width="70" value="name.first" header="First Name"></hot-column>
-        <hot-column width="100" value="name.last" header="Last Name">
-          <template data-hot-role="renderer" is="dom-template">
-            <bold-renderer value="{{ value }}"></bold-renderer>
-          </template>
-        </hot-column>
-        <hot-column width="80" value="gender" type="dropdown" source="genderList" header="Gender">
-          <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
-        </hot-column>
-        <hot-column width="100" value="skillLevel" header="Color skill level" class="no-padding color-editor">
-          <template data-hot-role="renderer" is="dom-template">
-            <div class$="{{ value }}"></div>
-          </template>
-          <template data-hot-role="editor" is="dom-template">
-            <select name="color" value="{{ value::input }}">
-              <option value="black">Black</option>
-              <option value="blue">Blue</option>
-              <option value="green">Green</option>
-              <option value="orange">Orange</option>
-              <option value="red">Red</option>
-              <option value="yellow">Yellow</option>
-            </select>
-          </template>
-        </hot-column>
-        <hot-column width="180" value="coordinates" header="Last seen">
-          <template data-hot-role="renderer" is="dom-template">
-            lat: <b>{{ value.lat }}</b><br/>
-            lng: <b>{{ value.lng }}</b>
-          </template>
-          <template data-hot-role="editor" is="dom-template">
-            <div class="map-editor">
-              Latitude: <b>{{ value.lat }}</b>, <br>
-              Longitude: <b>{{ value.lng }}</b>
-              <template is="dom-if" if="[[ showed ]]">
-                <google-map disable-zoom latitude="{{ value.lat }}" longitude="{{ value.lng }}">
-                  <google-map-marker latitude="[[ value.lat ]]" longitude="[[ value.lng ]]"></google-map-marker>
-                </google-map>
-              </template>
-            </div>
-          </template>
-        </hot-column>
-        <hot-column width="180" value="languages" header="Languages">
-          <template data-hot-role="renderer" is="dom-template">
-            <template is="dom-if" if="{{ value }}">
-              <template is="dom-repeat" items="{{ value }}" as="code">
-                <img src="{{ languagesComputedSrc(code) }}" alt$="{{ code }}">
+    <dom-bind>
+      <template id="tpl" is="dom-bind">
+        <hot-table width="790" height="490" datarows="{{ people }}" context-menu="true" max-rows="10">
+          <hot-column width="30" read-only value="id" header="ID"></hot-column>
+          <hot-column width="70" value="name.first" header="First Name"></hot-column>
+          <hot-column width="100" value="name.last" header="Last Name">
+            <template data-hot-role="renderer" is="dom-template">
+              <bold-renderer value="{{ value }}"></bold-renderer>
+            </template>
+          </hot-column>
+          <hot-column width="80" value="gender" type="dropdown" source="genderList" header="Gender">
+            <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
+          </hot-column>
+          <hot-column width="100" value="skillLevel" header="Color skill level" class="no-padding color-editor">
+            <template data-hot-role="renderer" is="dom-template">
+              <div class$="{{ value }}"></div>
+            </template>
+            <template data-hot-role="editor" is="dom-template">
+              <select name="color" value="{{ value::input }}">
+                <option value="black">Black</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="orange">Orange</option>
+                <option value="red">Red</option>
+                <option value="yellow">Yellow</option>
+              </select>
+            </template>
+          </hot-column>
+          <hot-column width="180" value="languages" header="Languages">
+            <template data-hot-role="renderer" is="dom-template">
+              <template is="dom-if" if="{{ value }}">
+                <template is="dom-repeat" items="{{ value }}" as="code">
+                  <img src="{{ languagesComputedSrc(code) }}" alt$="{{ code }}">
+                </template>
               </template>
             </template>
-          </template>
-          <template data-hot-role="editor" is="dom-template">
-            <div class="languages-editor">
+            <template data-hot-role="editor" is="dom-template">
               <language-editor selected="[[ value ]]"></language-editor>
-            </div>
-          </template>
-        </hot-column>
-      </hot-table>
-    </template>
+            </template>
+          </hot-column>
+        </hot-table>
+      </template>
+    </dom-bind>
   </div>
 
   <p>Used editors:</p>
 
   <ul>
     <li><b>Color skill level</b> column uses &lt;template&gt; element to edit cell</li>
-    <li><b>Last seen</b> column uses polymer &lt;google-maps&gt; element</li>
     <li><b>Languages</b> column uses polymer &lt;language-editor&gt; element</li>
   </ul>
 
@@ -188,23 +129,6 @@
           &#x3C;/select&#x3E;
         &#x3C;/template&#x3E;
       &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;coordinates&#x22; header=&#x22;Last seen&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22; style=&#x22;white-space: normal;&#x22;&#x3E;
-          lat: &#x3C;b&#x3E;{{ value.lat }}&#x3C;/b&#x3E;&#x3C;br/&#x3E;
-          lng: &#x3C;b&#x3E;{{ value.lng }}&#x3C;/b&#x3E;
-        &#x3C;/template&#x3E;
-        &#x3C;template data-hot-role=&#x22;editor&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;div class=&#x22;map-editor&#x22;&#x3E;
-            Latitude: &#x3C;b&#x3E;{{ value.lat }}&#x3C;/b&#x3E;, &#x3C;br&#x3E;
-            Longitude: &#x3C;b&#x3E;{{ value.lng }}&#x3C;/b&#x3E;
-            &#x3C;template is=&#x22;dom-if&#x22; if=&#x22;[[ showed ]]&#x22;&#x3E;
-              &#x3C;google-map disable-zoom latitude=&#x22;{{ value.lat }}&#x22; longitude=&#x22;{{ value.lng }}&#x22;&#x3E;
-                &#x3C;google-map-marker latitude=&#x22;[[ value.lat ]]&#x22; longitude=&#x22;[[ value.lng ]]&#x22;&#x3E;&#x3C;/google-map-marker&#x3E;
-              &#x3C;/google-map&#x3E;
-            &#x3C;/template&#x3E;
-          &#x3C;/div&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
       &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;languages&#x22; header=&#x22;Languages&#x22;&#x3E;
         &#x3C;template id=&#x22;abcde&#x22; data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
           &#x3C;template is=&#x22;dom-repeat&#x22; items=&#x22;{{ value }}&#x22; as=&#x22;code&#x22;&#x3E;
@@ -212,9 +136,7 @@
           &#x3C;/template&#x3E;
         &#x3C;/template&#x3E;
         &#x3C;template data-hot-role=&#x22;editor&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;div class=&#x22;languages-editor&#x22;&#x3E;
-            &#x3C;language-editor selected=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/language-editor&#x3E;
-          &#x3C;/div&#x3E;
+          &#x3C;language-editor selected=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/language-editor&#x3E;
         &#x3C;/template&#x3E;
       &#x3C;/hot-column&#x3E;
     &#x3C;/hot-table&#x3E;
@@ -247,15 +169,46 @@
         coordinates: {lat: 59.3288242, lng: 18.0729393}, languages: ['us']}
     ];
 
-    window.addEventListener('dom-change', function () {
-      var tpl = document.getElementById('tpl');
+    var domBind = document.querySelector('dom-bind');
 
-      tpl.people = people;
-      tpl.genderList = genderList;
-      tpl.languagesComputedSrc = function(code) {
-        return 'resources/flags/' + code + '.png';
-      }
-    });
+    domBind.people = people;
+    domBind.genderList = genderList;
+    domBind.languagesComputedSrc = function(code) {
+      return 'resources/flags/' + code + '.png';
+    }
+
+    var style = document.createElement('style');
+
+    style.innerHTML = `
+hot-table .color-editor {
+  width: 100%;
+  height: 100%;
+}
+.no-padding {
+  padding: 0 !important;
+}
+.color-editor div {
+  height: 100%;
+}
+.black {
+  background-color: black;
+}
+.blue {
+  background-color: blue;
+}
+.green {
+  background-color: green;
+}
+.orange {
+  background-color: orange;
+}
+.red {
+  background-color: red;
+}
+.yellow {
+  background-color: yellow;
+}`;
+    document.querySelector('hot-table').shadowRoot.appendChild(style);
   </script>
   <script>hljs.initHighlightingOnLoad();</script>
 </div>

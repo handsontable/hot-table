@@ -5,6 +5,7 @@
     BaseEditor.call(this, hotInstance);
     this.model = null;
     this.template = null;
+    this.TemplateClass = null;
     this.eventManager = Handsontable.eventManager(this);
     this.createContainerElement();
     this.initEvents();
@@ -22,6 +23,13 @@
    */
   Editor.prototype.init = function() {
     BaseEditor.prototype.init.call(this);
+  };
+
+  /**
+   * Init editor instance
+   */
+  Editor.prototype.setTemplate = function(templateClass) {
+    this.templateClass = templateClass;
   };
 
   /**
@@ -44,7 +52,11 @@
    */
   Editor.prototype.createEditorElement = function() {
     if (!this.model) {
-      this.model = this.template.stamp();
+      if (Polymer.Element) {
+        this.model = new this.templateClass();
+      } else {
+        this.model = this.templateClass.stamp();
+      }
       Polymer.dom(this.container).appendChild(this.model.root);
     }
   };
