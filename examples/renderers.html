@@ -17,27 +17,19 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/main.css"/>
 
+  <!-- Pikaday styles -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
+
   <!-- Importing Custom Elements -->
   <link rel="import" href="../hot-table.html">
   <link rel="import" href="../../google-map/google-map.html">
-  <link rel="import" href="components/google-map/google-map-search.html">
+  <link rel="import" href="components/custom-google-map/custom-google-map-search.html">
   <link rel="import" href="components/bold-renderer.html">
   <link rel="import" href="components/colored-renderer.html">
   <link rel="import" href="components/age-renderer.html">
   <style>
     hot-table {
       display: inline-block;
-    }
-    hot-table google-map, hot-table .google-map-empty {
-      height: 100px;
-      width: 200px;
-    }
-    hot-table .google-map-empty {
-      font-size: 1.2em;
-    }
-    hot-table td.maps {
-      padding: 0;
-      white-space: normal;
     }
   </style>
 </head>
@@ -52,42 +44,44 @@
   <h2>Simple Example</h2>
 
   <div class="example">
-    <template id="tpl" is="dom-bind">
-      <hot-table width="830" height="1050" datarows="{{ people }}" max-rows="{{ people.length }}" context-menu>
-        <hot-column width="30" read-only value="id" header="ID"></hot-column>
-        <hot-column width="70" value="name.first" header="First Name">
-          <template data-hot-role="renderer" is="dom-template"><colored-renderer value="{{ value }}"></colored-renderer></template>
-        </hot-column>
-        <hot-column width="100" value="name.last" header="Last Name">
-          <template data-hot-role="renderer" is="dom-template"><bold-renderer value="{{ value }}"></bold-renderer></template>
-        </hot-column>
-        <hot-column width="80" value="gender" header="Gender">
-          <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
-        </hot-column>
-        <hot-column width="120" value="age" header="Age">
-          <template data-hot-role="renderer" is="dom-template"><age-renderer age$="{{ value }}"></age-renderer></template>
-        </hot-column>
-        <hot-column width="200" value="address" header="Map" class="maps">
-          <template data-hot-role="renderer" is="dom-template">
-            <template is="dom-if" if="{{ value }}">
-              <google-map-search map="[[ map ]]" query="{{ value }}" global-search results="{{ results }}"></google-map-search>
-              <google-map disable-default-ui disable-zoom map="{{ map }}"
-                          latitude="{{ results.0.latitude }}" longitude="{{ results.0.longitude }}"></google-map>
+    <dom-bind>
+      <template id="tpl" is="dom-bind">
+        <hot-table width="830" height="1050" datarows="{{ people }}" max-rows="{{ people.length }}" context-menu>
+          <hot-column width="30" read-only value="id" header="ID"></hot-column>
+          <hot-column width="70" value="name.first" header="First Name">
+            <template data-hot-role="renderer" is="dom-template"><colored-renderer value="{{ value }}"></colored-renderer></template>
+          </hot-column>
+          <hot-column width="100" value="name.last" header="Last Name">
+            <template data-hot-role="renderer" is="dom-template"><bold-renderer value="{{ value }}"></bold-renderer></template>
+          </hot-column>
+          <hot-column width="80" value="gender" header="Gender">
+            <template data-hot-role="renderer" is="dom-template">(<span>{{ value }}</span>)</template>
+          </hot-column>
+          <hot-column width="120" value="age" header="Age">
+            <template data-hot-role="renderer" is="dom-template"><age-renderer age$="{{ value }}"></age-renderer></template>
+          </hot-column>
+          <hot-column width="200" height="100" value="address" header="Map" class="maps">
+            <template data-hot-role="renderer" is="dom-template">
+              <template is="dom-if" if="{{ value }}">
+                <custom-google-map-search map="[[ map ]]" query="{{ value }}" global-search results="{{ results }}"></custom-google-map-search>
+                <google-map disable-default-ui disable-zoom map="{{ map }}"
+                            latitude="{{ results.latitude }}" longitude="{{ results.longitude }}"></google-map>
+              </template>
+              <template is="dom-if" if="{{ !value }}">
+                <div class="google-map-empty">Double click me to provide address to show.</div>
+              </template>
             </template>
-            <template is="dom-if" if="{{ !value }}">
-              <div class="google-map-empty">Double click me to provide address to show.</div>
-            </template>
-          </template>
-        </hot-column>
-        <hot-column type="checkbox" value="languages.english" header="English" checked-template="Yes"
-            unchecked-template="No"></hot-column>
-        <hot-column type="checkbox" value="languages.spanish" header="Spanish" checked-template="Yes"
-            unchecked-template="No"></hot-column>
-        <hot-column type="checkbox" value="languages.french" header="French" checked-template="Yes"
-            unchecked-template="No"></hot-column>
-        <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
-      </hot-table>
-    </template>
+          </hot-column>
+          <hot-column type="checkbox" value="languages.english" header="English" checked-template="Yes"
+              unchecked-template="No"></hot-column>
+          <hot-column type="checkbox" value="languages.spanish" header="Spanish" checked-template="Yes"
+              unchecked-template="No"></hot-column>
+          <hot-column type="checkbox" value="languages.french" header="French" checked-template="Yes"
+              unchecked-template="No"></hot-column>
+          <hot-column type="numeric" value="salary" header="Salary" format="$ 0,0.00"></hot-column>
+        </hot-table>
+      </template>
+    </dom-bind>
   </div>
 
   <h2>Used renderers</h2>
@@ -165,11 +159,42 @@
         languages: {english: 'No', spanish: 'No', french: 'Yes'}, salary: 2090}
     ];
 
-    window.addEventListener('dom-change', function () {
-      var tpl = document.getElementById('tpl');
+    var domBind = document.querySelector('dom-bind');
 
-      tpl.people = people;
-    });
+    domBind.people = people;
+
+    var style = document.createElement('style');
+
+    style.innerHTML = `
+.google-map-empty {
+  height: 100px;
+  width: 200px;
+}
+.google-map-empty {
+  font-size: 1.2em;
+}
+td.maps {
+  padding: 0;
+  height: 100px;
+  white-space: normal;
+}`;
+    document.querySelector('hot-table').shadowRoot.appendChild(style);
+
+    setTimeout(function() {
+      var googleMaps = document.querySelector('hot-table').shadowRoot.querySelectorAll('google-map');
+
+      for (var i = 0, len = googleMaps.length; i < len; i++) {
+        var style = document.createElement('style');
+
+        style.innerHTML = `
+#map {
+  height: 100px;
+  width: 200px;
+}`;
+        googleMaps[i].shadowRoot.appendChild(style);
+        googleMaps[i].resize();
+      }
+    }, 1000);
   </script>
   <script>hljs.initHighlightingOnLoad();</script>
 </div>

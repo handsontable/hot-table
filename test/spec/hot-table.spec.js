@@ -2,7 +2,7 @@ describe('<hot-table>', function () {
 
   it('should create table', function(done) {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     this.$container.append(hot);
 
@@ -14,7 +14,7 @@ describe('<hot-table>', function () {
 
   it('should possible to call public handsontable methods', function () {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     this.$container.append(hot);
 
@@ -104,7 +104,7 @@ describe('<hot-table>', function () {
 
   it('should detect that table is running in hot-table environment', function(done) {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     this.$container.append(hot);
 
@@ -116,7 +116,7 @@ describe('<hot-table>', function () {
 
   it('undefined attribute should return default value', function(done) {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     this.$container.append(hot);
 
@@ -130,7 +130,7 @@ describe('<hot-table>', function () {
 
   it('attribute should update settings', function(done) {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     this.$container.append(hot);
     hot.setAttribute('paste-mode', 'shift_down');
@@ -145,7 +145,7 @@ describe('<hot-table>', function () {
 
   it('settings attribute value should be parsed', function(done) {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     hot.setAttribute('settings', '{"minSpareRows":3}');
     this.$container.append(hot);
@@ -162,14 +162,12 @@ describe('<hot-table>', function () {
         data: [{
           name: "Freddie"
         }],
-        html: '<hot-table id="hot" datarows="{{ data }}"><hot-column value="name"></hot-column></hot-table>'
       },
-      tpl;
+      tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    tpl.data = model.data;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml('<hot-table id="hot" datarows="{{ data }}"><hot-column value="name"></hot-column></hot-table>', model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getData()).toEqual([[model.data[0].name]]);
@@ -184,14 +182,12 @@ describe('<hot-table>', function () {
         settings: {
           colHeaders: ["First Name"]
         },
-        html: '<hot-table id="hot" settings="{{ settings }}"><hot-column value="name"></hot-column></hot-table>'
       },
-      tpl;
+      tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    tpl.settings = model.settings;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml('<hot-table id="hot" settings="{{ settings }}"><hot-column value="name"></hot-column></hot-table>', model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getColHeader(0)).toBe('First Name');
@@ -201,14 +197,12 @@ describe('<hot-table>', function () {
 
   it('should parse empty property as boolean true', function(done) {
     var
-      model = {
-        html: '<hot-table id="hot" col-headers></hot-table>'
-      },
-      tpl;
+      model = {},
+      tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml('<hot-table id="hot" col-headers></hot-table>', model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getSettings().colHeaders).toBe(true);
@@ -218,14 +212,12 @@ describe('<hot-table>', function () {
 
   it('should parse string "true" as boolean true', function(done) {
     var
-      model = {
-        html: '<hot-table id="hot" col-headers="true"></hot-table>'
-      },
-      tpl;
+      model = {},
+      tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml('<hot-table id="hot" col-headers="true"></hot-table>', model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getSettings().colHeaders).toBe(true);
@@ -235,14 +227,12 @@ describe('<hot-table>', function () {
 
   it('should parse string "false" as boolean false', function(done) {
     var
-      model = {
-        html: '<hot-table id="hot" col-headers="false"></hot-table>'
-      },
-      tpl;
+      model = {},
+      tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml('<hot-table id="hot" col-headers="false"></hot-table>', model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getSettings().colHeaders).toBe(false);
@@ -254,18 +244,16 @@ describe('<hot-table>', function () {
     var
       model = {
         fn: myFunction,
-        html: '<hot-table id="hot" col-headers="{{fn}}"></hot-table>'
       },
-      tpl;
+      tpl, domBind;
 
     function myFunction(col) {
       return col;
     }
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    tpl.fn = model.fn;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml('<hot-table id="hot" col-headers="{{fn}}"></hot-table>', model)
+    );
 
     setTimeout(function() {
       expect(getHotTable().getSettings().colHeaders).toBe(myFunction);
@@ -275,7 +263,7 @@ describe('<hot-table>', function () {
 
   it('should parse empty class as string (not boolean)', function() {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     this.$container.append(hot);
 
@@ -284,7 +272,7 @@ describe('<hot-table>', function () {
 
   it('should parse class attribute and apply to table', function(done) {
     var
-      hot = document.createElement('hot-table');
+      hot = createHotTable();
 
     this.$container.append(hot);
     hot.classList.add('my-table');
@@ -305,15 +293,12 @@ describe('<hot-table>', function () {
         data: [{
           name: "Freddie"
         }],
-        html: '<hot-table id="hot" datarows="{{ data }}" settings="{{ settings }}"><hot-column value="name"></hot-column></hot-table>'
       },
-      lastCount, tpl;
+      lastCount, tpl, domBind;
 
-    tpl = document.createElement('template', 'dom-bind');
-    tpl.innerHTML = model.html;
-    tpl.settings = model.settings;
-    tpl.data = model.data;
-    this.$container.append(tpl);
+    this.$container.append(
+      createHtml('<hot-table id="hot" datarows="{{ data }}" settings="{{ settings }}"><hot-column value="name"></hot-column></hot-table>', model)
+    );
 
     lastCount = afterRender.calls.count();
     model.data[0].Name = "Frederik";
@@ -323,5 +308,4 @@ describe('<hot-table>', function () {
       done();
     }, timeout);
   });
-
 });

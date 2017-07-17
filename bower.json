@@ -10,6 +10,10 @@
     "grid",
     "table"
   ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "handsontable": "~0.24.0"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
@@ -19,11 +23,29 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.0",
-    "handsontable": "~0.24.0"
-  },
   "devDependencies": {
-    "google-map": "GoogleWebComponents/google-map#^1.1.7"
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^v1.0.0",
+    "google-map": "GoogleWebComponents/google-map#^1.2.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "Polymer/polymer#^1.9"
+      },
+      "devDependencies": {
+        "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+        "web-component-tester": "^4.0.0",
+        "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+        "google-map": "GoogleWebComponents/google-map#^1.2.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7"
+      }
+    }
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
   }
 }

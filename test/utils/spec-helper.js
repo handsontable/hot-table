@@ -47,6 +47,42 @@ function spec() {
   return currentSpec;
 }
 
+function createHotTable() {
+  var wrapper = document.createElement('div');
+
+  wrapper.innerHTML = '<hot-table></hot-table>';
+
+  return wrapper.firstChild;
+};
+
+function createHotColumn() {
+  var wrapper = document.createElement('div');
+
+  wrapper.innerHTML = '<hot-column></hot-column>';
+
+  return wrapper.firstChild;
+};
+
+function createHtml(html, model) {
+  var element;
+
+  if (Polymer.Element) {
+    element = document.createElement('dom-bind');
+    tpl = document.createElement('template', 'dom-bind');
+    element.appendChild(tpl);
+    tpl.innerHTML = html;
+  } else {
+    element = document.createElement('template', 'dom-bind');
+    element.innerHTML = html;
+  }
+
+  Object.keys(model).forEach(function(key) {
+    element[key] = model[key];
+  })
+
+  return element;
+}
+
 /**
  * @returns {HTMLElement}
  */
