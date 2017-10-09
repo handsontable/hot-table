@@ -11,6 +11,10 @@
       HotTableUtils.behaviors.PublicMethodsBehavior
     ],
 
+    observers: [
+      '_onDatarowsChanged(datarows.*)'
+    ],
+
     /**
      * @property hot
      * @type Handsontable
@@ -254,6 +258,12 @@
       if (this.hot && this.initialized) {
         settings = settingsParser.parse(this);
         this.hot.updateSettings(settings);
+      }
+    },
+
+    _onDatarowsChanged: function() {
+      if (this.hot && this.initialized) {
+        this.hot.render();
       }
     }
   });
