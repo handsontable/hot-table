@@ -11,7 +11,7 @@
     "table"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^2.0.0",
+    "polymer": "Polymer/polymer#1.9 - 2",
     "handsontable": "~0.24.0"
   },
   "ignore": [
@@ -24,10 +24,10 @@
     "tests"
   ],
   "devDependencies": {
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#1 - 2",
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^v1.0.0",
-    "google-map": "GoogleWebComponents/google-map#^1.2.0"
+    "google-map": "GoogleWebComponents/google-map#^2.0.0"
   },
   "variants": {
     "1.x": {
@@ -38,7 +38,7 @@
         "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
         "web-component-tester": "^4.0.0",
         "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
-        "google-map": "GoogleWebComponents/google-map#^1.2.0"
+        "google-map": "GoogleWebComponents/google-map#^2.0.0"
       },
       "resolutions": {
         "webcomponentsjs": "^0.7"
@@ -46,6 +46,6 @@
     }
   },
   "resolutions": {
-    "polymer": "^2.0.0"
+    "webcomponentsjs": "^1.0.0"
   }
 }
