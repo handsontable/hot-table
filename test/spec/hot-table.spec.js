@@ -283,7 +283,7 @@ describe('<hot-table>', function () {
     }, timeout);
   });
 
-  it('should observe changes in data', function(done) {
+  it('should observe Polymer notifications in data', function(done) {
     var
       afterRender = jasmine.createSpy('afterRender'),
       model = {
@@ -301,10 +301,40 @@ describe('<hot-table>', function () {
     );
 
     lastCount = afterRender.calls.count();
-    model.data[0].Name = "Frederik";
+    getHotTable().set("datarows.0.name", "Frederik");
 
     setTimeout(function() {
       expect(afterRender.calls.count()).toBeGreaterThan(lastCount);
+      expect(getHotTable().shadowRoot.querySelector('td').textContent).toBe('Frederik');
+      done();
+    }, timeout);
+  });
+
+  it('should replace the dataset when assigned as a property', function(done) {
+    var
+      afterRender = jasmine.createSpy('afterRender'),
+      model = {
+        settings: {
+          afterRender: afterRender
+        },
+        data: [{
+          name: "Freddie"
+        }],
+      },
+      lastCount, tpl, domBind;
+
+    this.$container.append(
+      createHtml('<hot-table id="hot" datarows="{{ data }}" settings="{{ settings }}"><hot-column value="name"></hot-column></hot-table>', model)
+    );
+
+    lastCount = afterRender.calls.count();
+    getHotTable().datarows = [{
+      name: "Mercury"
+    }]
+
+    setTimeout(function() {
+      expect(afterRender.calls.count()).toBeGreaterThan(lastCount);
+      expect(getHotTable().shadowRoot.querySelector('td').textContent).toBe('Mercury');
       done();
     }, timeout);
   });
