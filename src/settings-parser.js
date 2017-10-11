@@ -131,7 +131,6 @@
     if (columns.length) {
       options.columns = columns;
     }
-    options.observeChanges = true;
 
     return options;
   };

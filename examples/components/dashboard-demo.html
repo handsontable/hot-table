@@ -316,15 +316,13 @@
           console.log('Data of hot-table ', data);
         });
         this.$.button2.addEventListener('click', function () {
-          people.filter(function (person) {
-            person.gender = person.gender === 'Male' ? 'Female' : 'Male';
+          people.forEach(function (person, index) {
+            _this.set('people.' + index + '.gender', person.gender === 'Male' ? 'Female' : 'Male');
           });
         });
         this.$.button3.addEventListener('click', function () {
-          people.filter(function (person) {
-            if (person.age !== null) {
-              person.age = parseInt(person.age, 10) + 1;
-            }
+          people.forEach(function (person, index) {
+            _this.set('people.' + index + '.age', parseInt(person.age, 10) + 1);
           });
         });
       }
