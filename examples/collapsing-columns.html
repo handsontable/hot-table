@@ -37,7 +37,7 @@
 
   <div class="example">
     <dom-bind>
-      <template id="tpl" is="dom-bind">
+      <template>
         <hot-table width="570" height="500" datarows="{{ people }}" row-headers context-menu hidden-columns
                    nested-headers="{{ settings.nestedHeaders }}" collapsible-columns="{{ settings.collapsibleColumns }}">
           <hot-column width="125" value="name" header="Full Name"></hot-column>
@@ -56,18 +56,21 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
-    &#x3C;hot-table width=&#x22;570&#x22; height=&#x22;500&#x22; datarows=&#x22;{{ people }}&#x22; row-headers context-menu hidden-columns nested-headers=&#x22;{{ settings.nestedHeaders }}&#x22; collapsible-columns=&#x22;{{ settings.collapsibleColumns }}&#x22;&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;name&#x22; header=&#x22;Full Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;address&#x22; header=&#x22;Address&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;registered&#x22; header=&#x22;Registered&#x22; type=&#x22;date&#x22; date-format=&#x22;YYYY-MM-DD&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;balance&#x22; header=&#x22;Balance&#x22; type=&#x22;numeric&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-    &#x3C;/hot-table&#x3E;
-  &#x3C;/template&#x3E;
+&lt;dom-bind&gt;
+  &lt;template&gt;
+    &lt;hot-table width=&quot;570&quot; height=&quot;500&quot; datarows=&quot;{{ people }}&quot; row-headers context-menu hidden-columns
+               nested-headers=&quot;{{ settings.nestedHeaders }}&quot; collapsible-columns=&quot;{{ settings.collapsibleColumns }}&quot;&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;name&quot; header=&quot;Full Name&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;address&quot; header=&quot;Address&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;registered&quot; header=&quot;Registered&quot; type=&quot;date&quot; date-format=&quot;YYYY-MM-DD&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;balance&quot; header=&quot;Balance&quot; type=&quot;numeric&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;
+          &lt;bold-renderer value=&quot;{{ value }}&quot;&gt;&lt;/bold-renderer&gt;
+        &lt;/template&gt;
+      &lt;/hot-column&gt;
+    &lt;/hot-table&gt;
+  &lt;/template&gt;
+&lt;/dom-bind&gt;
   </code></pre>
 
 
