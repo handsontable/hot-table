@@ -47,7 +47,7 @@
 
   <div class="example">
     <dom-bind>
-      <template id="tpl" is="dom-bind">
+      <template>
         <hot-table width="790" height="490" datarows="{{ people }}" context-menu="true" max-rows="10">
           <hot-column width="30" read-only value="id" header="ID"></hot-column>
           <hot-column width="70" value="name.first" header="First Name"></hot-column>
@@ -102,45 +102,49 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
-    &#x3C;hot-table width=&#x22;790&#x22; height=&#x22;490&#x22; datarows=&#x22;{{ people }}&#x22; context-menu=&#x22;true&#x22; max-rows=&#x22;10&#x22;&#x3E;
-      &#x3C;hot-column width=&#x22;30&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; type=&#x22;dropdown&#x22; source=&#x22;genderList&#x22; header=&#x22;Gender&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;(&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;)&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;skillLevel&#x22; header=&#x22;Color skill level&#x22; class=&#x22;no-padding color-editor&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;div class$=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/div&#x3E;
-        &#x3C;/template&#x3E;
-        &#x3C;template data-hot-role=&#x22;editor&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;select name=&#x22;color&#x22; value=&#x22;{{ value::input }}&#x22;&#x3E;
-            &#x3C;option value=&#x22;black&#x22;&#x3E;Black&#x3C;/option&#x3E;
-            &#x3C;option value=&#x22;blue&#x22;&#x3E;Blue&#x3C;/option&#x3E;
-            &#x3C;option value=&#x22;green&#x22;&#x3E;Green&#x3C;/option&#x3E;
-            &#x3C;option value=&#x22;orange&#x22;&#x3E;Orange&#x3C;/option&#x3E;
-            &#x3C;option value=&#x22;red&#x22;&#x3E;Red&#x3C;/option&#x3E;
-            &#x3C;option value=&#x22;yellow&#x22;&#x3E;Yellow&#x3C;/option&#x3E;
-          &#x3C;/select&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;180&#x22; value=&#x22;languages&#x22; header=&#x22;Languages&#x22;&#x3E;
-        &#x3C;template id=&#x22;abcde&#x22; data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;template is=&#x22;dom-repeat&#x22; items=&#x22;{{ value }}&#x22; as=&#x22;code&#x22;&#x3E;
-            &#x3C;img src=&#x22;{{ languagesComputedSrc(code) }}&#x22; alt=&#x22;{{ code }}&#x22;/&#x3E;
-          &#x3C;/template&#x3E;
-        &#x3C;/template&#x3E;
-        &#x3C;template data-hot-role=&#x22;editor&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;language-editor selected=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/language-editor&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-    &#x3C;/hot-table&#x3E;
-  &#x3C;/template&#x3E;
+&lt;dom-bind&gt;
+  &lt;template&gt;
+    &lt;hot-table width=&quot;790&quot; height=&quot;490&quot; datarows=&quot;{{ people }}&quot; context-menu=&quot;true&quot; max-rows=&quot;10&quot;&gt;
+      &lt;hot-column width=&quot;30&quot; read-only value=&quot;id&quot; header=&quot;ID&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;70&quot; value=&quot;name.first&quot; header=&quot;First Name&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; value=&quot;name.last&quot; header=&quot;Last Name&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;
+          &lt;bold-renderer value=&quot;{{ value }}&quot;&gt;&lt;/bold-renderer&gt;
+        &lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;80&quot; value=&quot;gender&quot; type=&quot;dropdown&quot; source=&quot;genderList&quot; header=&quot;Gender&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;(&lt;span&gt;{{ value }}&lt;/span&gt;)&lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; value=&quot;skillLevel&quot; header=&quot;Color skill level&quot; class=&quot;no-padding color-editor&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;
+          &lt;div class$=&quot;{{ value }}&quot;&gt;&lt;/div&gt;
+        &lt;/template&gt;
+        &lt;template data-hot-role=&quot;editor&quot; is=&quot;dom-template&quot;&gt;
+          &lt;select name=&quot;color&quot; value=&quot;{{ value::input }}&quot;&gt;
+            &lt;option value=&quot;black&quot;&gt;Black&lt;/option&gt;
+            &lt;option value=&quot;blue&quot;&gt;Blue&lt;/option&gt;
+            &lt;option value=&quot;green&quot;&gt;Green&lt;/option&gt;
+            &lt;option value=&quot;orange&quot;&gt;Orange&lt;/option&gt;
+            &lt;option value=&quot;red&quot;&gt;Red&lt;/option&gt;
+            &lt;option value=&quot;yellow&quot;&gt;Yellow&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;180&quot; value=&quot;languages&quot; header=&quot;Languages&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;
+          &lt;template is=&quot;dom-if&quot; if=&quot;{{ value }}&quot;&gt;
+            &lt;template is=&quot;dom-repeat&quot; items=&quot;{{ value }}&quot; as=&quot;code&quot;&gt;
+              &lt;img src=&quot;{{ languagesComputedSrc(code) }}&quot; alt$=&quot;{{ code }}&quot;&gt;
+            &lt;/template&gt;
+          &lt;/template&gt;
+        &lt;/template&gt;
+        &lt;template data-hot-role=&quot;editor&quot; is=&quot;dom-template&quot;&gt;
+          &lt;language-editor selected=&quot;[[ value ]]&quot;&gt;&lt;/language-editor&gt;
+        &lt;/template&gt;
+      &lt;/hot-column&gt;
+    &lt;/hot-table&gt;
+  &lt;/template&gt;
+&lt;/dom-bind&gt;
   </code></pre>
 
 

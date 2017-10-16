@@ -36,7 +36,7 @@
 
   <div class="example">
     <dom-bind>
-      <template id="tpl" is="dom-bind">
+      <template>
         <hot-table id="example" width="570" height="280" datarows="{{ people }}" row-headers context-menu="{{ contextMenu }}">
           <hot-column width="125" value="name" header="Full Name"></hot-column>
           <hot-column width="125" value="address" header="Address"></hot-column>
@@ -59,18 +59,20 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
-    &#x3C;hot-table id=&#x22;example&#x22; width=&#x22;570&#x22; height=&#x22;280&#x22; datarows=&#x22;{{ people }}&#x22; row-headers context-menu column-sorting sort-indicator persistent-state manual-column-resize manual-column-move manual-row-resize manual-row-move&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;name&#x22; header=&#x22;Full Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;address&#x22; header=&#x22;Address&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;registered&#x22; header=&#x22;Registered&#x22; type=&#x22;date&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;125&#x22; value=&#x22;balance&#x22; header=&#x22;Balance&#x22; type=&#x22;numeric&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-    &#x3C;/hot-table&#x3E;
-  &#x3C;/template&#x3E;
+&lt;dom-bind&gt;
+  &lt;template&gt;
+    &lt;hot-table id=&quot;example&quot; width=&quot;570&quot; height=&quot;280&quot; datarows=&quot;{{ people }}&quot; row-headers context-menu=&quot;{{ contextMenu }}&quot;&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;name&quot; header=&quot;Full Name&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;address&quot; header=&quot;Address&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;registered&quot; header=&quot;Registered&quot; type=&quot;date&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;125&quot; value=&quot;balance&quot; header=&quot;Balance&quot; type=&quot;numeric&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;
+          &lt;bold-renderer value=&quot;{{ value }}&quot;&gt;&lt;/bold-renderer&gt;
+        &lt;/template&gt;
+      &lt;/hot-column&gt;
+    &lt;/hot-table&gt;
+  &lt;/template&gt;
+&lt;/dom-bind&gt;
   </code></pre>
 
   <script>

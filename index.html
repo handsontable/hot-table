@@ -63,7 +63,7 @@
 
   <div class="example">
     <dom-bind>
-      <template id="tpl" is="dom-bind">
+      <template>
         <p>
           Name of first person: <strong>{{ people.0.name.first }}</strong> | Highlighted row: <strong>{{ highlightedRow }}</strong>
         </p>
@@ -92,29 +92,31 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
-    &#x3C;p&#x3E;
-      Name of first person: &#x3C;strong&#x3E;{{ people.0.name.first }}&#x3C;/strong&#x3E; | Highlighted row: &#x3C;strong&#x3E;{{ highlightedRow }}&#x3C;/strong&#x3E;
-    &#x3C;/p&#x3E;
-    &#x3C;hot-table width=&#x22;655&#x22; height=&#x22;295&#x22; datarows=&#x22;{{ people }}&#x22; context-menu max-rows=&#x22;{{ people.length }}&#x22;
-               highlighted-row=&#x22;{{ highlightedRow }}&#x22; class=&#x22;htLeft&#x22;&#x3E;
-      &#x3C;hot-column width=&#x22;30&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;...&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; type=&#x22;date&#x22; value=&#x22;date&#x22; header=&#x22;Birthday&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column value=&#x22;gender&#x22; header=&#x22;Gender&#x22; source=&#x22;[[ genderSource ]]&#x22; type=&#x22;dropdown&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checked-template=&#x22;Yes&#x22;
-                  unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checked-template=&#x22;Yes&#x22;
-                  unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checked-template=&#x22;Yes&#x22;
-                  unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;/hot-table&#x3E;
-  &#x3C;/template&#x3E;
+&lt;dom-bind&gt;
+  &lt;template&gt;
+    &lt;p&gt;
+      Name of first person: &lt;strong&gt;{{ people.0.name.first }}&lt;/strong&gt; | Highlighted row: &lt;strong&gt;{{ highlightedRow }}&lt;/strong&gt;
+    &lt;/p&gt;
+    &lt;hot-table width=&quot;655&quot; height=&quot;295&quot; datarows=&quot;{{ people }}&quot; context-menu max-rows=&quot;{{ people.length }}&quot;
+               highlighted-row=&quot;{{ highlightedRow }}&quot; class=&quot;htLeft&quot;&gt;
+      &lt;hot-column width=&quot;30&quot; read-only value=&quot;id&quot; header=&quot;ID&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column value=&quot;name.first&quot; header=&quot;First Name&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;&lt;span&gt;{{ value }}&lt;/span&gt;...&lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; value=&quot;name.last&quot; header=&quot;Last Name&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; type=&quot;date&quot; value=&quot;date&quot; header=&quot;Birthday&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column value=&quot;gender&quot; header=&quot;Gender&quot; source=&quot;[[ genderSource ]]&quot; type=&quot;dropdown&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;numeric&quot; value=&quot;age&quot; header=&quot;Age&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;checkbox&quot; value=&quot;languages.english&quot; header=&quot;English&quot; checked-template=&quot;Yes&quot;
+                  unchecked-template=&quot;No&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;checkbox&quot; value=&quot;languages.spanish&quot; header=&quot;Spanish&quot; checked-template=&quot;Yes&quot;
+                  unchecked-template=&quot;No&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;checkbox&quot; value=&quot;languages.french&quot; header=&quot;French&quot; checked-template=&quot;Yes&quot;
+                  unchecked-template=&quot;No&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;numeric&quot; value=&quot;salary&quot; header=&quot;Salary&quot; format=&quot;$ 0,0.00&quot;&gt;&lt;/hot-column&gt;
+    &lt;/hot-table&gt;
+  &lt;/template&gt;
+&lt;/dom-bind&gt;
   </code></pre>
 
   <h2>Demos</h2>
