@@ -46,7 +46,6 @@ describe('<hot-table>', function () {
     expect(hot.getCellsMeta).toBeFunction();
     expect(hot.getColHeader).toBeFunction();
     expect(hot.getColWidth).toBeFunction();
-    expect(hot.getColspanOffset).toBeFunction();
     expect(hot.getCoords).toBeFunction();
     expect(hot.getCopyableData).toBeFunction();
     expect(hot.getCopyableText).toBeFunction();
@@ -57,7 +56,6 @@ describe('<hot-table>', function () {
     expect(hot.getDataAtRow).toBeFunction();
     expect(hot.getDataAtRowProp).toBeFunction();
     expect(hot.getDataType).toBeFunction();
-    expect(hot.getHeaderColspan).toBeFunction();
     expect(hot.getInstance).toBeFunction();
     expect(hot.getPlugin).toBeFunction();
     expect(hot.getRowHeader).toBeFunction();
@@ -122,8 +120,10 @@ describe('<hot-table>', function () {
 
     setTimeout(function() {
       // value of the property in element should be the same as property in handsontable settings object.
-      expect(hot.pasteMode).toBe('overwrite');
-      expect(hot.getSettings().pasteMode).toBe('overwrite');
+      expect(hot.allowInvalid).toBe(true);
+      expect(hot.getSettings().allowInvalid).toBe(true);
+      expect(hot.viewportColumnRenderingOffset).toBe('auto');
+      expect(hot.getSettings().viewportColumnRenderingOffset).toBe('auto');
       done();
     }, timeout);
   });
@@ -133,12 +133,12 @@ describe('<hot-table>', function () {
       hot = createHotTable();
 
     this.$container.append(hot);
-    hot.setAttribute('paste-mode', 'shift_down');
+    hot.setAttribute('viewport-column-rendering-offset', '100');
 
     setTimeout(function() {
       // value of the property in element should be the same as property in handsontable settings object.
-      expect(hot.pasteMode).toBe('shift_down');
-      expect(hot.getSettings().pasteMode).toBe('shift_down');
+      expect(hot.viewportColumnRenderingOffset).toBe('100');
+      expect(hot.getSettings().viewportColumnRenderingOffset).toBe('100');
       done();
     }, timeout);
   });
@@ -305,7 +305,7 @@ describe('<hot-table>', function () {
 
     setTimeout(function() {
       expect(afterRender.calls.count()).toBeGreaterThan(lastCount);
-      expect(getHotTable().shadowRoot.querySelector('td').textContent).toBe('Frederik');
+      expect((getHotTable().shadowRoot || getHotTable()).querySelector('td').textContent).toBe('Frederik');
       done();
     }, timeout);
   });
@@ -334,7 +334,7 @@ describe('<hot-table>', function () {
 
     setTimeout(function() {
       expect(afterRender.calls.count()).toBeGreaterThan(lastCount);
-      expect(getHotTable().shadowRoot.querySelector('td').textContent).toBe('Mercury');
+      expect((getHotTable().shadowRoot || getHotTable()).querySelector('td').textContent).toBe('Mercury');
       done();
     }, timeout);
   });

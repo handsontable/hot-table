@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#1.9 - 2",
-    "handsontable": "~0.24.0"
+    "handsontable": "handsontable/handsontable#2 - 4"
   },
   "ignore": [
     "**/.*",
