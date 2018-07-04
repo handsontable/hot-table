@@ -27,8 +27,8 @@
     },
 
     _onChanged: function() {
-      if (this.parentNode) {
-        this.parentNode.onMutation && this.parentNode.onMutation();
+      if (this.parentNode && this.parentNode.onMutation) {
+        this.parentNode.onMutation();
       }
     },
 

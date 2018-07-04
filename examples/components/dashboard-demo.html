@@ -21,7 +21,7 @@
     <dashboard-tile id="frenchTile" skin="gray" label="French" value=""></dashboard-tile>
     <dashboard-tile id="spanishTile" skin="gray" label="Spanish" value=""></dashboard-tile>
 
-    <hot-table width="635" height="320" id="HOT" datarows="{{ people }}" settings="{{ mySettings }}" min-spare-rows="1" context-menu>
+    <hot-table width="635" height="320" id="HOT" datarows="{{ people }}" settings="{{ mySettings }}" context-menu>
       <hot-column id="col1" width="30" read-only="" value="id" header="ID"></hot-column>
       <hot-column width="70" value="name.first" header="First Name"></hot-column>
       <hot-column width="100" value="name.last" header="Last Name"></hot-column>
@@ -274,13 +274,13 @@
               female++;
               break;
           }
-          if (person.languages.english === 'Yes') {
+          if (person.languages && person.languages.english === 'Yes') {
             english++;
           }
-          if (person.languages.french === 'Yes') {
+          if (person.languages && person.languages.french === 'Yes') {
             french++;
           }
-          if (person.languages.spanish === 'Yes') {
+          if (person.languages && person.languages.spanish === 'Yes') {
             spanish++;
           }
         });

@@ -31,11 +31,6 @@
       this.destroyed = false;
       this.initialized = false;
       this.hotRootElement = document.createElement('div');
-
-      if (this.id) {
-        this.hotRootElement.id = this.id;
-      }
-
       this.hot = new Handsontable.Core(this.hotRootElement, {});
     },
 
@@ -45,13 +40,17 @@
     attached: function() {
       this.$.htContainer.parentNode.replaceChild(this.hotRootElement, this.$.htContainer);
 
+      if (this.id) {
+        this.hotRootElement.id = this.id;
+      }
+
       this.async(function() {
         if (!this.hot) {
           return;
         }
         // Fix detection of Polymer environment
         this.hot.isHotTableEnv = true;
-        Handsontable.eventManager.isHotTableEnv = this.hot.isHotTableEnv;
+        (Handsontable.eventManager || Handsontable.EventManager).isHotTableEnv = this.hot.isHotTableEnv;
 
         var settings = settingsParser.parse(this);
 
@@ -101,7 +100,7 @@
         _this.highlightedColumn = -1;
       });
       this.hot.addHook('afterSelectionEnd', function() {
-        var range = _this.hot.getSelectedRange();
+        var range = _this.hot.getSelectedRangeLast();
 
         _this.highlightedRow = range.highlight.row;
         _this.highlightedColumn = range.highlight.col;
