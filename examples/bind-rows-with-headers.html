@@ -11,10 +11,7 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
-  <!-- Pikaday styles -->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
-
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="css/main.css"/>
 
   <!-- Importing Custom Elements -->
@@ -22,9 +19,8 @@
   <link rel="import" href="components/bold-renderer.html">
 
   <!-- Handsontable PRO trial files -->
-  <link rel="stylesheet" href="//docs.handsontable.com/pro/1.10.0/bower_components/handsontable-pro/dist/handsontable.full.min.css">
-  <script src="//docs.handsontable.com/pro/1.10.0/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
-
+  <link rel="stylesheet" href="//docs.handsontable.com/pro/4.0.0/components/handsontable-pro/dist/handsontable.full.min.css">
+  <script src="//docs.handsontable.com/pro/4.0.0/components/handsontable-pro/dist/handsontable.full.min.js"></script>
   <style>
     hot-table {
       font-size: 12px;
@@ -43,7 +39,7 @@
 
   <div class="example">
     <dom-bind>
-      <template id="tpl" is="dom-bind">
+      <template>
         <hot-table width="420" height="280" datarows="{{ people }}" row-headers context-menu bind-rows-with-headers="strict">
           <hot-column width="50" read-only value="id" header="ID" type="numeric"></hot-column>
           <hot-column width="100" value="name.first" header="First Name"></hot-column>
@@ -67,20 +63,22 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
-    &#x3C;hot-table width=&#x22;420&#x22; height=&#x22;280&#x22; datarows=&#x22;{{ people }}&#x22; row-headers context-menu bind-rows-with-headers=&#x22;strict&#x22;&#x3E;
-      &#x3C;hot-column width=&#x22;50&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22; type=&#x22;numeric&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;gender&#x22; type=&#x22;dropdown&#x22; source=&#x22;genderList&#x22; header=&#x22;Gender&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;(&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;)&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-    &#x3C;/hot-table&#x3E;
-  &#x3C;/template&#x3E;
+&lt;dom-bind&gt;
+  &lt;template&gt;
+    &lt;hot-table width=&quot;420&quot; height=&quot;280&quot; datarows=&quot;{{ people }}&quot; row-headers context-menu bind-rows-with-headers=&quot;strict&quot;&gt;
+      &lt;hot-column width=&quot;50&quot; read-only value=&quot;id&quot; header=&quot;ID&quot; type=&quot;numeric&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; value=&quot;name.first&quot; header=&quot;First Name&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; value=&quot;name.last&quot; header=&quot;Last Name&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;
+          &lt;bold-renderer value=&quot;{{ value }}&quot;&gt;&lt;/bold-renderer&gt;
+        &lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; value=&quot;gender&quot; type=&quot;dropdown&quot; source=&quot;genderList&quot; header=&quot;Gender&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;(&lt;span&gt;{{ value }}&lt;/span&gt;)&lt;/template&gt;
+      &lt;/hot-column&gt;
+    &lt;/hot-table&gt;
+  &lt;/template&gt;
+&lt;/dom-bind&gt;
   </code></pre>
 
 

@@ -1,6 +1,6 @@
 # &lt;hot-table&gt;
 
-Polymer Element wrapper for [Handsontable](http://handsontable.com/) data grid editor
+Polymer custom element wrapper for [Handsontable](http://handsontable.com/) data grid editor. Works with Polymer 1.x and Polymer 2.x (hybrid).
 
 :exclamation: some stuff does not work yet. Do not use this yet! But feel free to submit issues on GitHub
 

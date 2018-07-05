@@ -6,7 +6,10 @@ var currentSpec = {},
 
 document.addEventListener('WebComponentsReady', function() {
   ready = true;
-  _done();
+
+  if (_done) {
+    _done();
+  }
 });
 
 beforeEach(function(done) {

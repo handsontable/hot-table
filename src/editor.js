@@ -1,12 +1,25 @@
 (function(w) {
   var BaseEditor = Handsontable.editors.BaseEditor;
 
+  var EditorState = {
+    VIRGIN: 'STATE_VIRGIN',
+    EDITING: 'STATE_EDITING',
+    WAITING: 'STATE_WAITING',
+    FINISHED: 'STATE_FINISHED'
+  };
+
   function Editor(hotInstance) {
     BaseEditor.call(this, hotInstance);
     this.model = null;
     this.template = null;
     this.TemplateClass = null;
-    this.eventManager = Handsontable.eventManager(this);
+
+    if (Handsontable.eventManager) {
+      this.eventManager = Handsontable.eventManager(this);
+    } else {
+      this.eventManager = new Handsontable.EventManager(this);
+    }
+
     this.createContainerElement();
     this.initEvents();
   }
@@ -174,7 +187,7 @@
   Editor.prototype.refreshDimensions = function() {
     var width, height, rootOffset, tdOffset, cssTransformOffset;
 
-    if (this.state !== Handsontable.EditorState.EDITING) {
+    if (this.state !== EditorState.EDITING) {
       return;
     }
     this.TD = this.getEditedCell();
@@ -208,12 +221,12 @@
    * @param {Event} event
    */
   Editor.prototype.beginEditing = function(initialValue, event) {
-    if (this.state !== Handsontable.EditorState.VIRGIN) {
+    if (this.state !== EditorState.VIRGIN) {
       return;
     }
-    this.instance.view.scrollViewport(new WalkontableCellCoords(this.row, this.col));
+    this.instance.view.scrollViewport({row: this.row, col: this.col});
     this.instance.view.render();
-    this.state = Handsontable.EditorState.EDITING;
+    this.state = EditorState.EDITING;
 
     initialValue = typeof initialValue === 'string' ? initialValue : this.originalValue;
     this.setValue(initialValue);

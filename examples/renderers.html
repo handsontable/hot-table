@@ -7,18 +7,12 @@
   <!-- Importing Web Component's Polyfill -->
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <!-- SOME ELEMENTS LIKE CONTEXT MENU ARE OUTSIDE HOT-TABLE DIRECTIVE -> CSS FILE IS REQUIRED IN HEAD -->
-  <link rel="stylesheet" href="../../handsontable/dist/handsontable.full.css">
-
   <!-- Code highlighter -->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="css/main.css"/>
-
-  <!-- Pikaday styles -->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
 
   <!-- Importing Custom Elements -->
   <link rel="import" href="../hot-table.html">
@@ -46,7 +40,7 @@
 
   <div class="example">
     <dom-bind>
-      <template id="tpl" is="dom-bind">
+      <template>
         <hot-table width="830" height="1050" datarows="{{ people }}" max-rows="{{ people.length }}" context-menu>
           <hot-column width="30" read-only value="id" header="ID"></hot-column>
           <hot-column width="70" value="name.first" header="First Name">
@@ -98,42 +92,44 @@
   <h2>Code</h2>
 
   <pre><code class="html">
-  &#x3C;template id=&#x22;tpl&#x22; is=&#x22;dom-bind&#x22;&#x3E;
-    &#x3C;hot-table width=&#x22;830&#x22; height=&#x22;1050&#x22; datarows=&#x22;{{ people }}&#x22; max-rows=&#x22;{{ people.length }}&#x22; context-menu&#x3E;
-      &#x3C;hot-column width=&#x22;30&#x22; read-only value=&#x22;id&#x22; header=&#x22;ID&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;70&#x22; value=&#x22;name.first&#x22; header=&#x22;First Name&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;colored-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/colored-renderer&#x3E;&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;100&#x22; value=&#x22;name.last&#x22; header=&#x22;Last Name&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;bold-renderer value=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/bold-renderer&#x3E;&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;80&#x22; value=&#x22;gender&#x22; header=&#x22;Gender&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;(&#x3C;span&#x3E;{{ value }}&#x3C;/span&#x3E;)&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;120&#x22; value=&#x22;age&#x22; header=&#x22;Age&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;&#x3C;age-renderer age$=&#x22;{{ value }}&#x22;&#x3E;&#x3C;/age-renderer&#x3E;&#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column width=&#x22;200&#x22; value=&#x22;address&#x22; header=&#x22;Map&#x22; class=&#x22;maps&#x22;&#x3E;
-        &#x3C;template data-hot-role=&#x22;renderer&#x22; is=&#x22;dom-template&#x22;&#x3E;
-          &#x3C;template is=&#x22;dom-if&#x22; if=&#x22;{{ value }}&#x22;&#x3E;
-            &#x3C;google-map-search map=&#x22;{{ map }}&#x22; query=&#x22;{{ value }}&#x22; global-search results=&#x22;{{ results }}&#x22;&#x3E;&#x3C;/google-map-search&#x3E;
-            &#x3C;google-map disable-default-ui disable-zoom map=&#x22;{{ map }}&#x22;
-                        latitude=&#x22;{{ results.0.latitude }}&#x22; longitude=&#x22;{{ results.0.longitude }}&#x22;&#x3E;&#x3C;/google-map&#x3E;
-          &#x3C;/template&#x3E;
-          &#x3C;template is=&#x22;dom-if&#x22; if=&#x22;{{ !value }}&#x22;&#x3E;
-            &#x3C;div class=&#x22;google-map-empty&#x22;&#x3E;Double click me to provide address to show.&#x3C;/div&#x3E;
-          &#x3C;/template&#x3E;
-        &#x3C;/template&#x3E;
-      &#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.english&#x22; header=&#x22;English&#x22; checked-template=&#x22;Yes&#x22;
-          unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.spanish&#x22; header=&#x22;Spanish&#x22; checked-template=&#x22;Yes&#x22;
-          unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;checkbox&#x22; value=&#x22;languages.french&#x22; header=&#x22;French&#x22; checked-template=&#x22;Yes&#x22;
-          unchecked-template=&#x22;No&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-      &#x3C;hot-column type=&#x22;numeric&#x22; value=&#x22;salary&#x22; header=&#x22;Salary&#x22; format=&#x22;$ 0,0.00&#x22;&#x3E;&#x3C;/hot-column&#x3E;
-    &#x3C;/hot-table&#x3E;
-  &#x3C;/template&#x3E;
+&lt;dom-bind&gt;
+  &lt;template&gt;
+    &lt;hot-table width=&quot;830&quot; height=&quot;1050&quot; datarows=&quot;{{ people }}&quot; max-rows=&quot;{{ people.length }}&quot; context-menu&gt;
+      &lt;hot-column width=&quot;30&quot; read-only value=&quot;id&quot; header=&quot;ID&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column width=&quot;70&quot; value=&quot;name.first&quot; header=&quot;First Name&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;&lt;colored-renderer value=&quot;{{ value }}&quot;&gt;&lt;/colored-renderer&gt;&lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;100&quot; value=&quot;name.last&quot; header=&quot;Last Name&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;&lt;bold-renderer value=&quot;{{ value }}&quot;&gt;&lt;/bold-renderer&gt;&lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;80&quot; value=&quot;gender&quot; header=&quot;Gender&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;(&lt;span&gt;{{ value }}&lt;/span&gt;)&lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;120&quot; value=&quot;age&quot; header=&quot;Age&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;&lt;age-renderer age$=&quot;{{ value }}&quot;&gt;&lt;/age-renderer&gt;&lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column width=&quot;200&quot; height=&quot;100&quot; value=&quot;address&quot; header=&quot;Map&quot; class=&quot;maps&quot;&gt;
+        &lt;template data-hot-role=&quot;renderer&quot; is=&quot;dom-template&quot;&gt;
+          &lt;template is=&quot;dom-if&quot; if=&quot;{{ value }}&quot;&gt;
+            &lt;custom-google-map-search map=&quot;[[ map ]]&quot; query=&quot;{{ value }}&quot; global-search results=&quot;{{ results }}&quot;&gt;&lt;/custom-google-map-search&gt;
+            &lt;google-map disable-default-ui disable-zoom map=&quot;{{ map }}&quot;
+                        latitude=&quot;{{ results.latitude }}&quot; longitude=&quot;{{ results.longitude }}&quot;&gt;&lt;/google-map&gt;
+          &lt;/template&gt;
+          &lt;template is=&quot;dom-if&quot; if=&quot;{{ !value }}&quot;&gt;
+            &lt;div class=&quot;google-map-empty&quot;&gt;Double click me to provide address to show.&lt;/div&gt;
+          &lt;/template&gt;
+        &lt;/template&gt;
+      &lt;/hot-column&gt;
+      &lt;hot-column type=&quot;checkbox&quot; value=&quot;languages.english&quot; header=&quot;English&quot; checked-template=&quot;Yes&quot;
+          unchecked-template=&quot;No&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;checkbox&quot; value=&quot;languages.spanish&quot; header=&quot;Spanish&quot; checked-template=&quot;Yes&quot;
+          unchecked-template=&quot;No&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;checkbox&quot; value=&quot;languages.french&quot; header=&quot;French&quot; checked-template=&quot;Yes&quot;
+          unchecked-template=&quot;No&quot;&gt;&lt;/hot-column&gt;
+      &lt;hot-column type=&quot;numeric&quot; value=&quot;salary&quot; header=&quot;Salary&quot; format=&quot;$ 0,0.00&quot;&gt;&lt;/hot-column&gt;
+    &lt;/hot-table&gt;
+  &lt;/template&gt;
+&lt;/dom-bind&gt;
   </code></pre>
 
   <script>
