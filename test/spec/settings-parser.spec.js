@@ -79,8 +79,6 @@ describe('SettingsParser', function() {
     expect(prop.commentedCellClassName).toBeDefined();
     expect(prop.comments).toBeDefined();
     expect(prop.contextMenu).toBeDefined();
-    expect(prop.copyColsLimit).toBeDefined();
-    expect(prop.copyRowsLimit).toBeDefined();
     expect(prop.copyable).toBeDefined();
     expect(prop.currentColClassName).toBeDefined();
     expect(prop.currentRowClassName).toBeDefined();
@@ -94,7 +92,6 @@ describe('SettingsParser', function() {
     expect(prop.enterMoves).toBeDefined();
     expect(prop.fillHandle).toBeDefined();
     expect(prop.fixedColumnsLeft).toBeDefined();
-    expect(prop.format).toBeDefined();
     expect(prop.fragmentSelection).toBeDefined();
     expect(prop.header).toBeDefined();
     expect(prop.height).toBeDefined();
@@ -117,11 +114,9 @@ describe('SettingsParser', function() {
     expect(prop.modifyColWidth).toBeDefined();
     expect(prop.modifyRow).toBeDefined();
     expect(prop.modifyRowHeight).toBeDefined();
-    expect(prop.multiSelect).toBeDefined();
     expect(prop.noWordWrapClassName).toBeDefined();
     expect(prop.observeDOMVisibility).toBeDefined();
     expect(prop.outsideClickDeselects).toBeDefined();
-    expect(prop.pasteMode).toBeDefined();
     expect(prop.persistentState).toBeDefined();
     expect(prop.persistentStateLoad).toBeDefined();
     expect(prop.persistentStateReset).toBeDefined();
